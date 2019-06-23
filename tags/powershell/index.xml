@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>powershell on Ryan Jan</title>
+    <link>http://localhost/tags/powershell/</link>
+    <description>Recent content in powershell on Ryan Jan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Wed, 19 Jun 2019 17:28:24 +0000</lastBuildDate>
+    
+	<atom:link href="http://localhost/tags/powershell/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Managing vSphere Global Permissions with PowerShell</title>
+      <link>http://localhost/2019/06/19/vsphere-global-permissions-with-powershell/</link>
+      <pubDate>Wed, 19 Jun 2019 17:28:24 +0000</pubDate>
+      
+      <guid>http://localhost/2019/06/19/vsphere-global-permissions-with-powershell/</guid>
+      <description>It appears that working with vSphere global permissions in PowerCLI is not yet possible. The VIPerms PowerShell module combines the add/remove examples from William&amp;rsquo;s post with a new function to list all global permissions. In this post I will demonstrate how to install and use this module.</description>
+    </item>
+    
+    <item>
+      <title>Get ESXi Host CDP Info With PowerCLI</title>
+      <link>http://localhost/2019/02/10/get-host-cdp-info-with-powercli/</link>
+      <pubDate>Sun, 10 Feb 2019 13:05:51 +0000</pubDate>
+      
+      <guid>http://localhost/2019/02/10/get-host-cdp-info-with-powercli/</guid>
+      <description>Introduction I recently had to provide our networking team with a list of ESXi hosts and which switchports each of their physical NICs were connected to. Like many other environments, we are primarily a Cisco house and therefore I was able to get this data by querying the Cisco Discovery Protocol (CDP) information via PowerCLI. Here is how I went about it.
+The Process I will initially show you how to pull this information for a specific host.</description>
+    </item>
+    
+    <item>
+      <title>PowerShell Tips: Script Optimization</title>
+      <link>http://localhost/2018/06/02/powershell-tips-script-optimization/</link>
+      <pubDate>Sat, 02 Jun 2018 11:53:28 +0000</pubDate>
+      
+      <guid>http://localhost/2018/06/02/powershell-tips-script-optimization/</guid>
+      <description>Introduction A colleague of mine recently asked for some help with a script he was writing. We use vSphere tags in order to determine which backup schedule a given VM is in and he wanted to find all VMs which were not assigned a tag in the category backup-service-level, and therefore were not being backed up. His actual query was regarding filtering out certain VMs which will never be given a backup tag.</description>
+    </item>
+    
+  </channel>
+</rss>

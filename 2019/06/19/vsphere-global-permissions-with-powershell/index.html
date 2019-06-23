@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    
+    <title>Ryan Jan  | Managing vSphere Global Permissions with PowerShell</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+
+    <meta name="generator" content="Hugo 0.55.6" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    
+    <link rel="stylesheet" type="text/css" href="/css/screen.css" />
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/prism.css" />
+    <link rel="stylesheet" type="text/css" href="/css/custom/global-custom.css" />
+    <link rel="stylesheet" type="text/css" href="/css/custom/screen-custom.css" />
+    <link rel="stylesheet" type="text/css" href="/css/fontawesome_all.min.css" /> 
+    <link rel="stylesheet" type="text/css" href="/css/custom/prism-custom.css" />
+
+    
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+</head>
+
+
+
+
+<body class='post-template' >
+    <div class="site-wrapper">
+        
+<header class="site-header outer" no-cover>
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+        
+        <a class="site-nav-logo" href="http://localhost/"><img src="/images/ryanjan-logo.png" alt="Ryan Jan" /></a>
+        
+        <ul class="nav" role="menu">
+            <li class="nav-home" role="menuitem"><a href="http://localhost/">Home</a></li>
+            <li class="nav-about" role="menuitem"><a href="http://localhost//about">About</a></li>
+        </ul>
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+            <a class="social-link social-link-gh" href="https://github.com/ryan-jan" target="_blank" rel="noopener">
+                <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a class="social-link social-link-tw" href="https://twitter.com/_ryanjan_" target="_blank" rel="noopener">
+                <i class="fab fa-twitter fa-lg"></i>
+            </a>
+        </div>
+    </div>
+</nav>
+    </div>
+</header>
+<main id="site-main" class="site-main outer">
+    <div class="inner">
+
+        <article class="post-full post ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime='19 June 2019'>19 June 2019</time>
+                    
+                    
+                    
+                        <span class="date-divider">/</span> <a href="/tags/powershell">powershell</a>
+                    
+                    
+                </section>
+                <h1 class="post-full-title">Managing vSphere Global Permissions with PowerShell</h1>
+            </header>
+
+            
+            <figure class="post-full-image" style="background-image: url( '/images/2019/06/closed-coming-soon-door-4291.jpg' )">
+            </figure>
+            
+
+            <section class="post-full-content">
+                <div class="post-content">
+                    
+
+<h2 id="introduction">Introduction</h2>
+
+<p>It appears that working with vSphere global permissions in PowerCLI is not yet possible. It is also my understanding that there is not currently a public API available in vCenter which allows you to manipulate global permissions either. However, thanks to William Lam&rsquo;s awesome <a href="https://www.virtuallyghetto.com/2017/03/automating-vsphere-global-permissions-with-powercli.html">blog post from 2017</a>, I learned that it is possible to add/remove global permissions via the Managed Object Browser (MOB). What&rsquo;s more, William provides two example PowerShell functions showing how to trigger the required MOB methods using standard <code>Invoke-WebRequest</code> calls. This is great, but unfortunately he only covered adding and removing permissions and I really needed to be able to list the current global permissions on a vCenter server for auditing purposes. So, I got to work and created a new PowerShell module named <code>VIPerms</code>. This module combines the add/remove examples from William&rsquo;s post with a new function to list all global permissions. In this post I will demonstrate how to install and use this module.</p>
+
+<h2 id="installation">Installation</h2>
+
+<p>As with most PowerShell modules VIPerms is available to install via the PowerShell Gallery.</p>
+
+<pre><code class="language-powershell">Install-Module -Name &quot;VIPerms&quot; -Scope &quot;CurrentUser&quot;
+</code></pre>
+
+<p>Once installed you can import the module into your session.</p>
+
+<pre><code class="language-powershell">Import-Module -Name &quot;VIPerms&quot;
+</code></pre>
+
+<h2 id="connecting-to-a-vcenter-server">Connecting to a vCenter Server</h2>
+
+<p>The first step is to connect to your vCenter server.</p>
+
+<pre><code class="language-powershell">Connect-VIMobServer -Server &quot;vcenter.example.com&quot;
+</code></pre>
+
+<p>This will prompt for credentials. You will need to use the <code>administrator@vsphere.local</code> account in order to access and manage the global permissions.</p>
+
+<p>If you use self-signed certificates in your environment you will need to skip certificate checking.</p>
+
+<pre><code class="language-powershell">Connect-VIMobServer -Server &quot;vcenter.example.com&quot; -SkipCertificateCheck
+</code></pre>
+
+<h2 id="listing-global-permissions">Listing Global Permissions</h2>
+
+<p>To list all global permissions for your vCenter server use the <code>Get-VIGlobalPermission</code> function.</p>
+
+<pre><code class="language-powershell">Get-VIGlobalPermission
+
+Principal                                                            PrincipalType Role            Propagate
+---------                                                            ------------- ----            ---------
+VSPHERE.LOCAL\vpxd-extension-b2df90b0-1e03-11e6-b844-005056bf2aaa    User          Admin           true
+VSPHERE.LOCAL\vpxd-b2df90b0-1e03-11e6-b844-005056bf2aaa              User          Admin           true
+VSPHERE.LOCAL\vsphere-webclient-b2df90b0-1e03-11e6-b844-005056bf2aaa User          Admin           true
+VSPHERE.LOCAL\Administrators                                         Group         Admin           true
+VSPHERE.LOCAL\Administrator                                          User          Admin           true
+...
+</code></pre>
+
+<h2 id="creating-global-permissions">Creating Global Permissions</h2>
+
+<p>The <code>New-VIGlobalPermission</code> function will allow you to create a global permission. You must supply a user/group
+name and the identifier of the required role to assign.</p>
+
+<p>First use the <code>Get-VIMobRole</code> function to get the identifier for the specific role.</p>
+
+<pre><code class="language-powershell">Get-VIMobRole
+
+Name     Description Id
+----     ----------- --
+Admin    Admin       -1
+ReadOnly ReadOnly    -2
+View     View        -3
+...
+</code></pre>
+
+<p>Then use the <code>New-VIGlobalPermission</code> function to create the permission. For example to assign the <code>Admin</code> role
+to the vSphere user <code>VSPHERE.LOCAL\test-user</code> you would use.</p>
+
+<pre><code class="language-powershell">New-VIGlobalPermission -Name &quot;VSPHERE.LOCAL\test-user&quot; -RoleId -1
+</code></pre>
+
+<p>If you are assigning a role to a group you will need to use the <code>-IsGroup</code> parameter.</p>
+
+<pre><code class="language-powershell">New-VIGlobalPermission -Name &quot;VSPHERE.LOCAL\group-of-users&quot; -IsGroup -RoleId -1
+</code></pre>
+
+<p>By default the global permission will propagate to all children objects. If you would like to override this
+you can use the <code>-Propagate</code> parameter.</p>
+
+<pre><code class="language-powershell">New-VIGlobalPermission -Name &quot;VSPHERE.LOCAL\group-of-users&quot; -IsGroup -RoleId -1 -Propagate:$false
+</code></pre>
+
+<blockquote>
+<p><strong>NOTE</strong>
+If you are already using the VMware.PowerCLI module you can use the official <code>Get-VIRole</code> CmdLet in place of the <code>Get-VIMobRole</code> function included in VIPerms.</p>
+</blockquote>
+
+<h2 id="removing-global-permissions">Removing Global Permissions</h2>
+
+<p>The <code>Remove-VIGlobalPermission</code> function will allow you to delete a global permission. You only need to specify the user/group with this function.</p>
+
+<pre><code class="language-powershell">Remove-VIGlobalPermission -Name &quot;VSPHERE.LOCAL\test-user&quot;
+</code></pre>
+
+<p>Again, if you are removing a permission from a group you will need to use the <code>-IsGroup</code> parameter.</p>
+
+<pre><code class="language-powershell">Remove-VIGlobalPermission -Name &quot;VSPHERE.LOCAL\group-of-users&quot; -IsGroup
+</code></pre>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>This module is something that I have put together pretty quickly as I needed to automate some global permissions tasks. I have tested it against vSphere 6.0, 6.5 and 6.7 lab environements and it seems to work fine with all versions. Hopefully it is useful to some other people out there! If you have any questions or feedback then you can find me on <a href="https://twitter.com/_ryanjan_">twitter</a>.</p>
+
+                </div>
+            </section>
+            <footer class="post-full-footer">
+                <section class="author-card">
+    <img class="author-profile-image" src="/images/profile_images/ryan.jpg" />
+    <section class="author-card-content">
+        <h4 class="author-card-name"><a href="#">Ryan Kowalewski</a></h4>
+        <p>I am a Virtualisation Technical Specialist for a FTSE 100 company in the UK. My role focusses mainly on VMware and automation.</p>
+    </section>
+</section>
+<div class="post-full-footer-right">
+    <a class="author-card-button" href="#">Read More</a>
+</div>
+
+            </footer>
+        </article>
+
+    </div>
+</main>
+
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="http://localhost/">
+            <img src="/images/favicon.png" alt="Ryan Jan icon" />
+            <span>Ryan Jan</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">Managing vSphere Global Permissions with PowerShell</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this</i></div>
+        <a class="floating-header-share-tw"
+            href="https://twitter.com/share?text=Managing%20vSphere%20Global%20Permissions%20with%20PowerShell&amp;url=http%3a%2f%2flocalhost%2f2019%2f06%2f19%2fvsphere-global-permissions-with-powershell%2f"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <i class="fab fa-twitter fa-lg"></i>
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%2f2019%2f06%2f19%2fvsphere-global-permissions-with-powershell%2f"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <i class="fab fa-facebook-f fa-lg"></i>
+        </a>
+    </div>
+    <progress id="reading-progress" class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+            
+            <article class="post-card post" no-image>
+    
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="http://localhost/2019/05/01/esxi-host-certificate-renewal-doesnt-include-full-chain/">
+            <header class="post-card-header">
+                
+                
+                
+                    <span class="post-card-tags">esxi</span>
+                
+                
+                <h2 class="post-card-title">ESXi Host Certificate Renewal Doesn&#39;t Include Full Chain</h2>
+            </header>
+            <section class="post-card-excerpt">
+                
+                <p>I have just successfully migrated one of our vCenter 6.0 Windows servers to a brand new 6.7 U1 vCenter Server Appliance. After this migration I configured VMCA to be a intermediate certificate authority to our internal CA. The process for this is relatively straight forward, however, there appears to be an issue in 6.7 (and potentially 6.5) whereby hosts which are subsequently issued a new SSL certificate fail to use the full certificate chain, and therefore still show as untrusted in the browser when accessing the ESXi host client.</p>
+                
+            </section>
+        </a>
+        <footer class="post-card-meta">
+            <ul class="author-list">
+                <li class="author-list-item">
+                    <div class="author-name-tooltip">
+                        Ryan Kowalewski
+                    </div>
+                    <a href="http://localhost/2019/05/01/esxi-host-certificate-renewal-doesnt-include-full-chain/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/images/profile_images/ryan.jpg" alt="Ryan Kowalewski" />
+                        
+                    </a>
+                </li>
+            </ul>
+            <span class="reading-time">2 mins</span>
+        </footer>
+    </div>
+</article>
+        </div>
+    </div>
+</aside>
+
+
+        <footer class="site-footer outer">
+    <div class="site-footer-content inner">
+        <section class="copyright"><a href="http://localhost/">Ryan Jan</a> &copy; 2019</section>
+        <nav class="site-footer-nav">
+            <a href="http://localhost/">Latest Posts</a>
+            <a href="https://github.com/ryan-jan" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://twitter.com/_ryanjan_" target="_blank" rel="noopener">Twitter</a>
+        </nav>
+    </div>
+</footer>
+    </div>
+
+    
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+
+    
+    <script type="text/javascript" src="/js/prism.js"></script>
+    <script type="text/javascript" src="/js/custom/prism-custom.js"></script>
+    
+    
+<script>
+    
+    
+    
+    
+    $(document).ready(function () {
+        
+        var $postContent = $(".post-full-content");
+        $postContent.fitVids();
+        
+    
+        var progressBar = document.querySelector('#reading-progress');
+        var header = document.querySelector('.floating-header');
+        var title = document.querySelector('.post-full-title');
+    
+        var lastScrollY = window.scrollY;
+        var lastWindowHeight = window.innerHeight;
+        var lastDocumentHeight = $(document).height();
+        var ticking = false;
+    
+        function onScroll() {
+            lastScrollY = window.scrollY;
+            requestTick();
+        }
+    
+        function onResize() {
+            lastWindowHeight = window.innerHeight;
+            lastDocumentHeight = $(document).height();
+            requestTick();
+        }
+    
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(update);
+            }
+            ticking = true;
+        }
+    
+        function update() {
+            var trigger = title.getBoundingClientRect().top + window.scrollY;
+            var triggerOffset = title.offsetHeight + 35;
+            var progressMax = lastDocumentHeight - lastWindowHeight;
+    
+            
+            if (lastScrollY >= trigger + triggerOffset) {
+                header.classList.add('floating-active');
+            } else {
+                header.classList.remove('floating-active');
+            }
+    
+            progressBar.setAttribute('max', progressMax);
+            progressBar.setAttribute('value', lastScrollY);
+    
+            ticking = false;
+        }
+    
+        window.addEventListener('scroll', onScroll, {passive: true});
+        window.addEventListener('resize', onResize, false);
+    
+        update();
+    
+    });
+</script>
+
+</body>
+</html>

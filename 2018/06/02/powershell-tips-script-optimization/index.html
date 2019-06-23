@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    
+    <title>Ryan Jan  | PowerShell Tips: Script Optimization</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+
+    <meta name="generator" content="Hugo 0.55.6" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    
+    <link rel="stylesheet" type="text/css" href="/css/screen.css" />
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/prism.css" />
+    <link rel="stylesheet" type="text/css" href="/css/custom/global-custom.css" />
+    <link rel="stylesheet" type="text/css" href="/css/custom/screen-custom.css" />
+    <link rel="stylesheet" type="text/css" href="/css/fontawesome_all.min.css" /> 
+    <link rel="stylesheet" type="text/css" href="/css/custom/prism-custom.css" />
+
+    
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+</head>
+
+
+
+
+<body class='post-template' >
+    <div class="site-wrapper">
+        
+<header class="site-header outer" no-cover>
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+        
+        <a class="site-nav-logo" href="http://localhost/"><img src="/images/ryanjan-logo.png" alt="Ryan Jan" /></a>
+        
+        <ul class="nav" role="menu">
+            <li class="nav-home" role="menuitem"><a href="http://localhost/">Home</a></li>
+            <li class="nav-about" role="menuitem"><a href="http://localhost//about">About</a></li>
+        </ul>
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+            <a class="social-link social-link-gh" href="https://github.com/ryan-jan" target="_blank" rel="noopener">
+                <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a class="social-link social-link-tw" href="https://twitter.com/_ryanjan_" target="_blank" rel="noopener">
+                <i class="fab fa-twitter fa-lg"></i>
+            </a>
+        </div>
+    </div>
+</nav>
+    </div>
+</header>
+<main id="site-main" class="site-main outer">
+    <div class="inner">
+
+        <article class="post-full post ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime='02 June 2018'>02 June 2018</time>
+                    
+                    
+                    
+                        <span class="date-divider">/</span> <a href="/tags/powershell">powershell</a>
+                    
+                    
+                </section>
+                <h1 class="post-full-title">PowerShell Tips: Script Optimization</h1>
+            </header>
+
+            
+            <figure class="post-full-image" style="background-image: url( '/images/2018/06/lum3n-193427-unsplash.jpg' )">
+            </figure>
+            
+
+            <section class="post-full-content">
+                <div class="post-content">
+                    
+
+<h2 id="introduction">Introduction</h2>
+
+<p>A colleague of mine recently asked for some help with a script he was writing. We use vSphere tags in order to determine which backup schedule a given VM is in and he wanted to find all VMs which were not assigned a tag in the category <code>backup-service-level</code>, and therefore were not being backed up. His actual query was regarding filtering out certain VMs which will never be given a backup tag. However, in helping with this I realised that his script was taking over 20 minutes to complete! I decided to take a copy and see if I could speed things up a bit.</p>
+
+<h2 id="the-script">The Script</h2>
+
+<p>Here is the script as it was when I first took a look at it.</p>
+
+<pre><code class="language-powershell">$VmNoTag = @()
+
+$VMs = Get-VM
+
+foreach ($VM in $VMs) {
+    $Name = $VM.name
+    $Tag = $($VM | Get-TagAssignment -Category 'backup-service-level').tag.name
+    $Power = $VM.PowerState
+        
+    $Line = New-Object -TypeName psobject 
+    $Line | Add-Member -MemberType NoteProperty VM -Value $Name
+    $Line | Add-Member -MemberType NoteProperty Tag -Value $Tag
+    $Line | Add-Member -MemberType NoteProperty PowerState -Value $Power
+    $VmNoTag += $line
+}
+
+$VmNoTag | Where-Object {$_.Tag -eq $null}
+</code></pre>
+
+<p>It&rsquo;s functional and returns the required results. However, the first thing I noticed is that the <code>Get-TagAssignment</code> cmdlet is being called in every iteration of the <code>foreach</code> loop. This will take a very long time as it has to fetch results from the vCenter API each time it is called. Also, the last line of the script filters the results so that only VMs without a tag assigned are returned. This is iterating though all of the results in the <code>$VMs</code> array for a second time, which will also be contributing a small performance hit.</p>
+
+<p>In order to effectively measure the performance of the script in its current state I used the <code>Measure-Command</code> cmdlet. As you can see the script takes 24 minutes to run in its current state.</p>
+
+<pre><code class="language-powershell">Measure-Command {&amp; .\Get-VMsWithNoTag.ps1}
+
+Days              : 0
+Hours             : 0
+Minutes           : 24
+Seconds           : 4
+Milliseconds      : 361
+Ticks             : 14443611146
+TotalDays         : 0.0167171425300926
+TotalHours        : 0.401211420722222
+TotalMinutes      : 24.0726852433333
+TotalSeconds      : 1444.3611146
+TotalMilliseconds : 1444361.1146
+</code></pre>
+
+<h2 id="optimization">Optimization</h2>
+
+<p>I was pretty sure that calling <code>Get-TagAssignment</code> over and over again was causing the slowness. To fix this, I call <code>Get-TagAssignment</code> once, before the <code>foreach</code> loop, and store the results in an array named <code>$TagAssignments</code>. Then within the <code>foreach</code> loop all I have to do is check whether the <code>$TagAssignments</code> array contains the VM&rsquo;s name. If it doesn&rsquo;t then the VM doesn&rsquo;t have a backup tag assigned and I add it to the <code>$VmNoTag</code> array of results.</p>
+
+<pre><code class="language-powershell">$VmNoTag = @()
+
+$VMs = Get-VM
+$TagAssignments = Get-TagAssignment -Category 'backup-service-level'
+
+foreach ($VM in $VMs) {
+    if (!($TagAssignments.Entity.Name -contains $VM.Name)) {
+        $VmNoTag += $VM    
+    }
+}
+
+$VmNoTag
+</code></pre>
+
+<p>I retested the script using the <code>Measure-Command</code> cmdlet and the results were very interesting.</p>
+
+<pre><code class="language-powershell">Measure-Command {&amp; .\Get-VMsWithNoTag.ps1}
+
+
+Days              : 0
+Hours             : 0
+Minutes           : 0
+Seconds           : 28
+Milliseconds      : 833
+Ticks             : 288335148
+TotalDays         : 0.000333721236111111
+TotalHours        : 0.00800930966666667
+TotalMinutes      : 0.48055858
+TotalSeconds      : 28.8335148
+TotalMilliseconds : 28833.5148
+</code></pre>
+
+<p>That&rsquo;s right 28 seconds! Down from 24 minutes. I was expecting to see an improvement but this amazed me. It just goes to show how important it is to optimize your code.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>This technique of storing a full set of results in an array, and then iterating through the array to find matching values can be a real time saver. I hope you have found it interesting and can use it to speed up some of your scripts.</p>
+
+                </div>
+            </section>
+            <footer class="post-full-footer">
+                <section class="author-card">
+    <img class="author-profile-image" src="/images/profile_images/ryan.jpg" />
+    <section class="author-card-content">
+        <h4 class="author-card-name"><a href="#">Ryan Kowalewski</a></h4>
+        <p>I am a Virtualisation Technical Specialist for a FTSE 100 company in the UK. My role focusses mainly on VMware and automation.</p>
+    </section>
+</section>
+<div class="post-full-footer-right">
+    <a class="author-card-button" href="#">Read More</a>
+</div>
+
+            </footer>
+        </article>
+
+    </div>
+</main>
+
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="http://localhost/">
+            <img src="/images/favicon.png" alt="Ryan Jan icon" />
+            <span>Ryan Jan</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">PowerShell Tips: Script Optimization</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this</i></div>
+        <a class="floating-header-share-tw"
+            href="https://twitter.com/share?text=PowerShell%20Tips%3a%20Script%20Optimization&amp;url=http%3a%2f%2flocalhost%2f2018%2f06%2f02%2fpowershell-tips-script-optimization%2f"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <i class="fab fa-twitter fa-lg"></i>
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%2f2018%2f06%2f02%2fpowershell-tips-script-optimization%2f"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <i class="fab fa-facebook-f fa-lg"></i>
+        </a>
+    </div>
+    <progress id="reading-progress" class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+             <article class="post-card post" >
+    
+    <a class="post-card-image-link" href="http://localhost/2018/06/24/vrops-reports-and-powercli-part-three-a-helper-module/">
+        <div class="post-card-image" style="background-image: url('/images/2018/05/vmw-vrealize-operations-fast-facts-2.jpg')"></div>
+    </a>
+    
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="http://localhost/2018/06/24/vrops-reports-and-powercli-part-three-a-helper-module/">
+            <header class="post-card-header">
+                
+                
+                
+                    <span class="post-card-tags">vrops</span>
+                
+                
+                <h2 class="post-card-title">vROps Reports and PowerCLI Part 3: A Helper Module</h2>
+            </header>
+            <section class="post-card-excerpt">
+                
+                <p>For your reference here is a list of the articles in this mini-series.
+ vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports vROps Reports and PowerCLI Part 3: A Helper Module (this article)  Introduction If you have been following along with …</p>
+                
+            </section>
+        </a>
+        <footer class="post-card-meta">
+            <ul class="author-list">
+                <li class="author-list-item">
+                    <div class="author-name-tooltip">
+                        Ryan Kowalewski
+                    </div>
+                    <a href="http://localhost/2018/06/24/vrops-reports-and-powercli-part-three-a-helper-module/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/images/profile_images/ryan.jpg" alt="Ryan Kowalewski" />
+                        
+                    </a>
+                </li>
+            </ul>
+            <span class="reading-time">6 mins</span>
+        </footer>
+    </div>
+</article> 
+            <article class="post-card post" >
+    
+    <a class="post-card-image-link" href="http://localhost/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/">
+        <div class="post-card-image" style="background-image: url('/images/2018/05/vmw-vrealize-operations-fast-facts-1.jpg')"></div>
+    </a>
+    
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="http://localhost/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/">
+            <header class="post-card-header">
+                
+                
+                
+                    <span class="post-card-tags">vrops</span>
+                
+                
+                <h2 class="post-card-title">vROps Reports and PowerCLI Part 2: Downloading Reports</h2>
+            </header>
+            <section class="post-card-excerpt">
+                
+                <p>For your reference, here are the articles in this mini-series:
+ vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports (this article) vROps Reports and PowerCLI Part 3: A Helper Module  Introduction Following on from the previous article in this …</p>
+                
+            </section>
+        </a>
+        <footer class="post-card-meta">
+            <ul class="author-list">
+                <li class="author-list-item">
+                    <div class="author-name-tooltip">
+                        Ryan Kowalewski
+                    </div>
+                    <a href="http://localhost/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/images/profile_images/ryan.jpg" alt="Ryan Kowalewski" />
+                        
+                    </a>
+                </li>
+            </ul>
+            <span class="reading-time">4 mins</span>
+        </footer>
+    </div>
+</article>
+        </div>
+    </div>
+</aside>
+
+
+        <footer class="site-footer outer">
+    <div class="site-footer-content inner">
+        <section class="copyright"><a href="http://localhost/">Ryan Jan</a> &copy; 2019</section>
+        <nav class="site-footer-nav">
+            <a href="http://localhost/">Latest Posts</a>
+            <a href="https://github.com/ryan-jan" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://twitter.com/_ryanjan_" target="_blank" rel="noopener">Twitter</a>
+        </nav>
+    </div>
+</footer>
+    </div>
+
+    
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+
+    
+    <script type="text/javascript" src="/js/prism.js"></script>
+    <script type="text/javascript" src="/js/custom/prism-custom.js"></script>
+    
+    
+<script>
+    
+    
+    
+    
+    $(document).ready(function () {
+        
+        var $postContent = $(".post-full-content");
+        $postContent.fitVids();
+        
+    
+        var progressBar = document.querySelector('#reading-progress');
+        var header = document.querySelector('.floating-header');
+        var title = document.querySelector('.post-full-title');
+    
+        var lastScrollY = window.scrollY;
+        var lastWindowHeight = window.innerHeight;
+        var lastDocumentHeight = $(document).height();
+        var ticking = false;
+    
+        function onScroll() {
+            lastScrollY = window.scrollY;
+            requestTick();
+        }
+    
+        function onResize() {
+            lastWindowHeight = window.innerHeight;
+            lastDocumentHeight = $(document).height();
+            requestTick();
+        }
+    
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(update);
+            }
+            ticking = true;
+        }
+    
+        function update() {
+            var trigger = title.getBoundingClientRect().top + window.scrollY;
+            var triggerOffset = title.offsetHeight + 35;
+            var progressMax = lastDocumentHeight - lastWindowHeight;
+    
+            
+            if (lastScrollY >= trigger + triggerOffset) {
+                header.classList.add('floating-active');
+            } else {
+                header.classList.remove('floating-active');
+            }
+    
+            progressBar.setAttribute('max', progressMax);
+            progressBar.setAttribute('value', lastScrollY);
+    
+            ticking = false;
+        }
+    
+        window.addEventListener('scroll', onScroll, {passive: true});
+        window.addEventListener('resize', onResize, false);
+    
+        update();
+    
+    });
+</script>
+
+</body>
+</html>

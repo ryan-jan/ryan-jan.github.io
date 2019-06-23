@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    
+    <title>Ryan Jan  | Installing Gogs In A FreeNAS Jail</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+
+    <meta name="generator" content="Hugo 0.55.6" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    
+    <link rel="stylesheet" type="text/css" href="/css/screen.css" />
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/prism.css" />
+    <link rel="stylesheet" type="text/css" href="/css/custom/global-custom.css" />
+    <link rel="stylesheet" type="text/css" href="/css/custom/screen-custom.css" />
+    <link rel="stylesheet" type="text/css" href="/css/fontawesome_all.min.css" /> 
+    <link rel="stylesheet" type="text/css" href="/css/custom/prism-custom.css" />
+
+    
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+</head>
+
+
+
+
+<body class='post-template' >
+    <div class="site-wrapper">
+        
+<header class="site-header outer" no-cover>
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+        
+        <a class="site-nav-logo" href="http://localhost/"><img src="/images/ryanjan-logo.png" alt="Ryan Jan" /></a>
+        
+        <ul class="nav" role="menu">
+            <li class="nav-home" role="menuitem"><a href="http://localhost/">Home</a></li>
+            <li class="nav-about" role="menuitem"><a href="http://localhost//about">About</a></li>
+        </ul>
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+            <a class="social-link social-link-gh" href="https://github.com/ryan-jan" target="_blank" rel="noopener">
+                <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a class="social-link social-link-tw" href="https://twitter.com/_ryanjan_" target="_blank" rel="noopener">
+                <i class="fab fa-twitter fa-lg"></i>
+            </a>
+        </div>
+    </div>
+</nav>
+    </div>
+</header>
+<main id="site-main" class="site-main outer">
+    <div class="inner">
+
+        <article class="post-full post ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime='26 March 2018'>26 March 2018</time>
+                    
+                    
+                    
+                        <span class="date-divider">/</span> <a href="/tags/tutorials">tutorials</a>
+                    
+                    
+                </section>
+                <h1 class="post-full-title">Installing Gogs In A FreeNAS Jail</h1>
+            </header>
+
+            
+            <figure class="post-full-image" style="background-image: url( '/images/2018/03/gogs-3.png' )">
+            </figure>
+            
+
+            <section class="post-full-content">
+                <div class="post-content">
+                    
+
+<p>I recently stumbled across the <a href="https://gogs.io">Gogs</a> project whilst looking for self-hosted Git solutions. I run a FreeNAS server at home so I thought I would get the app up and running in a jail. Here is how I did it.</p>
+
+<h2 id="jail-preparation">Jail Preparation</h2>
+
+<p>Create a new jail named <code>gogs</code> and make sure that the jail is up to date by running.</p>
+
+<pre><code class="language-bash">pkg update &amp;&amp; pkg upgrade
+</code></pre>
+
+<p>Now install the required packages.</p>
+
+<pre><code class="language-bash">pkg install go git gcc
+</code></pre>
+
+<p>Next add a user <code>git</code> and switch to the new user.</p>
+
+<pre><code class="language-bash">pw useradd git -m
+su git -
+</code></pre>
+
+<p>Set the Go env variables both for this session and for future sessions.</p>
+
+<pre><code class="language-bash">GOPATH=$HOME/go; export GOPATH
+echo 'GOPATH=$HOME/go; export GOPATH' &gt;&gt; ~/.profile
+</code></pre>
+
+<h2 id="installation-and-initial-configuration">Installation and Initial Configuration</h2>
+
+<p>Fetch <code>Gogs</code> using the <code>Go</code> package manager.</p>
+
+<pre><code class="language-bash">go get -u --tags sqlite github.com/gogs/gogs
+</code></pre>
+
+<p>Create a symbolic link to the <code>gogs</code>  directory to make it easier to manage.</p>
+
+<pre><code class="language-bash">ln -s ~/go/src/github.com/gogs/gogs ~/gogs
+</code></pre>
+
+<p><code>cd</code> into the source directory and issue the build command.</p>
+
+<pre><code class="language-bash">cd ~/gogs
+go build --tags sqlite
+</code></pre>
+
+<p>Issue the following command to start <code>gogs</code> for the first time and then browse to the jails IP address at port <code>3000</code> and complete the initial configuration via the web GUI.</p>
+
+<pre><code class="language-bash">./gogs web
+</code></pre>
+
+<p>Once you have completed the installation terminate the <code>gogs</code> process from the terminal using <code>Ctrl+C</code>.</p>
+
+<p>Finally, we need to switch back to the root user and configure an init script to set the <code>gogs</code> service to start at boot.</p>
+
+<pre><code class="language-bash">exit
+cp /home/git/gogs/scripts/init/freebsd/gogs /usr/local/etc/rc.d/
+chmod a+x /usr/local/etc/rc.d/gogs
+</code></pre>
+
+<p>We also need to add <code>gogs_enable=&quot;YES&quot;</code> to the <code>/etc/rc.conf</code> file. Now we can start the service and test that it is working via a web browser.</p>
+
+<pre><code class="language-bash">service gogs start
+</code></pre>
+
+<h2 id="updating">Updating</h2>
+
+<p>Updating is a piece of cake! But take a jail snapshot first!!!!</p>
+
+<p>SSH into the gogs jail and run the following commands.</p>
+
+<pre><code class="language-bash">su git
+cd /home/git/gogs
+go get -u --tags sqlite github.com/gogs/gogs
+go build --tags sqlite
+exit
+service gogs start
+</code></pre>
+
+                </div>
+            </section>
+            <footer class="post-full-footer">
+                <section class="author-card">
+    <img class="author-profile-image" src="/images/profile_images/ryan.jpg" />
+    <section class="author-card-content">
+        <h4 class="author-card-name"><a href="#">Ryan Kowalewski</a></h4>
+        <p>I am a Virtualisation Technical Specialist for a FTSE 100 company in the UK. My role focusses mainly on VMware and automation.</p>
+    </section>
+</section>
+<div class="post-full-footer-right">
+    <a class="author-card-button" href="#">Read More</a>
+</div>
+
+            </footer>
+        </article>
+
+    </div>
+</main>
+
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="http://localhost/">
+            <img src="/images/favicon.png" alt="Ryan Jan icon" />
+            <span>Ryan Jan</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">Installing Gogs In A FreeNAS Jail</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this</i></div>
+        <a class="floating-header-share-tw"
+            href="https://twitter.com/share?text=Installing%20Gogs%20In%20A%20FreeNAS%20Jail&amp;url=http%3a%2f%2flocalhost%2f2018%2f03%2f26%2finstalling-gogs-in-a-freenas-jail%2f"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <i class="fab fa-twitter fa-lg"></i>
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%2f2018%2f03%2f26%2finstalling-gogs-in-a-freenas-jail%2f"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <i class="fab fa-facebook-f fa-lg"></i>
+        </a>
+    </div>
+    <progress id="reading-progress" class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+             <article class="post-card post" >
+    
+    <a class="post-card-image-link" href="http://localhost/2018/05/16/running-vrops-reports-using-powercli/">
+        <div class="post-card-image" style="background-image: url('/images/2018/05/vmw-vrealize-operations-fast-facts.jpg')"></div>
+    </a>
+    
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="http://localhost/2018/05/16/running-vrops-reports-using-powercli/">
+            <header class="post-card-header">
+                
+                
+                
+                    <span class="post-card-tags">vrops</span>
+                
+                
+                <h2 class="post-card-title">vROps Reports and PowerCLI Part 1: Generating Reports</h2>
+            </header>
+            <section class="post-card-excerpt">
+                
+                <p>For your reference, here are the articles in this mini-series:
+ vROps Reports and PowerCLI Part 1: Generating Reports (this article) vROps Reports and PowerCLI Part 2: Downloading Reports vROps Reports and PowerCLI Part 3: A Helper Module  Introduction I&rsquo;ve been spending quite a bit of time …</p>
+                
+            </section>
+        </a>
+        <footer class="post-card-meta">
+            <ul class="author-list">
+                <li class="author-list-item">
+                    <div class="author-name-tooltip">
+                        Ryan Kowalewski
+                    </div>
+                    <a href="http://localhost/2018/05/16/running-vrops-reports-using-powercli/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/images/profile_images/ryan.jpg" alt="Ryan Kowalewski" />
+                        
+                    </a>
+                </li>
+            </ul>
+            <span class="reading-time">7 mins</span>
+        </footer>
+    </div>
+</article> 
+            
+        </div>
+    </div>
+</aside>
+
+
+        <footer class="site-footer outer">
+    <div class="site-footer-content inner">
+        <section class="copyright"><a href="http://localhost/">Ryan Jan</a> &copy; 2019</section>
+        <nav class="site-footer-nav">
+            <a href="http://localhost/">Latest Posts</a>
+            <a href="https://github.com/ryan-jan" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://twitter.com/_ryanjan_" target="_blank" rel="noopener">Twitter</a>
+        </nav>
+    </div>
+</footer>
+    </div>
+
+    
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+
+    
+    <script type="text/javascript" src="/js/prism.js"></script>
+    <script type="text/javascript" src="/js/custom/prism-custom.js"></script>
+    
+    
+<script>
+    
+    
+    
+    
+    $(document).ready(function () {
+        
+        var $postContent = $(".post-full-content");
+        $postContent.fitVids();
+        
+    
+        var progressBar = document.querySelector('#reading-progress');
+        var header = document.querySelector('.floating-header');
+        var title = document.querySelector('.post-full-title');
+    
+        var lastScrollY = window.scrollY;
+        var lastWindowHeight = window.innerHeight;
+        var lastDocumentHeight = $(document).height();
+        var ticking = false;
+    
+        function onScroll() {
+            lastScrollY = window.scrollY;
+            requestTick();
+        }
+    
+        function onResize() {
+            lastWindowHeight = window.innerHeight;
+            lastDocumentHeight = $(document).height();
+            requestTick();
+        }
+    
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(update);
+            }
+            ticking = true;
+        }
+    
+        function update() {
+            var trigger = title.getBoundingClientRect().top + window.scrollY;
+            var triggerOffset = title.offsetHeight + 35;
+            var progressMax = lastDocumentHeight - lastWindowHeight;
+    
+            
+            if (lastScrollY >= trigger + triggerOffset) {
+                header.classList.add('floating-active');
+            } else {
+                header.classList.remove('floating-active');
+            }
+    
+            progressBar.setAttribute('max', progressMax);
+            progressBar.setAttribute('value', lastScrollY);
+    
+            ticking = false;
+        }
+    
+        window.addEventListener('scroll', onScroll, {passive: true});
+        window.addEventListener('resize', onResize, false);
+    
+        update();
+    
+    });
+</script>
+
+</body>
+</html>

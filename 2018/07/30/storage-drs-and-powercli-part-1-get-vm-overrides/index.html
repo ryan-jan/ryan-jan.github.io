@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    
+    <title>Ryan Jan  | Storage DRS and PowerCLI Part 1: Get VM Overrides</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+
+    <meta name="generator" content="Hugo 0.55.6" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    
+    <link rel="stylesheet" type="text/css" href="/css/screen.css" />
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/prism.css" />
+    <link rel="stylesheet" type="text/css" href="/css/custom/global-custom.css" />
+    <link rel="stylesheet" type="text/css" href="/css/custom/screen-custom.css" />
+    <link rel="stylesheet" type="text/css" href="/css/fontawesome_all.min.css" /> 
+    <link rel="stylesheet" type="text/css" href="/css/custom/prism-custom.css" />
+
+    
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+</head>
+
+
+
+
+<body class='post-template' >
+    <div class="site-wrapper">
+        
+<header class="site-header outer" no-cover>
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+        
+        <a class="site-nav-logo" href="http://localhost/"><img src="/images/ryanjan-logo.png" alt="Ryan Jan" /></a>
+        
+        <ul class="nav" role="menu">
+            <li class="nav-home" role="menuitem"><a href="http://localhost/">Home</a></li>
+            <li class="nav-about" role="menuitem"><a href="http://localhost//about">About</a></li>
+        </ul>
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+            <a class="social-link social-link-gh" href="https://github.com/ryan-jan" target="_blank" rel="noopener">
+                <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a class="social-link social-link-tw" href="https://twitter.com/_ryanjan_" target="_blank" rel="noopener">
+                <i class="fab fa-twitter fa-lg"></i>
+            </a>
+        </div>
+    </div>
+</nav>
+    </div>
+</header>
+<main id="site-main" class="site-main outer">
+    <div class="inner">
+
+        <article class="post-full post no-image">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime='30 July 2018'>30 July 2018</time>
+                    
+                    
+                    
+                        <span class="date-divider">/</span> <a href="/tags/powercli">powercli</a>
+                    
+                    
+                </section>
+                <h1 class="post-full-title">Storage DRS and PowerCLI Part 1: Get VM Overrides</h1>
+            </header>
+
+            
+
+            <section class="post-full-content">
+                <div class="post-content">
+                    
+
+<h2 id="introduction">Introduction</h2>
+
+<p>With Storage DRS (SDRS) enabled datastore clusters, we have many options to configure overrides on a per-VM basis. For example disabling SDRS for a specific VM or forcing SDRS to keep a VMs VMDK files on separate datastores (anti-affinity). However, one thing which has caught out our 2nd line team recently and caused us some SDRS performance issues is that when you manually Storage vMotion (svMotion) one or more VMDK files and pick a specific datastore as the destination, you have to tick a box that disables SDRS for the particular VM.
+<img src="/content/images/2018/07/sdrs-disable.png" alt="sdrs-disable" />
+This results in a VM Override being created for that VM. Consequently, SDRS will make no attempt to move these VMDKs when trying to rebalance the datastores in the datastore cluster.</p>
+
+<p>To stop this being an issue I have now written a couple of PowerShell scripts using PowerCLI. The first one is to list the current VM Overrides. The second one is to bulk remove the VM Overrides that are not required. In this first post I will show you how to get a list of all VM Overrides for a specific datastore cluster. You can also see this information in the Web Client by going to the Storage view, selecting a datastore cluster, and going to Manage &gt; Settings &gt; VM Overrides.</p>
+
+<h2 id="the-process">The Process</h2>
+
+<p>The first thing to do is to retrieve the datastore cluster object using the <code>Get-View</code> cmdlet (VMware refer to these as Storage Pods).</p>
+
+<pre><code class="language-powershell">$StoragePod = Get-View -ViewType &quot;StoragePod&quot; -Filter @{&quot;Name&quot; = &quot;TESTDATASTORECLUSTER&quot;}
+</code></pre>
+
+<p>I am targeting a single datastore cluster, but you can target all clusters by omitting the <code>-Filter</code> parameter.</p>
+
+<p>If you now take a look at the <code>$StoragePod.PodStorageDrsEntry.StorageDrsConfig.VmConfig</code> property, you can see a list of VMs and their current SDRS configuration as follows.</p>
+
+<pre><code class="language-powershell">$StoragePod.PodStorageDrsEntry.StorageDrsConfig.VmConfig
+
+
+Vm                  : VirtualMachine-vm-1535
+Enabled             :
+Behavior            :
+IntraVmAffinity     : False
+IntraVmAntiAffinity :
+VirtualDiskRules    :
+LinkedView          :
+
+Vm                  : VirtualMachine-vm-461
+Enabled             :
+Behavior            :
+IntraVmAffinity     : False
+IntraVmAntiAffinity :
+VirtualDiskRules    :
+LinkedView          :
+
+Vm                  : VirtualMachine-vm-1381
+Enabled             : False
+Behavior            :
+IntraVmAffinity     :
+IntraVmAntiAffinity :
+VirtualDiskRules    :
+LinkedView          :
+
+Vm                  : VirtualMachine-vm-1382
+Enabled             : False
+Behavior            :
+IntraVmAffinity     :
+IntraVmAntiAffinity :
+VirtualDiskRules    :
+LinkedView          :
+
+Vm                  : VirtualMachine-vm-1481
+Enabled             : False
+Behavior            :
+IntraVmAffinity     :
+IntraVmAntiAffinity :
+VirtualDiskRules    :
+LinkedView          :
+
+Vm                  : VirtualMachine-vm-1527
+Enabled             :
+Behavior            :
+IntraVmAffinity     :
+IntraVmAntiAffinity :
+VirtualDiskRules    :
+LinkedView          :
+
+....
+</code></pre>
+
+<p>As you can see, I have two VMs with IntraVmAffinity overrides configured and three VMs which have SDRS disabled.</p>
+
+<p>You may also see VMs in this list with nothing configured, such as <code>VirtualMachine-vm-1527</code> above. This threw me initially, as only a few random VMs without an override configured were showing up. I have since worked out in my lab that any VM which previously had a VM override but has since had it removed, will show up in this state. Meanwhile, any VM which has never had an override will not show in the list at all.</p>
+
+<p>To filter out the VMs in the list that no longer have a VM Override configured, I need to check that the <code>Enabled</code> and <code>IntraVmAffinity</code> properties are not null.</p>
+
+<pre><code class="language-powershell">$VMOverrides = $StoragePod.PodStorageDrsEntry.StorageDrsConfig.VmConfig | Where-Object {
+    -not (
+        ($_.Enabled -eq $null) -and
+        ($_.IntraVmAffinity -eq $null)
+    )
+}
+</code></pre>
+
+<p>This will store all VMs with a current VM Override in the <code>$VMOverrides</code> object. We can then loop over these and output the data as a PSCustomObject.</p>
+
+<pre><code class="language-powershell">foreach ($Override in $VMOverrides) {
+    [PSCustomObject]@{
+        VirtualMachine = $Override.Vm
+        SDRSAutomationLevel = $Override.Enabled
+        KeepVMDKsTogether = $Override.IntraVmAffinity
+    }
+}
+
+VirtualMachine         SDRSAutomationLevel KeepVMDKsTogether
+--------------         ------------------- -----------------
+VirtualMachine-vm-1481 False
+VirtualMachine-vm-1527 False
+VirtualMachine-vm-1528 False
+VirtualMachine-vm-1547 False
+VirtualMachine-vm-844  False
+</code></pre>
+
+<p>While this is great, it is returning the managed object reference (MoRef) for each VM. It would be much better if we could instead display the VM name. You can get the VM name from the MoRef using the <code>Get-VM</code> cmdlet.</p>
+
+<pre><code class="language-powershell">Get-VM -Id &quot;VirtualMachine-vm-844&quot;
+
+Name                 PowerState Num CPUs MemoryGB
+----                 ---------- -------- --------
+Test123              PoweredOn  1        3.000
+</code></pre>
+
+<p>Therefore, I am going to create a hashtable containing the MoRef for each VM as the keys, and the VM name as the values. We can then cross reference this lookup table later.</p>
+
+<pre><code class="language-powershell">$VMLookup = @{}
+foreach ($VM in (Get-VM -Id $VMOverrides.Vm)) {
+    $VMLookup.($VM.Id) = $VM.Name
+}
+</code></pre>
+
+<p>To test the lookup table, we can call the hashtable and specify the MoRef as the key. This will return the name of the VM.</p>
+
+<pre><code class="language-powershell">$VMLookup.&quot;VirtualMachine-vm-844&quot;
+</code></pre>
+
+<p>Using this technique, we can now improve our <code>foreach</code> loop from earlier to display the VM name.</p>
+
+<pre><code class="language-powershell">foreach ($Override in $VMOverrides) {
+    [PSCustomObject]@{
+        VirtualMachine = $VMLookup.&quot;$($Override.Vm.Type)-$($Override.Vm.Value)&quot;
+        SDRSAutomationLevel = $Override.Enabled
+        KeepVMDKsTogether = $Override.IntraVmAffinity
+    }
+}
+
+VirtualMachine                SDRSAutomationLevel KeepVMDKsTogether
+--------------                ------------------- -----------------
+SL_Test                       False
+RKTEST1                       False
+RKTEST0                       False
+ZERTOTEST1                    False
+Test123                       False
+</code></pre>
+
+<p>We now have our list of current VM Overrides for this specific datastore cluster. All the above VMs have SDRS Automation set to false (disabling SDRS); and as there is no entry in the Keep VMDKs Together column, these VMs do not have an override for this setting and therefore will all be using the cluster default.</p>
+
+<p>This output is OK, but when you view the VM Overrides view in the Web Client it is a bit more informative. For example rather than displaying just &ldquo;true&rdquo; or &ldquo;false&rdquo; for the SDRSAutomationLevel the Web Client will display &ldquo;Fully Automated&rdquo; or &ldquo;Disabled&rdquo;, and for KeepVMDKsTogether it will display &ldquo;Yes&rdquo; or &ldquo;No&rdquo;. Also, rather than displaying a blank when there is no override configured for a specific setting, the Web Client will instead display the cluster default, as this is the setting that will be taking effect. For completeness, I will show you have to replicate this behavior in our script.</p>
+
+<p>To display the friendly name for the VM overrides we can use a <code>switch</code> statement when building our <code>PSCustomObject</code>.</p>
+
+<pre><code class="language-powershell">foreach ($Override in $VMOverrides) {
+    [PSCustomObject]@{
+        VirtualMachine = $VMLookup.&quot;$($Override.Vm.Type)-$($Override.Vm.Value)&quot;
+        SDRSAutomationLevel = Switch ($Override.Enabled) {
+            $true {&quot;Fully Automated&quot;}
+            $false {&quot;Disabled&quot;}
+        }
+        KeepVMDKsTogether = Switch ($Override.IntraVmAffinity) {
+            $true {&quot;Yes&quot;}
+            $false {&quot;No&quot;}
+        }
+    }
+}
+</code></pre>
+
+<p>As you can see, we are now testing the value of both <code>$Override.Enabled</code> and <code>$Override.IntraVmAffinity</code> and depending on whether the value is <code>$true</code> or <code>$false</code> we are returning the required friendly name.</p>
+
+<p>This takes care of the specific VM overrides but we will still see a number of blanks which are defaulting to the cluster default. To fix this we first need to assign the cluster default settings for both <code>DefaultVmBehavior</code> and <code>DefaultIntraVmAffinity</code> to separate variables. These settings can be retrieved from the <code>$StoragePod</code> object that we created earlier.</p>
+
+<pre><code class="language-powershell">Switch ($StoragePod.PodStorageDrsEntry.StorageDrsConfig.PodConfig.DefaultVmBehavior) {
+    &quot;automated&quot; {$DefaultVmBehavior = &quot;Default (Fully Automated)&quot;}
+    &quot;manual&quot; {$DefaultVmBehavior = &quot;Default (No Automation (Manual Mode))&quot;}
+}
+
+Switch ($StoragePod.PodStorageDrsEntry.StorageDrsConfig.PodConfig.DefaultIntraVmAffinity) {
+    $true {$DefaultIntraVmAffinity = &quot;Default (Yes)&quot;}
+    $false {$DefaultIntraVmAffinity = &quot;Default (No)&quot;}
+}
+</code></pre>
+
+<p>Now we have two variables, <code>$DefaultVmBehavior</code> and <code>$DefaultIntraVmAffinity</code>, which contain a friendly name for the cluster default setting e.g. &ldquo;manual&rdquo; becomes &ldquo;Default (No Automation (Manual Mode))&rdquo; which is how it would display in the Web Client. With a simple addition to the two <code>switch</code> statements we used creating our <code>PSCustomObject</code> we can add a test for <code>$null</code> which if true will return this default setting.</p>
+
+<pre><code class="language-powershell">foreach ($Override in $VMOverrides) {
+    [PSCustomObject]@{
+        VirtualMachine = $VMLookup.&quot;$($Override.Vm.Type)-$($Override.Vm.Value)&quot;
+        SDRSAutomationLevel = Switch ($Override.Enabled) {
+            $true {&quot;Fully Automated&quot;}
+            $false {&quot;Disabled&quot;}
+            $null {$DefaultVmBehavior}
+        }
+        KeepVMDKsTogether = Switch ($Override.IntraVmAffinity) {
+            $true {&quot;Yes&quot;}
+            $false {&quot;No&quot;}
+            $null {$DefaultIntraVmAffinity}
+        }
+    }
+}
+</code></pre>
+
+<p>As you can see, now if either <code>$Override.Enabled</code> or <code>$Override.IntraVmAffinity</code> is <code>$null</code>, instead of returning a blank we now return the cluster default variable. The whole script now displays VM overrides in a pretty nice format.</p>
+
+<pre><code class="language-powershell">VirtualMachine                SDRSAutomationLevel       KeepVMDKsTogether
+--------------                -------------------       -----------------
+TEST                          Default (Fully Automated) No
+RKTEST1                       Disabled                  Default (Yes)
+RKTEST0                       Disabled                  Default (Yes)
+Test123                       Disabled                  Default (Yes)
+TEST00008                     Fully Automated           Yes
+</code></pre>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I hope this has been helpful in showing you how to retrieve the VM Override information for a datastore cluster via PowerCLI. In part 2, I will focus on how to remove VM Overrides in bulk to ensure that Storage DRS performs as effectively as possible in your environment.</p>
+
+                </div>
+            </section>
+            <footer class="post-full-footer">
+                <section class="author-card">
+    <img class="author-profile-image" src="/images/profile_images/ryan.jpg" />
+    <section class="author-card-content">
+        <h4 class="author-card-name"><a href="#">Ryan Kowalewski</a></h4>
+        <p>I am a Virtualisation Technical Specialist for a FTSE 100 company in the UK. My role focusses mainly on VMware and automation.</p>
+    </section>
+</section>
+<div class="post-full-footer-right">
+    <a class="author-card-button" href="#">Read More</a>
+</div>
+
+            </footer>
+        </article>
+
+    </div>
+</main>
+
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="http://localhost/">
+            <img src="/images/favicon.png" alt="Ryan Jan icon" />
+            <span>Ryan Jan</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">Storage DRS and PowerCLI Part 1: Get VM Overrides</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this</i></div>
+        <a class="floating-header-share-tw"
+            href="https://twitter.com/share?text=Storage%20DRS%20and%20PowerCLI%20Part%201%3a%20Get%20VM%20Overrides&amp;url=http%3a%2f%2flocalhost%2f2018%2f07%2f30%2fstorage-drs-and-powercli-part-1-get-vm-overrides%2f"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <i class="fab fa-twitter fa-lg"></i>
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%2f2018%2f07%2f30%2fstorage-drs-and-powercli-part-1-get-vm-overrides%2f"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <i class="fab fa-facebook-f fa-lg"></i>
+        </a>
+    </div>
+    <progress id="reading-progress" class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+             <article class="post-card post" >
+    
+    <a class="post-card-image-link" href="http://localhost/2018/09/24/vrops-upgrade-fail-due-to-swap-issues/">
+        <div class="post-card-image" style="background-image: url('/images/2018/09/vrops70dash.png')"></div>
+    </a>
+    
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="http://localhost/2018/09/24/vrops-upgrade-fail-due-to-swap-issues/">
+            <header class="post-card-header">
+                
+                
+                
+                    <span class="post-card-tags">vrops</span>
+                
+                
+                <h2 class="post-card-title">vRealize Operations Manager Upgrade Fails Due To Swap Issue</h2>
+            </header>
+            <section class="post-card-excerpt">
+                
+                <p>Today I upgraded my non-production vRealize Operations Manager (vROps) appliance from v6.7 to v7.0. However, when applying the initial OS update .pak file via the admin interface, the upgrade immediately failed with the error message &quot;source ./pak_python_wrapper.sh validate.py&quot; failed. …</p>
+                
+            </section>
+        </a>
+        <footer class="post-card-meta">
+            <ul class="author-list">
+                <li class="author-list-item">
+                    <div class="author-name-tooltip">
+                        Ryan Kowalewski
+                    </div>
+                    <a href="http://localhost/2018/09/24/vrops-upgrade-fail-due-to-swap-issues/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/images/profile_images/ryan.jpg" alt="Ryan Kowalewski" />
+                        
+                    </a>
+                </li>
+            </ul>
+            <span class="reading-time">3 mins</span>
+        </footer>
+    </div>
+</article> 
+            <article class="post-card post" no-image>
+    
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="http://localhost/2018/07/11/vmfs-datastore-connectivity-issue/">
+            <header class="post-card-header">
+                
+                
+                
+                    <span class="post-card-tags">vmware</span>
+                
+                
+                <h2 class="post-card-title">ESXi Loses Connectivity to VMFS Datastores.</h2>
+            </header>
+            <section class="post-card-excerpt">
+                
+                <p>Introduction This post explains my recent experiences with certain hosts losing access to some of our VMFS datastores. Hopefully it will help someone avoid the pain that I have been through in diagnosing this issues!
+The Symptoms I was initially made aware of this issue as it appeared that certain hosts were losing connectivity to VMFS datastores. Upon investigation I found the following events being logged very frequently against multiple hosts.</p>
+                
+            </section>
+        </a>
+        <footer class="post-card-meta">
+            <ul class="author-list">
+                <li class="author-list-item">
+                    <div class="author-name-tooltip">
+                        Ryan Kowalewski
+                    </div>
+                    <a href="http://localhost/2018/07/11/vmfs-datastore-connectivity-issue/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/images/profile_images/ryan.jpg" alt="Ryan Kowalewski" />
+                        
+                    </a>
+                </li>
+            </ul>
+            <span class="reading-time">6 mins</span>
+        </footer>
+    </div>
+</article>
+        </div>
+    </div>
+</aside>
+
+
+        <footer class="site-footer outer">
+    <div class="site-footer-content inner">
+        <section class="copyright"><a href="http://localhost/">Ryan Jan</a> &copy; 2019</section>
+        <nav class="site-footer-nav">
+            <a href="http://localhost/">Latest Posts</a>
+            <a href="https://github.com/ryan-jan" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://twitter.com/_ryanjan_" target="_blank" rel="noopener">Twitter</a>
+        </nav>
+    </div>
+</footer>
+    </div>
+
+    
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+
+    
+    <script type="text/javascript" src="/js/prism.js"></script>
+    <script type="text/javascript" src="/js/custom/prism-custom.js"></script>
+    
+    
+<script>
+    
+    
+    
+    
+    $(document).ready(function () {
+        
+        var $postContent = $(".post-full-content");
+        $postContent.fitVids();
+        
+    
+        var progressBar = document.querySelector('#reading-progress');
+        var header = document.querySelector('.floating-header');
+        var title = document.querySelector('.post-full-title');
+    
+        var lastScrollY = window.scrollY;
+        var lastWindowHeight = window.innerHeight;
+        var lastDocumentHeight = $(document).height();
+        var ticking = false;
+    
+        function onScroll() {
+            lastScrollY = window.scrollY;
+            requestTick();
+        }
+    
+        function onResize() {
+            lastWindowHeight = window.innerHeight;
+            lastDocumentHeight = $(document).height();
+            requestTick();
+        }
+    
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(update);
+            }
+            ticking = true;
+        }
+    
+        function update() {
+            var trigger = title.getBoundingClientRect().top + window.scrollY;
+            var triggerOffset = title.offsetHeight + 35;
+            var progressMax = lastDocumentHeight - lastWindowHeight;
+    
+            
+            if (lastScrollY >= trigger + triggerOffset) {
+                header.classList.add('floating-active');
+            } else {
+                header.classList.remove('floating-active');
+            }
+    
+            progressBar.setAttribute('max', progressMax);
+            progressBar.setAttribute('value', lastScrollY);
+    
+            ticking = false;
+        }
+    
+        window.addEventListener('scroll', onScroll, {passive: true});
+        window.addEventListener('resize', onResize, false);
+    
+        update();
+    
+    });
+</script>
+
+</body>
+</html>

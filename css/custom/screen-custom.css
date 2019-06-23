@@ -1,0 +1,117 @@
+p {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.post-card-excerpt,
+.post-full-content {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.post-template .kg-card-markdown>p:first-child {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.post-full-content h1,
+.post-full-content h2,
+.post-full-content h3,
+.post-full-content h4,
+.post-full-content h5,
+.post-full-content h6 {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.post-full-content h2 {
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+.post-full-content h3 {
+    font-size: 2.2rem;
+    font-weight: 600;
+}
+
+.post-full-content a {
+    box-shadow: none;
+    color: #2962ff;
+}
+
+.post-full-content a:hover {
+    color: #768fff;
+}
+
+.post-full-content table {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.post-full-content pre {
+    border: none !important;
+}
+
+.post-full-content blockquote {
+    margin: 1.5em;
+    padding: 0 1.5em;
+    border-left: 3px solid #2962ff;
+}
+
+.site-header-content .author-meta {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.subscribe-overlay-description {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.social-links a {
+    text-decoration: none;
+}
+
+.post-full-meta-date {
+    color: #2962ff;  
+}
+
+.author-card-button:hover {
+    color: #2962ff;
+    border-color: #2962ff;  
+}
+
+/* Custom About Page */
+.about-sidebar {
+    width: 100%;
+}
+
+.about-sidebar > .author-profile-image {
+    width: 70%;
+    height: 70%;
+    box-shadow: 0 0 0 6px #eeeeee;
+}
+
+@media (min-width: 786px) {
+    .about-main {
+        padding: 0;
+    }
+
+    .about-main > .post-content {
+        display: block;
+        width: 70%;
+        float: left;
+        padding: 0 1.5em;
+    }
+
+    .about-sidebar {
+        display: block;
+        width: 30%;
+        float: left;
+        padding: 0 1.5em;
+    }
+
+    .about-sidebar img {
+        width: 70%;
+        height: 70%;
+    }
+
+    .about-sidebar > .author-profile-image {
+        margin: 0 auto;
+    }
+}

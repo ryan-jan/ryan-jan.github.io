@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    
+    <title>Ryan Jan  | vRealize Operations Manager Upgrade Fails Due To Swap Issue</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+
+    <meta name="generator" content="Hugo 0.55.6" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    
+    <link rel="stylesheet" type="text/css" href="/css/screen.css" />
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/prism.css" />
+    <link rel="stylesheet" type="text/css" href="/css/custom/global-custom.css" />
+    <link rel="stylesheet" type="text/css" href="/css/custom/screen-custom.css" />
+    <link rel="stylesheet" type="text/css" href="/css/fontawesome_all.min.css" /> 
+    <link rel="stylesheet" type="text/css" href="/css/custom/prism-custom.css" />
+
+    
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+</head>
+
+
+
+
+<body class='post-template' >
+    <div class="site-wrapper">
+        
+<header class="site-header outer" no-cover>
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+        
+        <a class="site-nav-logo" href="http://localhost/"><img src="/images/ryanjan-logo.png" alt="Ryan Jan" /></a>
+        
+        <ul class="nav" role="menu">
+            <li class="nav-home" role="menuitem"><a href="http://localhost/">Home</a></li>
+            <li class="nav-about" role="menuitem"><a href="http://localhost//about">About</a></li>
+        </ul>
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+            <a class="social-link social-link-gh" href="https://github.com/ryan-jan" target="_blank" rel="noopener">
+                <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a class="social-link social-link-tw" href="https://twitter.com/_ryanjan_" target="_blank" rel="noopener">
+                <i class="fab fa-twitter fa-lg"></i>
+            </a>
+        </div>
+    </div>
+</nav>
+    </div>
+</header>
+<main id="site-main" class="site-main outer">
+    <div class="inner">
+
+        <article class="post-full post ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime='24 September 2018'>24 September 2018</time>
+                    
+                    
+                    
+                        <span class="date-divider">/</span> <a href="/tags/vrops">vrops</a>
+                    
+                    
+                </section>
+                <h1 class="post-full-title">vRealize Operations Manager Upgrade Fails Due To Swap Issue</h1>
+            </header>
+
+            
+            <figure class="post-full-image" style="background-image: url( '/images/2018/09/vrops70dash.png' )">
+            </figure>
+            
+
+            <section class="post-full-content">
+                <div class="post-content">
+                    <p>Today I upgraded my non-production vRealize Operations Manager (vROps) appliance from v6.7 to v7.0. However, when applying the initial OS update <code>.pak</code> file via the admin interface, the upgrade immediately failed
+with the error message <code>&quot;source ./pak_python_wrapper.sh validate.py&quot; failed</code>.</p>
+
+<p>Initially a colleague of mine pointed me to the well known disk space issues (<a href="https://kb.vmware.com/s/article/2135651">KB article</a>), but a quick look at the disk stats showed that there was plenty of space available on all partitions.</p>
+
+<pre><code class="language-bash">vrops.example.com:~ # df -h
+
+Filesystem             Size  Used Avail Use% Mounted on
+/dev/sda3               16G  4.6G   11G  31% /
+udev                   7.9G  124K  7.9G   1% /dev
+tmpfs                  7.9G   16K  7.9G   1% /dev/shm
+/dev/sda1              128M   39M   83M  32% /boot
+/dev/mapper/data-core   20G  225M   19G   2% /storage/core
+/dev/mapper/data-log    20G  9.1G  9.7G  49% /storage/log
+/dev/mapper/data-db    217G  115G   91G  56% /storage/db
+</code></pre>
+
+<p>Then I stumbled accross an article which pointed me at the <code>/storage/log/vcops/log/pakManager/vcopsPakManager.root.post_validate.log</code> log file. In this log I saw the following errors regarding swap space.</p>
+
+<pre><code class="language-bash">INFO - ***swap_space_check*** --- Validating swap space on all nodes in the cluster.
+DEBUG - Updating state file with check: swap_space_check, start_time: True, stop_time: False, result: None, result_desc: None
+DEBUG - state file: &quot;/storage/db/pakRepoLocal/vRealizeOperationsManagerEnterpriseVAOSUpgrade-70010098132/vRealizeOperationsManagerEnterpriseVAOSUpgrade-70010098132_validate.json&quot;
+DEBUG - Swap:            0          0          0
+
+DEBUG - total: 0mb, used: 0mb
+ERROR - swap_space_check failed, float division by zero
+Traceback (most recent call last):
+  File &quot;validate.py&quot;, line 1974, in main
+    result, result_description = getattr(envInfo, check_name)()
+  File &quot;validate.py&quot;, line 1393, in swap_space_check
+    swap_percent = float(used)/float(total)
+ZeroDivisionError: float division by zero
+ERROR - float division by zero
+DEBUG - Updating state file with check: swap_space_check, start_time: False, stop_time: True, result: False, result_desc: float division by zero
+DEBUG - state file: &quot;/storage/db/pakRepoLocal/vRealizeOperationsManagerEnterpriseVAOSUpgrade-70010098132/vRealizeOperationsManagerEnterpriseVAOSUpgrade-70010098132_validate.json&quot;
+ERROR - Failed running upgrade: ZeroDivisionError('float division by zero',) is not JSON serializable
+</code></pre>
+
+<p>I then used <code>top</code> to see swap usage and sure enough it was showing <code>0mb</code> free.</p>
+
+<pre><code class="language-bash">vrops.example.com:~ # top
+top - 15:06:30 up 36 min,  1 user,  load average: 0.24, 0.22, 0.29
+Tasks: 107 total,   1 running, 106 sleeping,   0 stopped,   0 zombie
+Cpu(s):  0.1%us,  0.1%sy,  0.0%ni, 99.8%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st
+Mem:     16081M total,     3514M used,    12567M free,       52M buffers
+Swap:        0M total,        0M used,        0M free,     2782M cached
+</code></pre>
+
+<p>A quick <code>fdisk -l</code> showed me which partition was supposed to be for swap.</p>
+
+<pre><code class="language-bash">vrops.example.com:~ # fdisk -l /dev/sda
+
+Disk /dev/sda: 21.5 GB, 21474836480 bytes
+64 heads, 32 sectors/track, 20480 cylinders, total 41943040 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x000cdac4
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1            2048      272383      135168   83  Linux
+/dev/sda2          272384     8675327     4201472   82  Linux swap / Solaris
+/dev/sda3   *     8675328    41943039    16633856   83  Linux
+</code></pre>
+
+<p>And then I ran the following to re-enable the swap partition.</p>
+
+<pre><code class="language-bash">vrops.example.com:~ # mkswap -L SWAP-sda2 /dev/sda2
+Setting up swapspace version 1, size = 4201468 KiB
+LABEL=SWAP-sda2, UUID=f9eaa199-8121-4838-b277-81ca2820f64a
+vrops.example.com:~ # swapon -a
+</code></pre>
+
+<p>Finally I checked <code>top</code> again and as you can see the swap is now <code>4102Mb</code>.</p>
+
+<pre><code class="language-bash">vrops.example.com:~ # top
+top - 15:07:13 up 37 min,  1 user,  load average: 0.21, 0.22, 0.29
+Tasks: 106 total,   1 running, 105 sleeping,   0 stopped,   0 zombie
+Cpu(s):  0.0%us,  0.1%sy,  0.0%ni, 99.9%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st
+Mem:     16081M total,     3515M used,    12566M free,       52M buffers
+Swap:     4102M total,        0M used,     4102M free,     2782M cached
+</code></pre>
+
+<p>Sure enough, when I tried the update again it worked without issue. Hopefully this will save someone the couple of hours digging around online that I ended up doing today.</p>
+
+                </div>
+            </section>
+            <footer class="post-full-footer">
+                <section class="author-card">
+    <img class="author-profile-image" src="/images/profile_images/ryan.jpg" />
+    <section class="author-card-content">
+        <h4 class="author-card-name"><a href="#">Ryan Kowalewski</a></h4>
+        <p>I am a Virtualisation Technical Specialist for a FTSE 100 company in the UK. My role focusses mainly on VMware and automation.</p>
+    </section>
+</section>
+<div class="post-full-footer-right">
+    <a class="author-card-button" href="#">Read More</a>
+</div>
+
+            </footer>
+        </article>
+
+    </div>
+</main>
+
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="http://localhost/">
+            <img src="/images/favicon.png" alt="Ryan Jan icon" />
+            <span>Ryan Jan</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">vRealize Operations Manager Upgrade Fails Due To Swap Issue</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this</i></div>
+        <a class="floating-header-share-tw"
+            href="https://twitter.com/share?text=vRealize%20Operations%20Manager%20Upgrade%20Fails%20Due%20To%20Swap%20Issue&amp;url=http%3a%2f%2flocalhost%2f2018%2f09%2f24%2fvrops-upgrade-fail-due-to-swap-issues%2f"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <i class="fab fa-twitter fa-lg"></i>
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%2f2018%2f09%2f24%2fvrops-upgrade-fail-due-to-swap-issues%2f"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <i class="fab fa-facebook-f fa-lg"></i>
+        </a>
+    </div>
+    <progress id="reading-progress" class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+             <article class="post-card post" >
+    
+    <a class="post-card-image-link" href="http://localhost/2019/02/10/get-host-cdp-info-with-powercli/">
+        <div class="post-card-image" style="background-image: url('/images/2019/02/cisco-logo-16x9-2-1.jpg')"></div>
+    </a>
+    
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="http://localhost/2019/02/10/get-host-cdp-info-with-powercli/">
+            <header class="post-card-header">
+                
+                
+                
+                    <span class="post-card-tags">powercli</span>
+                
+                
+                <h2 class="post-card-title">Get ESXi Host CDP Info With PowerCLI</h2>
+            </header>
+            <section class="post-card-excerpt">
+                
+                <p>Introduction I recently had to provide our networking team with a list of ESXi hosts and which switchports each of their physical NICs were connected to. Like many other environments, we are primarily a Cisco house and therefore I was able to get this data by querying the Cisco Discovery Protocol …</p>
+                
+            </section>
+        </a>
+        <footer class="post-card-meta">
+            <ul class="author-list">
+                <li class="author-list-item">
+                    <div class="author-name-tooltip">
+                        Ryan Kowalewski
+                    </div>
+                    <a href="http://localhost/2019/02/10/get-host-cdp-info-with-powercli/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/images/profile_images/ryan.jpg" alt="Ryan Kowalewski" />
+                        
+                    </a>
+                </li>
+            </ul>
+            <span class="reading-time">6 mins</span>
+        </footer>
+    </div>
+</article> 
+            <article class="post-card post" no-image>
+    
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="http://localhost/2018/07/30/storage-drs-and-powercli-part-1-get-vm-overrides/">
+            <header class="post-card-header">
+                
+                
+                
+                    <span class="post-card-tags">powercli</span>
+                
+                
+                <h2 class="post-card-title">Storage DRS and PowerCLI Part 1: Get VM Overrides</h2>
+            </header>
+            <section class="post-card-excerpt">
+                
+                <p>Introduction With Storage DRS (SDRS) enabled datastore clusters, we have many options to configure overrides on a per-VM basis. For example disabling SDRS for a specific VM or forcing SDRS to keep a VMs VMDK files on separate datastores (anti-affinity). However, one thing which has caught out our 2nd line team recently and caused us some SDRS performance issues is that when you manually Storage vMotion (svMotion) one or more VMDK files and pick a specific datastore as the destination, you have to tick a box that disables SDRS for the particular VM.</p>
+                
+            </section>
+        </a>
+        <footer class="post-card-meta">
+            <ul class="author-list">
+                <li class="author-list-item">
+                    <div class="author-name-tooltip">
+                        Ryan Kowalewski
+                    </div>
+                    <a href="http://localhost/2018/07/30/storage-drs-and-powercli-part-1-get-vm-overrides/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/images/profile_images/ryan.jpg" alt="Ryan Kowalewski" />
+                        
+                    </a>
+                </li>
+            </ul>
+            <span class="reading-time">7 mins</span>
+        </footer>
+    </div>
+</article>
+        </div>
+    </div>
+</aside>
+
+
+        <footer class="site-footer outer">
+    <div class="site-footer-content inner">
+        <section class="copyright"><a href="http://localhost/">Ryan Jan</a> &copy; 2019</section>
+        <nav class="site-footer-nav">
+            <a href="http://localhost/">Latest Posts</a>
+            <a href="https://github.com/ryan-jan" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://twitter.com/_ryanjan_" target="_blank" rel="noopener">Twitter</a>
+        </nav>
+    </div>
+</footer>
+    </div>
+
+    
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+
+    
+    <script type="text/javascript" src="/js/prism.js"></script>
+    <script type="text/javascript" src="/js/custom/prism-custom.js"></script>
+    
+    
+<script>
+    
+    
+    
+    
+    $(document).ready(function () {
+        
+        var $postContent = $(".post-full-content");
+        $postContent.fitVids();
+        
+    
+        var progressBar = document.querySelector('#reading-progress');
+        var header = document.querySelector('.floating-header');
+        var title = document.querySelector('.post-full-title');
+    
+        var lastScrollY = window.scrollY;
+        var lastWindowHeight = window.innerHeight;
+        var lastDocumentHeight = $(document).height();
+        var ticking = false;
+    
+        function onScroll() {
+            lastScrollY = window.scrollY;
+            requestTick();
+        }
+    
+        function onResize() {
+            lastWindowHeight = window.innerHeight;
+            lastDocumentHeight = $(document).height();
+            requestTick();
+        }
+    
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(update);
+            }
+            ticking = true;
+        }
+    
+        function update() {
+            var trigger = title.getBoundingClientRect().top + window.scrollY;
+            var triggerOffset = title.offsetHeight + 35;
+            var progressMax = lastDocumentHeight - lastWindowHeight;
+    
+            
+            if (lastScrollY >= trigger + triggerOffset) {
+                header.classList.add('floating-active');
+            } else {
+                header.classList.remove('floating-active');
+            }
+    
+            progressBar.setAttribute('max', progressMax);
+            progressBar.setAttribute('value', lastScrollY);
+    
+            ticking = false;
+        }
+    
+        window.addEventListener('scroll', onScroll, {passive: true});
+        window.addEventListener('resize', onResize, false);
+    
+        update();
+    
+    });
+</script>
+
+</body>
+</html>
