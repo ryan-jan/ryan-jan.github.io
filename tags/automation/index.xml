@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>automation on Ryan Jan</title>
-    <link>http://localhost/tags/automation/</link>
+    <link>http://ryan-jan.github.io/tags/automation/</link>
     <description>Recent content in automation on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <lastBuildDate>Wed, 19 Jun 2019 17:28:24 +0000</lastBuildDate>
     
-	<atom:link href="http://localhost/tags/automation/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://ryan-jan.github.io/tags/automation/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Managing vSphere Global Permissions with PowerShell</title>
-      <link>http://localhost/2019/06/19/vsphere-global-permissions-with-powershell/</link>
+      <link>http://ryan-jan.github.io/2019/06/19/vsphere-global-permissions-with-powershell/</link>
       <pubDate>Wed, 19 Jun 2019 17:28:24 +0000</pubDate>
       
-      <guid>http://localhost/2019/06/19/vsphere-global-permissions-with-powershell/</guid>
+      <guid>http://ryan-jan.github.io/2019/06/19/vsphere-global-permissions-with-powershell/</guid>
       <description>It appears that working with vSphere global permissions in PowerCLI is not yet possible. The VIPerms PowerShell module combines the add/remove examples from William&amp;rsquo;s post with a new function to list all global permissions. In this post I will demonstrate how to install and use this module.</description>
     </item>
     

@@ -2,30 +2,30 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>vsphere on Ryan Jan</title>
-    <link>http://localhost/tags/vsphere/</link>
+    <link>http://ryan-jan.github.io/tags/vsphere/</link>
     <description>Recent content in vsphere on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <lastBuildDate>Wed, 19 Jun 2019 17:28:24 +0000</lastBuildDate>
     
-	<atom:link href="http://localhost/tags/vsphere/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://ryan-jan.github.io/tags/vsphere/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Managing vSphere Global Permissions with PowerShell</title>
-      <link>http://localhost/2019/06/19/vsphere-global-permissions-with-powershell/</link>
+      <link>http://ryan-jan.github.io/2019/06/19/vsphere-global-permissions-with-powershell/</link>
       <pubDate>Wed, 19 Jun 2019 17:28:24 +0000</pubDate>
       
-      <guid>http://localhost/2019/06/19/vsphere-global-permissions-with-powershell/</guid>
+      <guid>http://ryan-jan.github.io/2019/06/19/vsphere-global-permissions-with-powershell/</guid>
       <description>It appears that working with vSphere global permissions in PowerCLI is not yet possible. The VIPerms PowerShell module combines the add/remove examples from William&amp;rsquo;s post with a new function to list all global permissions. In this post I will demonstrate how to install and use this module.</description>
     </item>
     
     <item>
       <title>ESXi Loses Connectivity to VMFS Datastores.</title>
-      <link>http://localhost/2018/07/11/vmfs-datastore-connectivity-issue/</link>
+      <link>http://ryan-jan.github.io/2018/07/11/vmfs-datastore-connectivity-issue/</link>
       <pubDate>Wed, 11 Jul 2018 15:43:08 +0000</pubDate>
       
-      <guid>http://localhost/2018/07/11/vmfs-datastore-connectivity-issue/</guid>
+      <guid>http://ryan-jan.github.io/2018/07/11/vmfs-datastore-connectivity-issue/</guid>
       <description>Introduction This post explains my recent experiences with certain hosts losing access to some of our VMFS datastores. Hopefully it will help someone avoid the pain that I have been through in diagnosing this issues!
 The Symptoms I was initially made aware of this issue as it appeared that certain hosts were losing connectivity to VMFS datastores. Upon investigation I found the following events being logged very frequently against multiple hosts.</description>
     </item>

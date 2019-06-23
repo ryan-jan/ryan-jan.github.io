@@ -2,97 +2,97 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ryan Jan</title>
-    <link>http://localhost/</link>
+    <link>http://ryan-jan.github.io/</link>
     <description>Recent content on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <lastBuildDate>Wed, 19 Jun 2019 17:28:24 +0000</lastBuildDate>
     
-	<atom:link href="http://localhost/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://ryan-jan.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Managing vSphere Global Permissions with PowerShell</title>
-      <link>http://localhost/2019/06/19/vsphere-global-permissions-with-powershell/</link>
+      <link>http://ryan-jan.github.io/2019/06/19/vsphere-global-permissions-with-powershell/</link>
       <pubDate>Wed, 19 Jun 2019 17:28:24 +0000</pubDate>
       
-      <guid>http://localhost/2019/06/19/vsphere-global-permissions-with-powershell/</guid>
+      <guid>http://ryan-jan.github.io/2019/06/19/vsphere-global-permissions-with-powershell/</guid>
       <description>It appears that working with vSphere global permissions in PowerCLI is not yet possible. The VIPerms PowerShell module combines the add/remove examples from William&amp;rsquo;s post with a new function to list all global permissions. In this post I will demonstrate how to install and use this module.</description>
     </item>
     
     <item>
       <title>ESXi Host Certificate Renewal Doesn&#39;t Include Full Chain</title>
-      <link>http://localhost/2019/05/01/esxi-host-certificate-renewal-doesnt-include-full-chain/</link>
+      <link>http://ryan-jan.github.io/2019/05/01/esxi-host-certificate-renewal-doesnt-include-full-chain/</link>
       <pubDate>Wed, 01 May 2019 21:31:47 +0000</pubDate>
       
-      <guid>http://localhost/2019/05/01/esxi-host-certificate-renewal-doesnt-include-full-chain/</guid>
+      <guid>http://ryan-jan.github.io/2019/05/01/esxi-host-certificate-renewal-doesnt-include-full-chain/</guid>
       <description>I have just successfully migrated one of our vCenter 6.0 Windows servers to a brand new 6.7 U1 vCenter Server Appliance. After this migration I configured VMCA to be a intermediate certificate authority to our internal CA. The process for this is relatively straight forward, however, there appears to be an issue in 6.7 (and potentially 6.5) whereby hosts which are subsequently issued a new SSL certificate fail to use the full certificate chain, and therefore still show as untrusted in the browser when accessing the ESXi host client.</description>
     </item>
     
     <item>
       <title>Get ESXi Host CDP Info With PowerCLI</title>
-      <link>http://localhost/2019/02/10/get-host-cdp-info-with-powercli/</link>
+      <link>http://ryan-jan.github.io/2019/02/10/get-host-cdp-info-with-powercli/</link>
       <pubDate>Sun, 10 Feb 2019 13:05:51 +0000</pubDate>
       
-      <guid>http://localhost/2019/02/10/get-host-cdp-info-with-powercli/</guid>
+      <guid>http://ryan-jan.github.io/2019/02/10/get-host-cdp-info-with-powercli/</guid>
       <description>Introduction I recently had to provide our networking team with a list of ESXi hosts and which switchports each of their physical NICs were connected to. Like many other environments, we are primarily a Cisco house and therefore I was able to get this data by querying the Cisco Discovery Protocol (CDP) information via PowerCLI. Here is how I went about it.
 The Process I will initially show you how to pull this information for a specific host.</description>
     </item>
     
     <item>
       <title>vRealize Operations Manager Upgrade Fails Due To Swap Issue</title>
-      <link>http://localhost/2018/09/24/vrops-upgrade-fail-due-to-swap-issues/</link>
+      <link>http://ryan-jan.github.io/2018/09/24/vrops-upgrade-fail-due-to-swap-issues/</link>
       <pubDate>Mon, 24 Sep 2018 17:55:36 +0000</pubDate>
       
-      <guid>http://localhost/2018/09/24/vrops-upgrade-fail-due-to-swap-issues/</guid>
+      <guid>http://ryan-jan.github.io/2018/09/24/vrops-upgrade-fail-due-to-swap-issues/</guid>
       <description>Today I upgraded my non-production vRealize Operations Manager (vROps) appliance from v6.7 to v7.0. However, when applying the initial OS update .pak file via the admin interface, the upgrade immediately failed with the error message &amp;quot;source ./pak_python_wrapper.sh validate.py&amp;quot; failed.
 Initially a colleague of mine pointed me to the well known disk space issues (KB article), but a quick look at the disk stats showed that there was plenty of space available on all partitions.</description>
     </item>
     
     <item>
       <title>Storage DRS and PowerCLI Part 1: Get VM Overrides</title>
-      <link>http://localhost/2018/07/30/storage-drs-and-powercli-part-1-get-vm-overrides/</link>
+      <link>http://ryan-jan.github.io/2018/07/30/storage-drs-and-powercli-part-1-get-vm-overrides/</link>
       <pubDate>Mon, 30 Jul 2018 20:42:57 +0000</pubDate>
       
-      <guid>http://localhost/2018/07/30/storage-drs-and-powercli-part-1-get-vm-overrides/</guid>
+      <guid>http://ryan-jan.github.io/2018/07/30/storage-drs-and-powercli-part-1-get-vm-overrides/</guid>
       <description>Introduction With Storage DRS (SDRS) enabled datastore clusters, we have many options to configure overrides on a per-VM basis. For example disabling SDRS for a specific VM or forcing SDRS to keep a VMs VMDK files on separate datastores (anti-affinity). However, one thing which has caught out our 2nd line team recently and caused us some SDRS performance issues is that when you manually Storage vMotion (svMotion) one or more VMDK files and pick a specific datastore as the destination, you have to tick a box that disables SDRS for the particular VM.</description>
     </item>
     
     <item>
       <title>ESXi Loses Connectivity to VMFS Datastores.</title>
-      <link>http://localhost/2018/07/11/vmfs-datastore-connectivity-issue/</link>
+      <link>http://ryan-jan.github.io/2018/07/11/vmfs-datastore-connectivity-issue/</link>
       <pubDate>Wed, 11 Jul 2018 15:43:08 +0000</pubDate>
       
-      <guid>http://localhost/2018/07/11/vmfs-datastore-connectivity-issue/</guid>
+      <guid>http://ryan-jan.github.io/2018/07/11/vmfs-datastore-connectivity-issue/</guid>
       <description>Introduction This post explains my recent experiences with certain hosts losing access to some of our VMFS datastores. Hopefully it will help someone avoid the pain that I have been through in diagnosing this issues!
 The Symptoms I was initially made aware of this issue as it appeared that certain hosts were losing connectivity to VMFS datastores. Upon investigation I found the following events being logged very frequently against multiple hosts.</description>
     </item>
     
     <item>
       <title>vROps Reports and PowerCLI Part 3: A Helper Module</title>
-      <link>http://localhost/2018/06/24/vrops-reports-and-powercli-part-three-a-helper-module/</link>
+      <link>http://ryan-jan.github.io/2018/06/24/vrops-reports-and-powercli-part-three-a-helper-module/</link>
       <pubDate>Sun, 24 Jun 2018 11:22:20 +0000</pubDate>
       
-      <guid>http://localhost/2018/06/24/vrops-reports-and-powercli-part-three-a-helper-module/</guid>
+      <guid>http://ryan-jan.github.io/2018/06/24/vrops-reports-and-powercli-part-three-a-helper-module/</guid>
       <description>For your reference here is a list of the articles in this mini-series.
  vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports vROps Reports and PowerCLI Part 3: A Helper Module (this article)  Introduction If you have been following along with the previous two articles in this series, you should now have a pretty good understanding of how to manipulate the extensionData container via PowerCLI to generate and download reports from vRealize Operations Manager (vROps).</description>
     </item>
     
     <item>
       <title>PowerShell Tips: Script Optimization</title>
-      <link>http://localhost/2018/06/02/powershell-tips-script-optimization/</link>
+      <link>http://ryan-jan.github.io/2018/06/02/powershell-tips-script-optimization/</link>
       <pubDate>Sat, 02 Jun 2018 11:53:28 +0000</pubDate>
       
-      <guid>http://localhost/2018/06/02/powershell-tips-script-optimization/</guid>
+      <guid>http://ryan-jan.github.io/2018/06/02/powershell-tips-script-optimization/</guid>
       <description>Introduction A colleague of mine recently asked for some help with a script he was writing. We use vSphere tags in order to determine which backup schedule a given VM is in and he wanted to find all VMs which were not assigned a tag in the category backup-service-level, and therefore were not being backed up. His actual query was regarding filtering out certain VMs which will never be given a backup tag.</description>
     </item>
     
     <item>
       <title>vROps Reports and PowerCLI Part 2: Downloading Reports</title>
-      <link>http://localhost/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/</link>
+      <link>http://ryan-jan.github.io/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/</link>
       <pubDate>Mon, 21 May 2018 17:46:20 +0000</pubDate>
       
-      <guid>http://localhost/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/</guid>
+      <guid>http://ryan-jan.github.io/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/</guid>
       <description>For your reference, here are the articles in this mini-series:
  vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports (this article) vROps Reports and PowerCLI Part 3: A Helper Module  Introduction Following on from the previous article in this mini-series, this article demonstrates how to retrieve a generated report from vROps as a PowerShell object.
 Downloading A Generated Report The last step of the previous article was to use the GetReport() method to verify that your report generation was complete.</description>
@@ -100,20 +100,20 @@ Downloading A Generated Report The last step of the previous article was to use 
     
     <item>
       <title>vROps Reports and PowerCLI Part 1: Generating Reports</title>
-      <link>http://localhost/2018/05/16/running-vrops-reports-using-powercli/</link>
+      <link>http://ryan-jan.github.io/2018/05/16/running-vrops-reports-using-powercli/</link>
       <pubDate>Wed, 16 May 2018 11:33:34 +0000</pubDate>
       
-      <guid>http://localhost/2018/05/16/running-vrops-reports-using-powercli/</guid>
+      <guid>http://ryan-jan.github.io/2018/05/16/running-vrops-reports-using-powercli/</guid>
       <description>For your reference, here are the articles in this mini-series:
  vROps Reports and PowerCLI Part 1: Generating Reports (this article) vROps Reports and PowerCLI Part 2: Downloading Reports vROps Reports and PowerCLI Part 3: A Helper Module  Introduction I&amp;rsquo;ve been spending quite a bit of time with vRealize Operations Manager (vROps) lately, mostly running reports. While this is easy enough to do via the web UI, I found myself running a report, downloading the .</description>
     </item>
     
     <item>
       <title>Installing Gogs In A FreeNAS Jail</title>
-      <link>http://localhost/2018/03/26/installing-gogs-in-a-freenas-jail/</link>
+      <link>http://ryan-jan.github.io/2018/03/26/installing-gogs-in-a-freenas-jail/</link>
       <pubDate>Mon, 26 Mar 2018 22:17:46 +0000</pubDate>
       
-      <guid>http://localhost/2018/03/26/installing-gogs-in-a-freenas-jail/</guid>
+      <guid>http://ryan-jan.github.io/2018/03/26/installing-gogs-in-a-freenas-jail/</guid>
       <description>I recently stumbled across the Gogs project whilst looking for self-hosted Git solutions. I run a FreeNAS server at home so I thought I would get the app up and running in a jail. Here is how I did it.
 Jail Preparation Create a new jail named gogs and make sure that the jail is up to date by running.
 pkg update &amp;amp;&amp;amp; pkg upgrade  Now install the required packages.</description>
@@ -121,10 +121,10 @@ pkg update &amp;amp;&amp;amp; pkg upgrade  Now install the required packages.</d
     
     <item>
       <title>About</title>
-      <link>http://localhost/about/</link>
+      <link>http://ryan-jan.github.io/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost/about/</guid>
+      <guid>http://ryan-jan.github.io/about/</guid>
       <description>Welcome! My name is Ryan Kowalewski and this is my blog.
 I am a Virtualization Technical Specialist in the Cloud Platforms team of a FTSE 100 company based on the south coast of the UK. My role focusses mostly around VMware and automation, and as such many of my posts will be in these areas, although I will throw in some different content from time to time.
 I regularly find myself referring to many of the awesome blogs/resources which already exist in the community and as such this is my way of giving a little bit back while hopefully helping a few people along the way.</description>
