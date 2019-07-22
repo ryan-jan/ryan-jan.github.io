@@ -89,7 +89,7 @@
 <h2 id="introduction">Introduction</h2>
 
 <p>With Storage DRS (SDRS) enabled datastore clusters, we have many options to configure overrides on a per-VM basis. For example disabling SDRS for a specific VM or forcing SDRS to keep a VMs VMDK files on separate datastores (anti-affinity). However, one thing which has caught out our 2nd line team recently and caused us some SDRS performance issues is that when you manually Storage vMotion (svMotion) one or more VMDK files and pick a specific datastore as the destination, you have to tick a box that disables SDRS for the particular VM.
-<img src="/content/images/2018/07/sdrs-disable.png" alt="sdrs-disable" />
+<img src="/images/2018/07/sdrs-disable.png" alt="sdrs-disable" />
 This results in a VM Override being created for that VM. Consequently, SDRS will make no attempt to move these VMDKs when trying to rebalance the datastores in the datastore cluster.</p>
 
 <p>To stop this being an issue I have now written a couple of PowerShell scripts using PowerCLI. The first one is to list the current VM Overrides. The second one is to bulk remove the VM Overrides that are not required. In this first post I will show you how to get a list of all VM Overrides for a specific datastore cluster. You can also see this information in the Web Client by going to the Storage view, selecting a datastore cluster, and going to Manage &gt; Settings &gt; VM Overrides.</p>
