@@ -77,6 +77,10 @@ p {
     border-color: #2962ff;  
 }
 
+.floating-header-share a {
+    text-decoration: none;
+}
+
 /* Custom About Page */
 .about-sidebar {
     width: 100%;
