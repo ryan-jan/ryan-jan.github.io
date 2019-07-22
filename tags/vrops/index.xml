@@ -2,41 +2,41 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>vrops on Ryan Jan</title>
-    <link>http://ryan-jan.github.io/tags/vrops/</link>
+    <link>https://ryanjan.uk/tags/vrops/</link>
     <description>Recent content in vrops on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <lastBuildDate>Mon, 24 Sep 2018 17:55:36 +0000</lastBuildDate>
     
-	<atom:link href="http://ryan-jan.github.io/tags/vrops/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ryanjan.uk/tags/vrops/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>vRealize Operations Manager Upgrade Fails Due To Swap Issue</title>
-      <link>http://ryan-jan.github.io/2018/09/24/vrops-upgrade-fail-due-to-swap-issues/</link>
+      <link>https://ryanjan.uk/2018/09/24/vrops-upgrade-fail-due-to-swap-issues/</link>
       <pubDate>Mon, 24 Sep 2018 17:55:36 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/2018/09/24/vrops-upgrade-fail-due-to-swap-issues/</guid>
+      <guid>https://ryanjan.uk/2018/09/24/vrops-upgrade-fail-due-to-swap-issues/</guid>
       <description>Today I upgraded my non-production vRealize Operations Manager (vROps) appliance from v6.7 to v7.0. However, when applying the initial OS update .pak file via the admin interface, the upgrade immediately failed with the error message &amp;quot;source ./pak_python_wrapper.sh validate.py&amp;quot; failed.
 Initially a colleague of mine pointed me to the well known disk space issues (KB article), but a quick look at the disk stats showed that there was plenty of space available on all partitions.</description>
     </item>
     
     <item>
       <title>vROps Reports and PowerCLI Part 3: A Helper Module</title>
-      <link>http://ryan-jan.github.io/2018/06/24/vrops-reports-and-powercli-part-three-a-helper-module/</link>
+      <link>https://ryanjan.uk/2018/06/24/vrops-reports-and-powercli-part-three-a-helper-module/</link>
       <pubDate>Sun, 24 Jun 2018 11:22:20 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/2018/06/24/vrops-reports-and-powercli-part-three-a-helper-module/</guid>
+      <guid>https://ryanjan.uk/2018/06/24/vrops-reports-and-powercli-part-three-a-helper-module/</guid>
       <description>For your reference here is a list of the articles in this mini-series.
  vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports vROps Reports and PowerCLI Part 3: A Helper Module (this article)  Introduction If you have been following along with the previous two articles in this series, you should now have a pretty good understanding of how to manipulate the extensionData container via PowerCLI to generate and download reports from vRealize Operations Manager (vROps).</description>
     </item>
     
     <item>
       <title>vROps Reports and PowerCLI Part 2: Downloading Reports</title>
-      <link>http://ryan-jan.github.io/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/</link>
+      <link>https://ryanjan.uk/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/</link>
       <pubDate>Mon, 21 May 2018 17:46:20 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/</guid>
+      <guid>https://ryanjan.uk/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/</guid>
       <description>For your reference, here are the articles in this mini-series:
  vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports (this article) vROps Reports and PowerCLI Part 3: A Helper Module  Introduction Following on from the previous article in this mini-series, this article demonstrates how to retrieve a generated report from vROps as a PowerShell object.
 Downloading A Generated Report The last step of the previous article was to use the GetReport() method to verify that your report generation was complete.</description>
@@ -44,10 +44,10 @@ Downloading A Generated Report The last step of the previous article was to use 
     
     <item>
       <title>vROps Reports and PowerCLI Part 1: Generating Reports</title>
-      <link>http://ryan-jan.github.io/2018/05/16/running-vrops-reports-using-powercli/</link>
+      <link>https://ryanjan.uk/2018/05/16/running-vrops-reports-using-powercli/</link>
       <pubDate>Wed, 16 May 2018 11:33:34 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/2018/05/16/running-vrops-reports-using-powercli/</guid>
+      <guid>https://ryanjan.uk/2018/05/16/running-vrops-reports-using-powercli/</guid>
       <description>For your reference, here are the articles in this mini-series:
  vROps Reports and PowerCLI Part 1: Generating Reports (this article) vROps Reports and PowerCLI Part 2: Downloading Reports vROps Reports and PowerCLI Part 3: A Helper Module  Introduction I&amp;rsquo;ve been spending quite a bit of time with vRealize Operations Manager (vROps) lately, mostly running reports. While this is easy enough to do via the web UI, I found myself running a report, downloading the .</description>
     </item>

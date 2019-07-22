@@ -2,111 +2,111 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Ryan Jan</title>
-    <link>http://ryan-jan.github.io/tags/</link>
+    <link>https://ryanjan.uk/tags/</link>
     <description>Recent content in Tags on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <lastBuildDate>Wed, 19 Jun 2019 17:28:24 +0000</lastBuildDate>
     
-	<atom:link href="http://ryan-jan.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ryanjan.uk/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>automation</title>
-      <link>http://ryan-jan.github.io/tags/automation/</link>
+      <link>https://ryanjan.uk/tags/automation/</link>
       <pubDate>Wed, 19 Jun 2019 17:28:24 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/tags/automation/</guid>
+      <guid>https://ryanjan.uk/tags/automation/</guid>
       <description></description>
     </item>
     
     <item>
       <title>powershell</title>
-      <link>http://ryan-jan.github.io/tags/powershell/</link>
+      <link>https://ryanjan.uk/tags/powershell/</link>
       <pubDate>Wed, 19 Jun 2019 17:28:24 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/tags/powershell/</guid>
+      <guid>https://ryanjan.uk/tags/powershell/</guid>
       <description></description>
     </item>
     
     <item>
       <title>vsphere</title>
-      <link>http://ryan-jan.github.io/tags/vsphere/</link>
+      <link>https://ryanjan.uk/tags/vsphere/</link>
       <pubDate>Wed, 19 Jun 2019 17:28:24 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/tags/vsphere/</guid>
+      <guid>https://ryanjan.uk/tags/vsphere/</guid>
       <description></description>
     </item>
     
     <item>
       <title>esxi</title>
-      <link>http://ryan-jan.github.io/tags/esxi/</link>
+      <link>https://ryanjan.uk/tags/esxi/</link>
       <pubDate>Wed, 01 May 2019 21:31:47 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/tags/esxi/</guid>
+      <guid>https://ryanjan.uk/tags/esxi/</guid>
       <description></description>
     </item>
     
     <item>
       <title>powercli</title>
-      <link>http://ryan-jan.github.io/tags/powercli/</link>
+      <link>https://ryanjan.uk/tags/powercli/</link>
       <pubDate>Sun, 10 Feb 2019 13:05:51 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/tags/powercli/</guid>
+      <guid>https://ryanjan.uk/tags/powercli/</guid>
       <description></description>
     </item>
     
     <item>
       <title>vcenter</title>
-      <link>http://ryan-jan.github.io/tags/vcenter/</link>
+      <link>https://ryanjan.uk/tags/vcenter/</link>
       <pubDate>Sun, 10 Feb 2019 13:05:51 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/tags/vcenter/</guid>
+      <guid>https://ryanjan.uk/tags/vcenter/</guid>
       <description></description>
     </item>
     
     <item>
       <title>vrops</title>
-      <link>http://ryan-jan.github.io/tags/vrops/</link>
+      <link>https://ryanjan.uk/tags/vrops/</link>
       <pubDate>Mon, 24 Sep 2018 17:55:36 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/tags/vrops/</guid>
+      <guid>https://ryanjan.uk/tags/vrops/</guid>
       <description></description>
     </item>
     
     <item>
       <title>storagedrs</title>
-      <link>http://ryan-jan.github.io/tags/storagedrs/</link>
+      <link>https://ryanjan.uk/tags/storagedrs/</link>
       <pubDate>Mon, 30 Jul 2018 20:42:57 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/tags/storagedrs/</guid>
+      <guid>https://ryanjan.uk/tags/storagedrs/</guid>
       <description></description>
     </item>
     
     <item>
       <title>vmware</title>
-      <link>http://ryan-jan.github.io/tags/vmware/</link>
+      <link>https://ryanjan.uk/tags/vmware/</link>
       <pubDate>Wed, 11 Jul 2018 15:43:08 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/tags/vmware/</guid>
+      <guid>https://ryanjan.uk/tags/vmware/</guid>
       <description></description>
     </item>
     
     <item>
       <title>tutorials</title>
-      <link>http://ryan-jan.github.io/tags/tutorials/</link>
+      <link>https://ryanjan.uk/tags/tutorials/</link>
       <pubDate>Sun, 24 Jun 2018 11:22:20 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/tags/tutorials/</guid>
+      <guid>https://ryanjan.uk/tags/tutorials/</guid>
       <description></description>
     </item>
     
     <item>
       <title>freenas</title>
-      <link>http://ryan-jan.github.io/tags/freenas/</link>
+      <link>https://ryanjan.uk/tags/freenas/</link>
       <pubDate>Mon, 26 Mar 2018 22:17:46 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/tags/freenas/</guid>
+      <guid>https://ryanjan.uk/tags/freenas/</guid>
       <description></description>
     </item>
     

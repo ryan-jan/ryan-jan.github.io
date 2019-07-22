@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>vcenter on Ryan Jan</title>
-    <link>http://ryan-jan.github.io/tags/vcenter/</link>
+    <link>https://ryanjan.uk/tags/vcenter/</link>
     <description>Recent content in vcenter on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <lastBuildDate>Sun, 10 Feb 2019 13:05:51 +0000</lastBuildDate>
     
-	<atom:link href="http://ryan-jan.github.io/tags/vcenter/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ryanjan.uk/tags/vcenter/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Get ESXi Host CDP Info With PowerCLI</title>
-      <link>http://ryan-jan.github.io/2019/02/10/get-host-cdp-info-with-powercli/</link>
+      <link>https://ryanjan.uk/2019/02/10/get-host-cdp-info-with-powercli/</link>
       <pubDate>Sun, 10 Feb 2019 13:05:51 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/2019/02/10/get-host-cdp-info-with-powercli/</guid>
+      <guid>https://ryanjan.uk/2019/02/10/get-host-cdp-info-with-powercli/</guid>
       <description>Introduction I recently had to provide our networking team with a list of ESXi hosts and which switchports each of their physical NICs were connected to. Like many other environments, we are primarily a Cisco house and therefore I was able to get this data by querying the Cisco Discovery Protocol (CDP) information via PowerCLI. Here is how I went about it.
 The Process I will initially show you how to pull this information for a specific host.</description>
     </item>

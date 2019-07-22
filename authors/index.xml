@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Authors on Ryan Jan</title>
-    <link>http://ryan-jan.github.io/authors/</link>
+    <link>https://ryanjan.uk/authors/</link>
     <description>Recent content in Authors on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <lastBuildDate>Wed, 19 Jun 2019 17:28:24 +0000</lastBuildDate>
     
-	<atom:link href="http://ryan-jan.github.io/authors/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ryanjan.uk/authors/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title></title>
-      <link>http://ryan-jan.github.io/authors/ryan/</link>
+      <link>https://ryanjan.uk/authors/ryan/</link>
       <pubDate>Wed, 19 Jun 2019 17:28:24 +0000</pubDate>
       
-      <guid>http://ryan-jan.github.io/authors/ryan/</guid>
+      <guid>https://ryanjan.uk/authors/ryan/</guid>
       <description>Ryan is a Virtualisation Technical Specialist for a FTSE 100 company in the UK. His role focusses mainly on VMware and automation.</description>
     </item>
     
