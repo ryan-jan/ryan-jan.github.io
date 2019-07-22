@@ -9,6 +9,17 @@
   </url>
   
   <url>
+    <loc>http://ryan-jan.github.io/authors/ryan/</loc>
+    <lastmod>2019-06-19T17:28:24+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://ryan-jan.github.io/authors/</loc>
+    <lastmod>2019-06-19T17:28:24+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://ryan-jan.github.io/2019/06/19/vsphere-global-permissions-with-powershell/</loc>
     <lastmod>2019-06-19T17:28:24+00:00</lastmod>
   </url>

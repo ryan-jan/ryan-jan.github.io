@@ -63,7 +63,8 @@ p {
     font-family: 'Open Sans', sans-serif;
 }
 
-.social-links a {
+.social-links a,
+.author-meta a {
     text-decoration: none;
 }
 
