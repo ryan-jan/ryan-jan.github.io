@@ -42,8 +42,7 @@
   
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Get ESXi Host CDP Info With PowerCLI">
-    <meta name="twitter:description" content="Introduction I recently had to provide our networking team with a list of ESXi hosts and which switchports each of their physical NICs were connected to. Like many other environments, we are primarily a Cisco house and therefore I was able to get this data by querying the Cisco Discovery Protocol (CDP) information via PowerCLI. Here is how I went about it.
-The Process I will initially show you how to pull this information for a specific host.">
+    <meta name="twitter:description" content="I recently had to provide our networking team with a list of ESXi hosts and which switchports each of their physical NICs were connected to. Like many other environments, we are primarily a Cisco house and therefore I was able to get this data by querying the Cisco Discovery Protocol (CDP) information via PowerCLI. Here is how I went about it.">
     <meta name="twitter:url" content="https://ryanjan.uk/2019/02/10/get-host-cdp-info-with-powercli/">
     
     <meta name="twitter:image" content="https://ryanjan.uk/images/2019/02/cisco-logo-16x9-2-1.jpg">
@@ -145,17 +144,17 @@ The Process I will initially show you how to pull this information for a specifi
 
    TypeName: VMware.Vim.HostNetworkSystem
 
-Name                            MemberType Definition                                                                                                    
-----                            ---------- ----------                                                                                                    
-AddPortGroup                    Method     void AddPortGroup(VMware.Vim.HostPortGroupSpec portgrp)                                                       
-AddServiceConsoleVirtualNic     Method     string AddServiceConsoleVirtualNic(string portgroup, VMware.Vim.HostVirtualNicSpec nic)                       
-AddVirtualNic                   Method     string AddVirtualNic(string portgroup, VMware.Vim.HostVirtualNicSpec nic)                                     
-AddVirtualSwitch                Method     void AddVirtualSwitch(string vswitchName, VMware.Vim.HostVirtualSwitchSpec spec)                              
-Equals                          Method     bool Equals(System.Object obj)                                                                                
-GetHashCode                     Method     int GetHashCode()                                                                                             
-GetType                         Method     type GetType()                                                                                                
-QueryNetworkHint                Method     VMware.Vim.PhysicalNicHintInfo[] QueryNetworkHint(string[] device)                                            
-RefreshNetworkSystem            Method     void RefreshNetworkSystem()               
+Name                            MemberType Definition
+----                            ---------- ----------
+AddPortGroup                    Method     void AddPortGroup(VMware.Vim.HostPortGroupSpec portgrp)
+AddServiceConsoleVirtualNic     Method     string AddServiceConsoleVirtualNic(string portgroup, VMware.Vim.HostVirtualNicSpec nic)
+AddVirtualNic                   Method     string AddVirtualNic(string portgroup, VMware.Vim.HostVirtualNicSpec nic)
+AddVirtualSwitch                Method     void AddVirtualSwitch(string vswitchName, VMware.Vim.HostVirtualSwitchSpec spec)
+Equals                          Method     bool Equals(System.Object obj)
+GetHashCode                     Method     int GetHashCode()
+GetType                         Method     type GetType()
+QueryNetworkHint                Method     VMware.Vim.PhysicalNicHintInfo[] QueryNetworkHint(string[] device)
+RefreshNetworkSystem            Method     void RefreshNetworkSystem()
 
 ...
 ...
@@ -166,8 +165,8 @@ RefreshNetworkSystem            Method     void RefreshNetworkSystem()
 
 <pre><code class="language-powershell">$NetSystem.QueryNetworkHint
 
-OverloadDefinitions                                                 
--------------------                                                 
+OverloadDefinitions
+-------------------
 VMware.Vim.PhysicalNicHintInfo[] QueryNetworkHint(string[] device)
 </code></pre>
 
@@ -186,21 +185,21 @@ VMware.Vim.PhysicalNicHintInfo[] QueryNetworkHint(string[] device)
 
 Device              : vmnic5
 Subnet              : {3506, 3505}
-Network             : 
+Network             :
 ConnectedSwitchPort : VMware.Vim.PhysicalNicCdpInfo
-LldpInfo            : 
+LldpInfo            :
 
 Device              : vmnic6
-Subnet              : 
-Network             : 
-ConnectedSwitchPort : 
-LldpInfo            : 
+Subnet              :
+Network             :
+ConnectedSwitchPort :
+LldpInfo            :
 
 Device              : vmnic7
 Subnet              : {3506, 3505}
-Network             : 
+Network             :
 ConnectedSwitchPort : VMware.Vim.PhysicalNicCdpInfo
-LldpInfo            : 
+LldpInfo            :
 
 ...
 </code></pre>
@@ -231,7 +230,7 @@ Mtu              : 1500
 SystemName       : N5K_1
 SystemOID        : 1.3.6.1.4.1.9.12.3.1.3.1038
 MgmtAddr         : 10.123.96.141
-Location         : 
+Location         :
 
 CdpVersion       : 2
 Timeout          : 60
@@ -251,7 +250,7 @@ Mtu              : 1500
 SystemName       : N5K_2
 SystemOID        : 1.3.6.1.4.1.9.12.3.1.3.1038
 MgmtAddr         : 10.123.96.142
-Location         : 
+Location         :
 </code></pre>
 
 <p>There is a lot of information available in this property, most of which I am not interested in. Also, it is not very helpful that I can&rsquo;t tell from this output which physical device (e.g. vmnic0) that each of these blocks of information relate to. To tidy this up we can create a new <code>PSCustomObject</code> in the <code>foreach</code> loop and return only the information we want to see.</p>
@@ -265,16 +264,16 @@ Location         :
     }
 }
 
-Device DevId                      PortId          
------- -----                      ------          
-vmnic0                                            
-vmnic1                                            
-vmnic2                                            
-vmnic3                                            
-vmnic4                                            
+Device DevId                      PortId
+------ -----                      ------
+vmnic0
+vmnic1
+vmnic2
+vmnic3
+vmnic4
 vmnic5 N5K_1                      Ethernet108/1/14
-vmnic6                                            
-vmnic7 N5K_2                      Ethernet108/1/14                
+vmnic6
+vmnic7 N5K_2                      Ethernet108/1/14
 </code></pre>
 
 <h2 id="a-helper-script">A Helper Script</h2>

@@ -17,7 +17,7 @@
       <pubDate>Tue, 15 Oct 2019 14:59:59 +0100</pubDate>
       
       <guid>https://ryanjan.uk/2019/10/15/add-hard-disks-async-with-powercli/</guid>
-      <description>Introduction At the time of writing the New-HardDisk PowerCLI CmdLet does not yet have a -RunAsync parameter. I found this out when trying to create a new 300 GiB eagerly zeroed disk on multiple VMs in one go. I soon realised that I was going to be sat there for a long time as each new disk was being formatted one at a time. So, I asked around on the PowerCLI Slack channel for any ideas and Steve Kaplan helpfully reminded me that I should be able to work out how to add these disks asynchronously using the Code Capture feature in the HTML5 web client, and he was right!</description>
+      <description>At the time of writing the &lt;code&gt;New-HardDisk&lt;/code&gt; PowerCLI CmdLet does not yet have a &lt;code&gt;-RunAsync&lt;/code&gt; parameter. I found this out when trying to create a new 300 GiB eagerly zeroed disk on multiple VMs in one go. I soon realised that I was going to be sat there for a long time as each new disk was being formatted one at a time.</description>
     </item>
     
     <item>
@@ -26,8 +26,7 @@
       <pubDate>Sun, 10 Feb 2019 13:05:51 +0000</pubDate>
       
       <guid>https://ryanjan.uk/2019/02/10/get-host-cdp-info-with-powercli/</guid>
-      <description>Introduction I recently had to provide our networking team with a list of ESXi hosts and which switchports each of their physical NICs were connected to. Like many other environments, we are primarily a Cisco house and therefore I was able to get this data by querying the Cisco Discovery Protocol (CDP) information via PowerCLI. Here is how I went about it.
-The Process I will initially show you how to pull this information for a specific host.</description>
+      <description>I recently had to provide our networking team with a list of ESXi hosts and which switchports each of their physical NICs were connected to. Like many other environments, we are primarily a Cisco house and therefore I was able to get this data by querying the Cisco Discovery Protocol (CDP) information via PowerCLI. Here is how I went about it.</description>
     </item>
     
   </channel>
