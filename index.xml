@@ -6,10 +6,19 @@
     <description>Recent content on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Wed, 19 Jun 2019 17:28:24 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 15 Oct 2019 14:59:59 +0100</lastBuildDate>
     
 	<atom:link href="https://ryanjan.uk/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Add Hard Disks to VMs Asynchronously with PowerCLI</title>
+      <link>https://ryanjan.uk/2019/10/15/add-hard-disks-async-with-powercli/</link>
+      <pubDate>Tue, 15 Oct 2019 14:59:59 +0100</pubDate>
+      
+      <guid>https://ryanjan.uk/2019/10/15/add-hard-disks-async-with-powercli/</guid>
+      <description>Introduction At the time of writing the New-HardDisk PowerCLI CmdLet does not yet have a -RunAsync parameter. I found this out when trying to create a new 300 GiB eagerly zeroed disk on multiple VMs in one go. I soon realised that I was going to be sat there for a long time as each new disk was being formatted one at a time. So, I asked around on the PowerCLI Slack channel for any ideas and Steve Kaplan helpfully reminded me that I should be able to work out how to add these disks asynchronously using the Code Capture feature in the HTML5 web client, and he was right!</description>
+    </item>
     
     <item>
       <title>Managing vSphere Global Permissions with PowerShell</title>

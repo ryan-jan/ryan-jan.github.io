@@ -4,18 +4,53 @@
   
   <url>
     <loc>https://ryanjan.uk/</loc>
-    <lastmod>2019-06-19T17:28:24+00:00</lastmod>
+    <lastmod>2019-10-15T14:59:59+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://ryanjan.uk/authors/ryan/</loc>
-    <lastmod>2019-06-19T17:28:24+00:00</lastmod>
+    <lastmod>2019-10-15T14:59:59+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ryanjan.uk/2019/10/15/add-hard-disks-async-with-powercli/</loc>
+    <lastmod>2019-10-15T14:59:59+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://ryanjan.uk/authors/</loc>
-    <lastmod>2019-06-19T17:28:24+00:00</lastmod>
+    <lastmod>2019-10-15T14:59:59+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ryanjan.uk/posts/</loc>
+    <lastmod>2019-10-15T14:59:59+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ryanjan.uk/tags/</loc>
+    <lastmod>2019-10-15T14:59:59+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ryanjan.uk/tags/powercli/</loc>
+    <lastmod>2019-10-15T14:59:59+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ryanjan.uk/tags/powershell/</loc>
+    <lastmod>2019-10-15T14:59:59+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ryanjan.uk/tags/vcenter/</loc>
+    <lastmod>2019-10-15T14:59:59+01:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -25,25 +60,7 @@
   </url>
   
   <url>
-    <loc>https://ryanjan.uk/posts/</loc>
-    <lastmod>2019-06-19T17:28:24+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ryanjan.uk/tags/</loc>
-    <lastmod>2019-06-19T17:28:24+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://ryanjan.uk/tags/automation/</loc>
-    <lastmod>2019-06-19T17:28:24+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ryanjan.uk/tags/powershell/</loc>
     <lastmod>2019-06-19T17:28:24+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -68,18 +85,6 @@
   <url>
     <loc>https://ryanjan.uk/2019/02/10/get-host-cdp-info-with-powercli/</loc>
     <lastmod>2019-02-10T13:05:51+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://ryanjan.uk/tags/powercli/</loc>
-    <lastmod>2019-02-10T13:05:51+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ryanjan.uk/tags/vcenter/</loc>
-    <lastmod>2019-02-10T13:05:51+00:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>

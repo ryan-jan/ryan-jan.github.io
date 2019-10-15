@@ -6,10 +6,37 @@
     <description>Recent content in Tags on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Wed, 19 Jun 2019 17:28:24 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 15 Oct 2019 14:59:59 +0100</lastBuildDate>
     
 	<atom:link href="https://ryanjan.uk/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>powercli</title>
+      <link>https://ryanjan.uk/tags/powercli/</link>
+      <pubDate>Tue, 15 Oct 2019 14:59:59 +0100</pubDate>
+      
+      <guid>https://ryanjan.uk/tags/powercli/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>powershell</title>
+      <link>https://ryanjan.uk/tags/powershell/</link>
+      <pubDate>Tue, 15 Oct 2019 14:59:59 +0100</pubDate>
+      
+      <guid>https://ryanjan.uk/tags/powershell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>vcenter</title>
+      <link>https://ryanjan.uk/tags/vcenter/</link>
+      <pubDate>Tue, 15 Oct 2019 14:59:59 +0100</pubDate>
+      
+      <guid>https://ryanjan.uk/tags/vcenter/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>automation</title>
@@ -17,15 +44,6 @@
       <pubDate>Wed, 19 Jun 2019 17:28:24 +0000</pubDate>
       
       <guid>https://ryanjan.uk/tags/automation/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>powershell</title>
-      <link>https://ryanjan.uk/tags/powershell/</link>
-      <pubDate>Wed, 19 Jun 2019 17:28:24 +0000</pubDate>
-      
-      <guid>https://ryanjan.uk/tags/powershell/</guid>
       <description></description>
     </item>
     
@@ -44,24 +62,6 @@
       <pubDate>Wed, 01 May 2019 21:31:47 +0000</pubDate>
       
       <guid>https://ryanjan.uk/tags/esxi/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>powercli</title>
-      <link>https://ryanjan.uk/tags/powercli/</link>
-      <pubDate>Sun, 10 Feb 2019 13:05:51 +0000</pubDate>
-      
-      <guid>https://ryanjan.uk/tags/powercli/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>vcenter</title>
-      <link>https://ryanjan.uk/tags/vcenter/</link>
-      <pubDate>Sun, 10 Feb 2019 13:05:51 +0000</pubDate>
-      
-      <guid>https://ryanjan.uk/tags/vcenter/</guid>
       <description></description>
     </item>
     

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119235055-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-119235055-1');
+  </script>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  
+  <title>Ryan Jan  | Add Hard Disks to VMs Asynchronously with PowerCLI</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+
+  <meta name="generator" content="Hugo 0.55.6" />
+  
+  
+    <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+  
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  
+  <link rel="stylesheet" type="text/css" href="/css/screen.css" />
+  
+  
+  <link rel="stylesheet" type="text/css" href="/css/prism.css" />
+  <link rel="stylesheet" type="text/css" href="/css/custom/global-custom.css" />
+  <link rel="stylesheet" type="text/css" href="/css/custom/screen-custom.css" />
+  <link rel="stylesheet" type="text/css" href="/css/fontawesome_all.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="/css/custom/prism-custom.css" />
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+
+  
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Add Hard Disks to VMs Asynchronously with PowerCLI">
+    <meta name="twitter:description" content="Introduction At the time of writing the New-HardDisk PowerCLI CmdLet does not yet have a -RunAsync parameter. I found this out when trying to create a new 300 GiB eagerly zeroed disk on multiple VMs in one go. I soon realised that I was going to be sat there for a long time as each new disk was being formatted one at a time. So, I asked around on the PowerCLI Slack channel for any ideas and Steve Kaplan helpfully reminded me that I should be able to work out how to add these disks asynchronously using the Code Capture feature in the HTML5 web client, and he was right!">
+    <meta name="twitter:url" content="https://ryanjan.uk/2019/10/15/add-hard-disks-async-with-powercli/">
+    
+    <meta name="twitter:image" content="https://ryanjan.uk/images/2019/10/wait-image.jpg">
+    
+    
+    
+    
+    <meta name="twitter:creator" content="@_ryanjan_">
+    <meta name="twitter:site" content="@_ryanjan_">
+    
+
+</head>
+
+
+
+
+<body class='post-template' >
+  <div class="site-wrapper">
+    
+<header class="site-header outer" no-cover>
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+        
+        <a class="site-nav-logo" href="https://ryanjan.uk/"><img src="/images/ryanjan-logo.png" alt="Ryan Jan" /></a>
+        
+        <ul class="nav" role="menu">
+            <li class="nav-home" role="menuitem"><a href="https://ryanjan.uk/">Home</a></li>
+            <li class="nav-about" role="menuitem"><a href="https://ryanjan.uk//about">About</a></li>
+        </ul>
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+            <a class="social-link social-link-gh" href="https://github.com/ryan-jan" target="_blank" rel="noopener">
+                <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a class="social-link social-link-tw" href="https://twitter.com/_ryanjan_" target="_blank" rel="noopener">
+                <i class="fab fa-twitter fa-lg"></i>
+            </a>
+        </div>
+    </div>
+</nav>
+    </div>
+</header>
+<main id="site-main" class="site-main outer">
+    <div class="inner">
+
+        <article class="post-full post ">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime='15 October 2019'>15 October 2019</time>
+                    
+                    
+                    
+                        <span class="date-divider">/</span> <a href="/tags/powercli">powercli</a>
+                    
+                    
+                </section>
+                <h1 class="post-full-title">Add Hard Disks to VMs Asynchronously with PowerCLI</h1>
+            </header>
+
+            
+            <figure class="post-full-image" style="background-image: url( '/images/2019/10/wait-image.jpg' )">
+            </figure>
+            
+
+            <section class="post-full-content">
+                <div class="post-content">
+                    
+
+<h2 id="introduction">Introduction</h2>
+
+<p>At the time of writing the <code>New-HardDisk</code> PowerCLI CmdLet does not yet have a <code>-RunAsync</code> parameter. I found this out when trying to create a new 300 GiB eagerly zeroed disk on multiple VMs in one go. I soon realised that I was going to be sat there for a long time as each new disk was being formatted one at a time. So, I asked around on the PowerCLI Slack channel for any ideas and <a href="https://twitter.com/ROIdude">Steve Kaplan</a> helpfully reminded me that I should be able to work out how to add these disks asynchronously using the Code Capture feature in the HTML5 web client, and he was right! I have put together a script which you can grab from my <a href="https://github.com/ryan-jan/Blog-Scripts/blob/master/powershell/New-HardDiskAsync.ps1">GitHub</a> to make things easier and I will give some brief examples below.</p>
+
+<h2 id="using-the-new-harddiskasync-ps1-script">Using the New-HardDiskAsync.ps1 Script</h2>
+
+<p>Once you have a copy of the script downloaded from my GitHub repository, you will first need to connect to a vCenter server using the <code>Connect-VIServer</code> CmdLet.</p>
+
+<pre><code class="language-powershell">Connect-VIServer -Server &quot;vcenter.example.com&quot;
+</code></pre>
+
+<p>First lets add a single 200 GiB thin provisioned disk to the VM named <code>vm0123</code>.</p>
+
+<p>NOTE - These examples assume that the script is saved in the current working directory.</p>
+
+<pre><code class="language-powershell">.\New-HardDiskAsync.ps1 -Name &quot;vm0123&quot; -CapacityGB 200
+</code></pre>
+
+<p>Now lets create a 500 GiB thick provisioned disk which is eager zeroed.</p>
+
+<pre><code class="language-powershell">.\New-HardDiskAsync.ps1 -Name &quot;vm0123&quot; -CapacityGB 500 -StorageFormat &quot;EagerZeroedThick&quot;
+</code></pre>
+
+<p>We can also use the <code>-Controller</code> parameter to specify a particular SCSI controller if there is more than one assigned to the VM (by default if there is more than one assigned and this parameter is not specified we will pick the first SCSI controller with free capacity).</p>
+
+<pre><code class="language-powershell">$ScsiController = Get-ScsiController -VM &quot;vm0123&quot;
+.\New-HardDiskAsync.ps1 -Name &quot;vm0123&quot; -CapacityGB 500 -Controller $ScsiController[1]
+</code></pre>
+
+<p>NOTE - In the example above I am simply specifying which SCSI controller to use based on its index position in the <code>$ScsiController</code> array.</p>
+
+<p>You will notice that a task object is returned by this script. This can be used to check the progress of the asynchronous task which is registered with the vCenter server by the script. In order to do this we will store the output from this script in a variable and then use the <code>Get-Task</code> CmdLet to see the status.</p>
+
+<pre><code class="language-powershell">$Task = .\New-HardDiskAsync.ps1 -Name &quot;vm0123&quot; -CapacityGB 200
+Get-Task -Id $Task.Id
+
+Name                           State      % Complete Start Time   Finish Time
+----                           -----      ---------- ----------   -----------
+ReconfigVM_Task                Success           100 03:44:35 PM  03:44:35 PM
+</code></pre>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Armed with my new script I was able to save a lot of time when adding my 300 GiB thick disks to a couple of hundred VMs. Hopefully this will also help some other people out in the future, at least until VMware add implement a <code>-RunAsync</code> parameter on the <code>New-HardDisk</code> CmdLet!</p>
+
+                </div>
+            </section>
+            <footer class="post-full-footer">
+                
+                
+                
+                    
+                        <section class="author-card">
+    
+    
+    <img class="author-profile-image" src="/authors/ryan/avatar_hu556f9c2eb9e01da7c273187f0f4fea39_39403_60x60_fill_q75_box_center.jpg" />
+    <section class="author-card-content">
+        <h4 class="author-card-name"><a href="/authors/ryan/">Ryan Kowalewski</a></h4>
+        <p><p>Ryan is a Virtualisation Technical Specialist for a FTSE 100 company in the UK. His role focusses mainly on VMware and automation.</p>
+</p>
+    </section>
+</section>
+<div class="post-full-footer-right">
+    <a class="author-card-button" href="/authors/ryan/">Read More</a>
+</div>
+
+                    
+                
+            </footer>
+        </article>
+
+    </div>
+</main>
+
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="https://ryanjan.uk/">
+            <img src="/images/favicon.png" alt="Ryan Jan icon" />
+            <span>Ryan Jan</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">Add Hard Disks to VMs Asynchronously with PowerCLI</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this</i></div>
+        <a class="floating-header-share-tw"
+            href="https://twitter.com/share?text=Add%20Hard%20Disks%20to%20VMs%20Asynchronously%20with%20PowerCLI&amp;url=https%3a%2f%2fryanjan.uk%2f2019%2f10%2f15%2fadd-hard-disks-async-with-powercli%2f"
+            target="_blank">
+            <i class="fab fa-twitter fa-lg"></i>
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fryanjan.uk%2f2019%2f10%2f15%2fadd-hard-disks-async-with-powercli%2f"
+            target="_blank">
+            <i class="fab fa-facebook-f fa-lg"></i>
+        </a>
+    </div>
+    <progress id="reading-progress" class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+            
+            <article class="post-card post" >
+    
+    <a class="post-card-image-link" href="https://ryanjan.uk/2019/06/19/vsphere-global-permissions-with-powershell/">
+        <div class="post-card-image" style="background-image: url('/images/2019/06/closed-coming-soon-door-4291.jpg')"></div>
+    </a>
+    
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="https://ryanjan.uk/2019/06/19/vsphere-global-permissions-with-powershell/">
+            <header class="post-card-header">
+                
+                
+                
+                    <span class="post-card-tags">powershell</span>
+                
+                
+                <h2 class="post-card-title">Managing vSphere Global Permissions with PowerShell</h2>
+            </header>
+            <section class="post-card-excerpt">
+                
+                <p>It appears that working with vSphere global permissions in PowerCLI is not yet possible. The VIPerms PowerShell module combines the add/remove examples from William&rsquo;s post with a new function to list all global permissions. In this post I will demonstrate how to install and use this module.</p>
+                
+            </section>
+        </a>
+        <footer class="post-card-meta">
+            <ul class="author-list">
+                
+                    
+                    
+                    <li class="author-list-item">
+                        <div class="author-name-tooltip">
+                            Ryan Kowalewski
+                        </div>
+                        
+                        <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
+                            
+                            
+                            <img class="author-profile-image" src="/authors/ryan/avatar_hu556f9c2eb9e01da7c273187f0f4fea39_39403_60x60_fill_q75_box_center.jpg" alt="Ryan Kowalewski" />
+                            
+                        </a>
+                    </li>
+                    
+                
+            </ul>
+            <span class="reading-time">3 mins</span>
+        </footer>
+    </div>
+</article>
+        </div>
+    </div>
+</aside>
+
+
+    <footer class="site-footer outer">
+    <div class="site-footer-content inner">
+        <section class="copyright"><a href="https://ryanjan.uk/">Ryan Jan</a> &copy; 2019</section>
+        <nav class="site-footer-nav">
+            <a href="https://ryanjan.uk/">Latest Posts</a>
+            <a href="https://github.com/ryan-jan" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://twitter.com/_ryanjan_" target="_blank" rel="noopener">Twitter</a>
+        </nav>
+    </div>
+</footer>
+  </div>
+
+  
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous">
+  </script>
+  <script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+
+  
+  <script type="text/javascript" src="/js/prism.js"></script>
+  <script type="text/javascript" src="/js/custom/prism-custom.js"></script>
+
+  
+<script>
+    
+    
+    
+    
+    $(document).ready(function () {
+        
+        var $postContent = $(".post-full-content");
+        $postContent.fitVids();
+        
+    
+        var progressBar = document.querySelector('#reading-progress');
+        var header = document.querySelector('.floating-header');
+        var title = document.querySelector('.post-full-title');
+    
+        var lastScrollY = window.scrollY;
+        var lastWindowHeight = window.innerHeight;
+        var lastDocumentHeight = $(document).height();
+        var ticking = false;
+    
+        function onScroll() {
+            lastScrollY = window.scrollY;
+            requestTick();
+        }
+    
+        function onResize() {
+            lastWindowHeight = window.innerHeight;
+            lastDocumentHeight = $(document).height();
+            requestTick();
+        }
+    
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(update);
+            }
+            ticking = true;
+        }
+    
+        function update() {
+            var trigger = title.getBoundingClientRect().top + window.scrollY;
+            var triggerOffset = title.offsetHeight + 35;
+            var progressMax = lastDocumentHeight - lastWindowHeight;
+    
+            
+            if (lastScrollY >= trigger + triggerOffset) {
+                header.classList.add('floating-active');
+            } else {
+                header.classList.remove('floating-active');
+            }
+    
+            progressBar.setAttribute('max', progressMax);
+            progressBar.setAttribute('value', lastScrollY);
+    
+            ticking = false;
+        }
+    
+        window.addEventListener('scroll', onScroll, {passive: true});
+        window.addEventListener('resize', onResize, false);
+    
+        update();
+    
+    });
+</script>
+
+</body>
+</html>
