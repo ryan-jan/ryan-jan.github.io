@@ -14,7 +14,7 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Ryan Jan  | powershell</title>
+  <title>Ryan Jan  | PowerShell Tips: What is splatting and should I use it?</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
   <meta name="HandheldFriendly" content="True" />
@@ -42,7 +42,7 @@
 
 
 
-<body class='tag-template' >
+<body class='post-template' >
   <div class="viewport">
     <header id="gh-head" class="gh-head">
       <nav class="gh-head-inner inner gh-container">
@@ -81,82 +81,202 @@
     </header>
     <main>
       
+<article class="article">
+    <header class="article-header gh-canvas">
+        
+        
+        
+        <section class="article-tag">
+            <a href="/tags/powershell">powershell</a>
+        </section>
+        
+        
 
-<section class="outer">
-    <div class="inner posts">
-        <div class="post-feed">
-            <header class="post-card post-card-large">
-                <div class="post-card-content">
-                    <div class="post-card-content-link">
-                        <header class="post-card-header">
-                            <div class="post-card-primary-tag">Tagged</div>
-                            <h2 class="post-card-title">POWERSHELL</h2>
-                        </header>
-                        <section class="post-card-excerpt">
-                            <p>
-                                
-                                A collection of 5 posts
-                                
-                            </p>
-                        </section>
+        <h1 class="article-title">PowerShell Tips: What is splatting and should I use it?</h1>
+
+        
+
+        <div class="article-byline">
+            <section class="article-byline-content">
+                
+                
+                
+                
+                
+                <ul class="author-list">
+                    <li class="author-list-item">
+                        
+                        <a href="https://ryanjan.uk/authors/ryan/" class="author-avatar">
+                            
+                            <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                        </a>
+                    </li>
+                </ul>
+                <div class="article-byline-meta">
+                    <h4 class="author-name"><a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a></h4>
+                    <div class="byline-meta-content">
+                        13 May 2021
+                        <span class="byline-reading-time"><span class="bull">&bull;</span> 4 min
+                            read</span>
                     </div>
                 </div>
-            </header>
-            
-            <article class="post-card">
-
-    
-    <a class="post-card-image-link" href="https://ryanjan.uk/2021/05/13/powershell-splatting/">
-        <img class="post-card-image" src="/images/2021/05/powershell.jpg" loading="lazy" />
-    </a>
-    
-
-    <div class="post-card-content">
-        <a class="post-card-content-link" href="https://ryanjan.uk/2021/05/13/powershell-splatting/">
-            <header class="post-card-header">
                 
                 
-                
-                <div class="post-card-primary-tag">powershell</div>
-                
-                
-                <h2 class="post-card-title">PowerShell Tips: What is splatting and should I use it?</h2>
-            </header>
-            <section class="post-card-excerpt">
-                <p>Introduction In this post I am going to demonstrate a very useful PowerShell technique called splatting. But what is splatting? Here is the official description from the about_Splatting doc.
- Splatting is a method of passing a collection of parameter values to a command as a unit. PowerShell associates each value in the collection with a command parameter. Splatted parameter values are stored in named splatting variables, which look like standard variables, but begin with an At symbol (@) instead of a dollar sign ($).</p>
             </section>
-        </a>
+        </div>
 
-        <footer class="post-card-meta">
-            
-            
-            
-            
-            
-            <ul class="author-list">
-                <li class="author-list-item">
-                    
-                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
-                        
-                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
-                    </a>
-                </li>
-            </ul>
-            
-            <div class="post-card-byline-content">
-                
-                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
-                
-                <span class="post-card-byline-date">13 May 2021 <span class="bull"> &bull; </span>
-                    4 min read</span>
-            </div>
-            
-        </footer>
-    </div>
+        
+        <figure class="article-image">
+            <img src="/images/2021/05/powershell.jpg" alt="PowerShell Tips: What is splatting and should I use it?" />
+        </figure>
+        
+    </header>
+
+    <section class="gh-content gh-canvas">
+        
+
+<h2 id="introduction">Introduction</h2>
+
+<p>In this post I am going to demonstrate a very useful PowerShell technique called splatting. But what is splatting? Here is the official
+description from the <a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_splatting?view=powershell-7.1">about_Splatting</a>
+doc.</p>
+
+<blockquote>
+<p>Splatting is a method of passing a collection of parameter values to a command as a unit. PowerShell associates each value in the collection with a command       parameter. Splatted parameter values are stored in named splatting variables, which look like standard variables, but begin with an At symbol (@) instead of a dollar sign ($). The At symbol tells PowerShell that you are passing a collection of values, instead of a single value.</p>
+
+<p>Splatting makes your commands shorter and easier to read. You can reuse the splatting values in different command calls and use splatting to pass parameter values from the $PSBoundParameters automatic variable to other scripts and functions.</p>
+</blockquote>
+
+<p>As you can see, splatting is essentially all about code readability. It is a nice way to avoid writing commands with many parameters that end up running way off of your display and causing lots of scrolling around. The description above makes it sound much more complicated than it actually is so lets just dive into some examples.</p>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<p>Take the following command which enables AD authentication on an Azure File Share.</p>
+
+<pre><code class="language-powershell">Set-AzStorageAccount -ResourceGroupName $ResourceGroup -Name $StorAccount -EnableActiveDirectoryDomainServicesForFile $true -ActiveDirectoryDomainName $DomainName -ActiveDirectoryNetBiosDomainName $DomainName -ActiveDirectoryForestName $DomainName -ActiveDirectoryDomainGuid $DomainGuid -ActiveDirectoryDomainsid $DomainSid -ActiveDirectoryAzureStorageSid $StorAccountSid
+</code></pre>
+
+<p>This command requires nine parameters, all of which have pretty long names, and means that you cannot see exactly what is going on without scrolling all the way to the right.</p>
+
+<p>This is where splatting comes in. Splatting allows us to write the following instead.</p>
+
+<pre><code class="language-powershell">$Params = @{
+    ResourceGroupName = $ResourceGroup
+    Name = $StorAccount
+    EnableActiveDirectoryDomainServicesForFile = $true
+    ActiveDirectoryDomainName = $DomainName
+    ActiveDirectoryNetBiosDomainName = $DomainName
+    ActiveDirectoryForestName = $DomainName
+    ActiveDirectoryDomainGuid = $DomainGuid
+    ActiveDirectoryDomainsid = $DomainSid
+    ActiveDirectoryAzureStorageSid = $StorAccountSid
+}
+
+Set-AzStorageAccount @Params
+</code></pre>
+
+<p>As you can see, we are creating a hashtable named <code>$Params</code> containing each parameter and its value. We can then use this hashtable in place of the parameters by specifying it after the command with the <code>@</code> prefix rather than the <code>$</code> variable prefix. This makes the command much more readable and avoids the need to scroll around to see all of the parameters.</p>
+
+<h2 id="reusing-splatted-parameters">Reusing Splatted Parameters</h2>
+
+<p>One of the more functional benefits of splatting is that you can reuse the hashtable containing the parameters multiple times, changing parameters and their values as required.</p>
+
+<p>The following example writes a message to the console, changing some of the parameter values depending on whether the fictional <code>$Results</code> variable contains an Error property.</p>
+
+<pre><code class="language-powershell">$Results = Invoke-SomeCommand
+
+if ($Results.Error) {
+    Write-Host -Message &quot;Error&quot; -ForegroundColor &quot;Gray&quot; -BackgroundColor &quot;Red&quot;
+} else {
+    Write-Host -Message &quot;Hello World!&quot; -ForegroundColor &quot;Gray&quot; -BackgroundColor &quot;Magenta&quot;
+}
+</code></pre>
+
+<p>Using splatting, we can avoid writing the full command out twice. Instead we can specify the default paramaters and values in the <code>$Params</code> hashtable and simply change the values we require if <code>$Results</code> contains an Error property.</p>
+
+<pre><code class="language-powershell">$Results = Invoke-SomeCommand
+
+$Params = @{
+    Message = &quot;Hello world!&quot;
+    ForegroundColor = &quot;Gray&quot;
+    BackgroundColor = &quot;Magenta&quot;
+}
+
+if ($Results.Error) {
+    $Params.Message = &quot;Error&quot;
+    $Params.BackgroundColor = &quot;Red&quot;
+}
+
+Write-Host @Params
+</code></pre>
+
+<p>This is not exactly a real world example but it at least shows how you can reuse the parameters in the hashtable. This technique is extremely powerful when used in more complex scripts/functions etc.</p>
+
+<h2 id="mixing-splatting-with-explicitly-defined-parameters">Mixing Splatting with Explicitly Defined Parameters</h2>
+
+<p>It is possible to mix both splatted parameters with explicit parameters. For example.</p>
+
+<pre><code class="language-powershell">$Params = @{
+    Parameter1 = &quot;Value1&quot;
+    Parameter2 = &quot;Value2&quot;
+}
+Invoke-SomeCommand @Params -WhatIf
+</code></pre>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-8907477009760148"
+     data-ad-slot="3921250676"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<h2 id="switch-parameter-types">Switch Parameter Types</h2>
+
+<p>One point to mention is how to specify switch parameters when splatting. When specifying a switch parameter directly you simply type the parameter name. For example, when specifying the <code>-WhatIf</code> parameter.</p>
+
+<pre><code class="language-powershell">Invoke-SomeCommand -Parameter1 &quot;Value1&quot; -WhatIf
+</code></pre>
+
+<p>However, when using splatting you will need to provide a <code>$true</code> or <code>$false</code> value for the switch paramater in the hashtable. For example.</p>
+
+<pre><code class="language-powershell">$Params = @{
+    Parameter1 = &quot;Value1&quot;
+    WhatIf = $true
+}
+
+Invoke-SomeCommand @Params
+</code></pre>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Hopefully this has been an interesting overview of the splatting technique. Splatting is key to writing readable PowerShell code and yet I find that many people I mention it to have never actually heard of it.</p>
+
+<p>There is a great community project on GitHub called <a href="https://poshcode.gitbook.io/powershell-practice-and-style/">PowerShell Practice and Style</a> which aims to lay out some best practices for writing PowerShell code. They make reference to the splatting technique in the <a href="https://poshcode.gitbook.io/powershell-practice-and-style/style-guide/readability">readability</a> section which is where I first stumbled across it.</p>
+
+    </section>
+
 </article>
-            
-            <article class="post-card">
+
+<section class="footer-cta">
+    <div class="inner">
+        <h2>Sign up for more like this.</h2>
+        <a class="footer-cta-button su-modal-open-button" href="#/subscribe">
+            <div>Enter your email</div>
+            <span>Subscribe</span>
+        </a>
+    </div>
+</section>
+
+<aside class="read-more-wrap">
+    <div class="read-more inner">
+        
+        
+        
+        <article class="post-card">
 
     
     <a class="post-card-image-link" href="https://ryanjan.uk/2019/10/15/add-hard-disks-async-with-powercli/">
@@ -207,8 +327,8 @@
         </footer>
     </div>
 </article>
-            
-            <article class="post-card">
+        
+        <article class="post-card">
 
     
     <a class="post-card-image-link" href="https://ryanjan.uk/2019/06/19/vsphere-global-permissions-with-powershell/">
@@ -259,8 +379,8 @@
         </footer>
     </div>
 </article>
-            
-            <article class="post-card">
+        
+        <article class="post-card">
 
     
     <a class="post-card-image-link" href="https://ryanjan.uk/2019/02/10/get-host-cdp-info-with-powercli/">
@@ -311,62 +431,10 @@
         </footer>
     </div>
 </article>
-            
-            <article class="post-card">
-
-    
-    <a class="post-card-image-link" href="https://ryanjan.uk/2018/06/02/powershell-tips-script-optimization/">
-        <img class="post-card-image" src="/images/2018/06/lum3n-193427-unsplash.jpg" loading="lazy" />
-    </a>
-    
-
-    <div class="post-card-content">
-        <a class="post-card-content-link" href="https://ryanjan.uk/2018/06/02/powershell-tips-script-optimization/">
-            <header class="post-card-header">
-                
-                
-                
-                <div class="post-card-primary-tag">powershell</div>
-                
-                
-                <h2 class="post-card-title">PowerShell Tips: Script Optimization</h2>
-            </header>
-            <section class="post-card-excerpt">
-                <p>Introduction A colleague of mine recently asked for some help with a script he was writing. We use vSphere tags in order to determine which backup schedule a given VM is in and he wanted to find all VMs which were not assigned a tag in the category backup-service-level, and therefore were not being backed up. His actual query was regarding filtering out certain VMs which will never be given a backup tag.</p>
-            </section>
-        </a>
-
-        <footer class="post-card-meta">
-            
-            
-            
-            
-            
-            <ul class="author-list">
-                <li class="author-list-item">
-                    
-                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
-                        
-                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
-                    </a>
-                </li>
-            </ul>
-            
-            <div class="post-card-byline-content">
-                
-                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
-                
-                <span class="post-card-byline-date">02 Jun 2018 <span class="bull"> &bull; </span>
-                    3 min read</span>
-            </div>
-            
-        </footer>
+        
+        
     </div>
-</article>
-            
-        </div>
-    </div>
-</section>
+</aside>
 
     </main>
     <footer class="site-footer outer">
