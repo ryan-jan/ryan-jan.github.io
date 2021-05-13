@@ -17,8 +17,8 @@
       <pubDate>Thu, 13 May 2021 09:05:51 +0000</pubDate>
       
       <guid>https://ryanjan.uk/2021/05/13/powershell-splatting/</guid>
-      <description>Introduction In this post I am going to demonstrate a very useful PowerShell technique called splatting. But what is splatting? Here is the official description from the about_Splatting doc.
- Splatting is a method of passing a collection of parameter values to a command as a unit. PowerShell associates each value in the collection with a command parameter. Splatted parameter values are stored in named splatting variables, which look like standard variables, but begin with an At symbol (@) instead of a dollar sign ($).</description>
+      <description>In this post I am going to demonstrate a very useful PowerShell technique called splatting. But what is splatting? Here is the official
+description from the about_Splatting doc.</description>
     </item>
     
     <item>
