@@ -199,6 +199,17 @@ ChangePasswordAsync                           Method     System.Threading.Tasks.
 
 <p>With this information, and the vROps API documentation that can be accessed via your vROps appliance (e.g. <code>http://vrops.example.com/suite-api</code>), I was able to generate and download a report as a <code>powershell</code> object. This mini-series will guide you through how I did it, starting with generating a report.</p>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-8907477009760148"
+     data-ad-slot="3921250676"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
 <h2 id="generating-a-report">Generating A Report</h2>
 
 <p>The first step is to generate a report. This is made possible by the <code>CreateReport()</code> method of the <code>extensionData</code> container. Looking at the API documentation, you will see that this method takes the <code>&lt;ns3:report&gt;</code> object as its input. The <code>&lt;ns3:report&gt;</code> model shows that it has the following three required properties.</p>
