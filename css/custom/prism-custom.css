@@ -1,6 +1,7 @@
 code[class*="language-"],
 pre[class*="language-"] {
     color: #ABB2BF;
+	margin-top: 2vmin;
 }
 
 .token.tag,

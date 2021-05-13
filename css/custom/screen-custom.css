@@ -1,122 +1,52 @@
-p {
+:root {
+    --ghost-accent-color: #000000;
+    --font-serif: "Open Sans";
+    --font-sans-serif: "Open Sans";
+    --black: #000;
+    --grey0: #1d1d1d;
+    --grey1: #333;
+    --grey2: #3d3d3d;
+    --grey3: #474747;
+    --grey4: #515151;
+    --grey5: #686868;
+    --grey6: #7f7f7f;
+    --grey7: #979797;
+    --grey8: #aeaeae;
+    --grey9: #c5c5c5;
+    --grey10: #dcdcdc;
+    --grey11: #e1e1e1;
+    --grey12: #eaeaea;
+    --grey13: #f9f9f9;
+    --white: #fff;
+    --red: #f02525;
+    --yellow: #FFDC15;
+    --green: #7FC724;
+}
+
+.gh-canvas {
+    display: grid;
+    grid-template-columns: [full-start] minmax(4vmin, auto) [wide-start] minmax(auto, 240px) [main-start] min(840px, calc(100% - 8vw)) [main-end] minmax(auto, 240px) [wide-end] minmax(4vmin, auto) [full-end];
+}
+
+.gh-content>blockquote,
+.gh-content>dl,
+.gh-content>ol,
+.gh-content>p,
+.gh-content>ul {
     font-size: 16px;
     line-height: 1.5;
 }
 
-.post-card-excerpt,
-.post-full-content {
-    font-family: 'Open Sans', sans-serif;
+.gh-content>*+* {
+    margin-top: 1.5vmin !important;
 }
 
-.post-template .kg-card-markdown>p:first-child {
-    font-size: 16px;
-    line-height: 1.5;
+.about-col {
+    float: left;
+    width: 20%;
+    padding: 5px;
 }
 
-.post-full-content h1,
-.post-full-content h2,
-.post-full-content h3,
-.post-full-content h4,
-.post-full-content h5,
-.post-full-content h6 {
-    font-family: 'Open Sans', sans-serif;
-}
-
-.post-full-content h2 {
-    font-size: 3rem;
-    font-weight: 600;
-}
-
-.post-full-content h3 {
-    font-size: 2.2rem;
-    font-weight: 600;
-}
-
-.post-full-content a {
-    box-shadow: none;
-    color: #2962ff;
-}
-
-.post-full-content a:hover {
-    color: #768fff;
-}
-
-.post-full-content table {
-    font-family: 'Open Sans', sans-serif;
-}
-
-.post-full-content pre {
-    border: none !important;
-}
-
-.post-full-content blockquote {
-    margin: 1.5em;
-    padding: 0 1.5em;
-    border-left: 3px solid #2962ff;
-}
-
-.site-header-content .author-meta {
-    font-family: 'Open Sans', sans-serif;
-}
-
-.subscribe-overlay-description {
-    font-family: 'Open Sans', sans-serif;
-}
-
-.social-links a,
-.author-meta a {
-    text-decoration: none;
-}
-
-.post-full-meta-date {
-    color: #2962ff;  
-}
-
-.author-card-button:hover {
-    color: #2962ff;
-    border-color: #2962ff;  
-}
-
-.floating-header-share a {
-    text-decoration: none;
-}
-
-/* Custom About Page */
-.about-sidebar {
-    width: 100%;
-}
-
-.about-sidebar > .author-profile-image {
-    width: 70%;
-    height: 70%;
-    box-shadow: 0 0 0 6px #eeeeee;
-}
-
-@media (min-width: 786px) {
-    .about-main {
-        padding: 0;
-    }
-
-    .about-main > .post-content {
-        display: block;
-        width: 70%;
-        float: left;
-        padding: 0 1.5em;
-    }
-
-    .about-sidebar {
-        display: block;
-        width: 30%;
-        float: left;
-        padding: 0 1.5em;
-    }
-
-    .about-sidebar img {
-        width: 70%;
-        height: 70%;
-    }
-
-    .about-sidebar > .author-profile-image {
-        margin: 0 auto;
-    }
+.about-col img {
+    max-height: 100px;
 }
