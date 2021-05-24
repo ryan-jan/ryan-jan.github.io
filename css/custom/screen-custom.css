@@ -121,7 +121,6 @@ blockquote p {
 
 @media only screen and (min-width: 1366px) {
     .overlay-ad.fixed {
-        display: none;
         position: fixed;
         bottom: 0;
         right: 0;
@@ -139,7 +138,6 @@ blockquote p {
     }
 
     .overlay-ad.sticky {
-        display: none;
         position: absolute;
         right: 0;
         margin-top: -280px;
