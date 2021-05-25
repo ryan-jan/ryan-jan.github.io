@@ -6,10 +6,19 @@
     <description>Recent content on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Thu, 13 May 2021 09:05:51 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 25 May 2021 09:05:51 +0000</lastBuildDate>
     
 	<atom:link href="https://ryanjan.uk/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>How to validate Azure resource moves using PowerShell</title>
+      <link>https://ryanjan.uk/2021/05/25/how-to-validate-azure-resource-moves-using-powershell/</link>
+      <pubDate>Tue, 25 May 2021 09:05:51 +0000</pubDate>
+      
+      <guid>https://ryanjan.uk/2021/05/25/how-to-validate-azure-resource-moves-using-powershell/</guid>
+      <description>The validate move resources API operation in Azure lets you pre-validate a potential move without actually moving any resources. This can be helpful when planning complex move scenarios.</description>
+    </item>
     
     <item>
       <title>PowerShell Tips: What is splatting and should I use it?</title>
