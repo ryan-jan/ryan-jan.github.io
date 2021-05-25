@@ -152,7 +152,7 @@ description from the about_Splatting doc.">
 
 <h2 id="introduction">Introduction</h2>
 
-<p>In this post I am going to demonstrate a very useful PowerShell technique called splatting. But what is splatting? Here is the official
+<p>In this post, I am going to demonstrate a very useful PowerShell technique called splatting. But what is splatting? Here is the official
 description from the <a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_splatting?view=powershell-7.1">about_Splatting</a>
 doc.</p>
 
@@ -162,7 +162,7 @@ doc.</p>
 <p>Splatting makes your commands shorter and easier to read. You can reuse the splatting values in different command calls and use splatting to pass parameter values from the $PSBoundParameters automatic variable to other scripts and functions.</p>
 </blockquote>
 
-<p>As you can see, splatting is essentially all about code readability. It is a nice way to avoid writing commands with many parameters that end up running way off of your display and causing lots of scrolling around. The description above makes it sound much more complicated than it actually is so lets just dive into some examples.</p>
+<p>As you can see, splatting is essentially all about code readability. It&rsquo;s a nice way to avoid writing commands with multiple parameters, that would otherwise end up running way off of your display. The description above makes it sound much more complicated than it actually is, so let&rsquo;s just dive into some examples.</p>
 
 <div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -175,14 +175,14 @@ doc.</p>
 
 <h2 id="getting-started">Getting Started</h2>
 
-<p>Take the following command which enables AD authentication on an Azure File Share.</p>
+<p>Take the following command, which enables AD authentication on an Azure File Share.</p>
 
 <pre><code class="language-powershell">Set-AzStorageAccount -ResourceGroupName $ResourceGroup -Name $StorAccount -EnableActiveDirectoryDomainServicesForFile $true -ActiveDirectoryDomainName $DomainName -ActiveDirectoryNetBiosDomainName $DomainName -ActiveDirectoryForestName $DomainName -ActiveDirectoryDomainGuid $DomainGuid -ActiveDirectoryDomainsid $DomainSid -ActiveDirectoryAzureStorageSid $StorAccountSid
 </code></pre>
 
-<p>This command requires nine parameters, all of which have pretty long names, and means that you cannot see exactly what is going on without scrolling all the way to the right.</p>
+<p>This command requires nine parameters, all of which have fairly long names, and means that you cannot see exactly what is going on without scrolling to the right.</p>
 
-<p>This is where splatting comes in. Splatting allows us to write the following instead.</p>
+<p>This is where splatting comes in. Splatting allows you to write the following instead.</p>
 
 <pre><code class="language-powershell">$Params = @{
     ResourceGroupName = $ResourceGroup
@@ -199,7 +199,7 @@ doc.</p>
 Set-AzStorageAccount @Params
 </code></pre>
 
-<p>As you can see, we are creating a hashtable named <code>$Params</code> containing each parameter and its value. We can then use this hashtable in place of the parameters by specifying it after the command with the <code>@</code> prefix rather than the <code>$</code> variable prefix. This makes the command much more readable and avoids the need to scroll around to see all of the parameters.</p>
+<p>As you can see, you created a hashtable named <code>$Params</code> containing each parameter and its value. You can then use this hashtable in place of the parameters by specifying it after the command with the <code>@</code> prefix rather than the <code>$</code> variable prefix. This makes the command much more readable and avoids any unnecessary scrolling.</p>
 
 <div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -214,7 +214,7 @@ Set-AzStorageAccount @Params
 
 <p>One of the more functional benefits of splatting is that you can reuse the hashtable containing the parameters multiple times, changing parameters and their values as required.</p>
 
-<p>The following example writes a message to the console, changing some of the parameter values depending on whether the fictional <code>$Results</code> variable contains an Error property.</p>
+<p>The following example writes a message to the console, changing some of the parameter values depending on whether the fictional <code>$Results</code> variable contains an Error property or not.</p>
 
 <pre><code class="language-powershell">$Results = Invoke-SomeCommand
 
@@ -225,7 +225,7 @@ if ($Results.Error) {
 }
 </code></pre>
 
-<p>Using splatting, we can avoid writing the full command out twice. Instead we can specify the default paramaters and values in the <code>$Params</code> hashtable and simply change the values we require if <code>$Results</code> contains an Error property.</p>
+<p>Using splatting, you can avoid writing the full command out twice. Instead, you can specify the default parameters and values in the <code>$Params</code> hashtable and simply change the values we require if <code>$Results</code> contains an Error.</p>
 
 <pre><code class="language-powershell">$Results = Invoke-SomeCommand
 
@@ -243,11 +243,11 @@ if ($Results.Error) {
 Write-Host @Params
 </code></pre>
 
-<p>This is not exactly a real world example but it at least shows how you can reuse the parameters in the hashtable. This technique is extremely powerful when used in more complex scripts/functions etc.</p>
+<p>This is not exactly a real world example, but it at least shows how you can reuse the parameters in the hashtable. This technique is extremely powerful when used in more complex scripts/functions etc.</p>
 
 <h2 id="mixing-splatting-with-explicitly-defined-parameters">Mixing Splatting with Explicitly Defined Parameters</h2>
 
-<p>It is possible to mix both splatted parameters with explicit parameters. For example.</p>
+<p>It is possible to mix both splatted parameters with explicit parameters; for example:</p>
 
 <pre><code class="language-powershell">$Params = @{
     Parameter1 = &quot;Value1&quot;
@@ -272,7 +272,7 @@ Invoke-SomeCommand @Params -WhatIf
 <pre><code class="language-powershell">Invoke-SomeCommand -Parameter1 &quot;Value1&quot; -WhatIf
 </code></pre>
 
-<p>However, when using splatting you will need to provide a <code>$true</code> or <code>$false</code> value for the switch paramater in the hashtable. For example.</p>
+<p>However, when using splatting you will need to provide a <code>$true</code> or <code>$false</code> value for the switch parameter in the hashtable; for example:</p>
 
 <pre><code class="language-powershell">$Params = @{
     Parameter1 = &quot;Value1&quot;
@@ -286,7 +286,7 @@ Invoke-SomeCommand @Params
 
 <p>Hopefully this has been an interesting overview of the splatting technique. Splatting is key to writing readable PowerShell code and yet I find that many people I mention it to have never actually heard of it.</p>
 
-<p>There is a great community project on GitHub called <a href="https://poshcode.gitbook.io/powershell-practice-and-style/">PowerShell Practice and Style</a> which aims to lay out some best practices for writing PowerShell code. They make reference to the splatting technique in the <a href="https://poshcode.gitbook.io/powershell-practice-and-style/style-guide/readability">readability</a> section which is where I first stumbled across it.</p>
+<p>There is a great community project on GitHub called <a href="https://poshcode.gitbook.io/powershell-practice-and-style/">PowerShell Practice and Style</a> which aims to lay out some best practices for writing PowerShell code. They make reference to the splatting technique in the <a href="https://poshcode.gitbook.io/powershell-practice-and-style/style-guide/readability">readability</a> section, which is where I first stumbled across it.</p>
 
 <div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
