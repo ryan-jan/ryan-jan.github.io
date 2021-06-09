@@ -140,32 +140,26 @@
         </div>
 
         
-        <figure class="article-image">
-            <img src="/images/2021/05/azure-resources.png" alt="How to validate Azure resource moves using PowerShell" />
-        </figure>
+            
+            <figure class="article-image">
+                <img src="/images/2021/05/azure-resources.png" alt="How to validate Azure resource moves using PowerShell" />
+            </figure>
+            
         
     </header>
 
     <section class="gh-content gh-canvas">
-        
-
-<h1 id="how-to-validate-azure-resource-moves-using-powershell">How to validate Azure resource moves using PowerShell</h1>
-
+        <h1 id="how-to-validate-azure-resource-moves-using-powershell">How to validate Azure resource moves using PowerShell</h1>
 <p>The <a href="https://docs.microsoft.com/en-us/rest/api/resources/resources/moveresources">validate move resources</a> API operation in Azure lets you pre-validate a potential move without actually moving any resources. This can be helpful when planning complex move scenarios.</p>
-
 <p>In this tutorial, you&rsquo;ll learn how to invoke the validate move operation using the <a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/invoke-restmethod?view=powershell-7.1"><code>Invoke-RestMethod</code> PowerShell command</a> and how to view the validation results.</p>
-
 <h2 id="prerequisites">Prerequisites</h2>
-
 <p>To follow along with this tutorial, you&rsquo;ll need the following:</p>
-
 <ul>
 <li>A workstation with PowerShell 7.1 and the <a href="https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-5.9.0">Az</a> module installed. I&rsquo;m using a Windows 10 workstation with PowerShell 7.1 and Az 5.8.0.</li>
 <li>The appropriate permissions in Azure.</li>
 <li>A source resource group containing at least one resource.</li>
 <li>A destination resource group.</li>
 </ul>
-
 <div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
      <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
@@ -174,29 +168,21 @@
           (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
 </div>
-
 <h2 id="gather-the-required-information">Gather the required information</h2>
-
 <p>The <code>validateMoveResources</code> API endpoint requires the following information:</p>
-
 <ul>
 <li>Your Azure access token.</li>
 <li>The <code>ResourceId</code> of the source resource group: <code>rg-source</code> in this example.</li>
 <li>The <code>Id</code> of one or more source resources (which must be in the source resource group). I am using a single storage account resource called <code>st-source</code> in this example.</li>
 <li>The <code>ResourceId</code> of the destination resource group: <code>rg-dest</code> in this example.</li>
 </ul>
-
 <p>The following code connects to Azure using <a href="https://docs.microsoft.com/en-us/powershell/module/az.accounts/connect-azaccount?view=azps-5.9.0"><code>Connect-AzAccount</code></a> and stores your access token in a variable (<code>$Token</code>).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-AzAccount
 
-<pre><code class="language-powershell">Connect-AzAccount
-
-# Store the access token as a Secure String, as this is required by the
-# Invoke-RestMethod command later.
+<span style="color:#75715e"># Store the access token as a Secure String, as this is required by the</span>
+<span style="color:#75715e"># Invoke-RestMethod command later.</span>
 $Token = (Get-AzAccessToken).Token | ConvertTo-SecureString -AsPlainText -Force
-</code></pre>
-
-<p>The <code>ResourceId</code> of the source and destination resource groups, as well as the source storage account <code>Id</code>, can be stored in variables (<code>$SourceGroupId</code>, <code>$SourceResourceId</code>, and <code>$DestGroupId</code>), as below.</p>
-
+</code></pre></div><p>The <code>ResourceId</code> of the source and destination resource groups, as well as the source storage account <code>Id</code>, can be stored in variables (<code>$SourceGroupId</code>, <code>$SourceResourceId</code>, and <code>$DestGroupId</code>), as below.</p>
 <div class="callout info">
     <div class="callout-wrapper">
         <span>
@@ -209,13 +195,10 @@ $Token = (Get-AzAccessToken).Token | ConvertTo-SecureString -AsPlainText -Force
         </div>
     </div>
 </div>
-
-<pre><code class="language-powershell">$SourceGroupId = (Get-AzResourceGroup -Name &quot;rg-source&quot;).ResourceId
-$SourceResourceId = (Get-AzStorageAccount -Name &quot;st-source&quot; -ResourceGroupName &quot;rg-source&quot;).Id
-$DestGroupId = (Get-AzResourceGroup -Name &quot;rg-dest&quot;).ResourceId
-</code></pre>
-
-<div class="in-article-ad">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$SourceGroupId = (Get-AzResourceGroup -Name <span style="color:#e6db74">&#34;rg-source&#34;</span>).ResourceId
+$SourceResourceId = (Get-AzStorageAccount -Name <span style="color:#e6db74">&#34;st-source&#34;</span> -ResourceGroupName <span style="color:#e6db74">&#34;rg-source&#34;</span>).Id
+$DestGroupId = (Get-AzResourceGroup -Name <span style="color:#e6db74">&#34;rg-dest&#34;</span>).ResourceId
+</code></pre></div><div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
      <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
           data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
@@ -223,28 +206,19 @@ $DestGroupId = (Get-AzResourceGroup -Name &quot;rg-dest&quot;).ResourceId
           (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
 </div>
-
 <h2 id="send-the-initial-request-to-the-move-validation-api-endpoint">Send the initial request to the move validation API endpoint</h2>
-
 <p>To start the move validation task, you&rsquo;ll send a <code>POST</code> request to the API endpoint. This request must include a JSON object as the body; for example:</p>
-
-<pre><code class="language-json">{
- &quot;resources&quot;: [&quot;&lt;resource-id-1&gt;&quot;, &quot;&lt;resource-id-2&gt;&quot;],
- &quot;targetResourceGroup&quot;: &quot;/subscriptions/&lt;subscription-id&gt;/resourceGroups/&lt;target-group&gt;&quot;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+ <span style="color:#f92672">&#34;resources&#34;</span>: [<span style="color:#e6db74">&#34;&lt;resource-id-1&gt;&#34;</span>, <span style="color:#e6db74">&#34;&lt;resource-id-2&gt;&#34;</span>],
+ <span style="color:#f92672">&#34;targetResourceGroup&#34;</span>: <span style="color:#e6db74">&#34;/subscriptions/&lt;subscription-id&gt;/resourceGroups/&lt;target-group&gt;&#34;</span>
 }
-</code></pre>
-
-<p>You can create the request body using the variables you stored in the previous step. The code below first creates a PowerShell <a href="https://docs.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-hashtable?view=powershell-7.1">hashtable</a> (<code>$Body</code>) representing the data, and then converts the hashtable to a JSON object (<code>$JsonBody</code>).</p>
-
-<pre><code class="language-powershell">$Body = @{
+</code></pre></div><p>You can create the request body using the variables you stored in the previous step. The code below first creates a PowerShell <a href="https://docs.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-hashtable?view=powershell-7.1">hashtable</a> (<code>$Body</code>) representing the data, and then converts the hashtable to a JSON object (<code>$JsonBody</code>).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Body = @{
     resources = @($SourceResourceId)
     targetResourceGroup = $DestGroupId
 }
 $JsonBody = $Body | ConvertTo-Json -Depth 5 
-</code></pre>
-
-<p>With the <code>$JsonBody</code> variable now stored, you can issue the <code>POST</code> request to start the asynchronous validation task. The following command builds the required <code>Uri</code> using the <code>$SourceGroupId</code> variable, specifies the <code>$JsonBody</code> variable as the request body, and uses the <code>$Token</code> variable to include the Azure access key.</p>
-
+</code></pre></div><p>With the <code>$JsonBody</code> variable now stored, you can issue the <code>POST</code> request to start the asynchronous validation task. The following command builds the required <code>Uri</code> using the <code>$SourceGroupId</code> variable, specifies the <code>$JsonBody</code> variable as the request body, and uses the <code>$Token</code> variable to include the Azure access key.</p>
 <div class="callout info">
     <div class="callout-wrapper">
         <span>
@@ -257,25 +231,19 @@ $JsonBody = $Body | ConvertTo-Json -Depth 5
         </div>
     </div>
 </div>
-
-<pre><code class="language-powershell">$Params = @{
-    Uri = &quot;https://management.azure.com$SourceGroupId/validateMoveResources?api-version=2019-05-10&quot;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Params = @{
+    Uri = <span style="color:#e6db74">&#34;https://management.azure.com$SourceGroupId/validateMoveResources?api-version=2019-05-10&#34;</span>
     Body = $JsonBody
-    Method = &quot;Post&quot;
-    Authentication = &quot;Bearer&quot;
+    Method = <span style="color:#e6db74">&#34;Post&#34;</span>
+    Authentication = <span style="color:#e6db74">&#34;Bearer&#34;</span>
     Token = $Token
-    ContentType = &quot;application/json&quot;
-    ResponseHeadersVariable = &quot;ResHeaders&quot;
+    ContentType = <span style="color:#e6db74">&#34;application/json&#34;</span>
+    ResponseHeadersVariable = <span style="color:#e6db74">&#34;ResHeaders&#34;</span>
 }
 Invoke-RestMethod @Params
-</code></pre>
-
-<p>If successful, this command won&rsquo;t produce any output to the console.</p>
-
+</code></pre></div><p>If successful, this command won&rsquo;t produce any output to the console.</p>
 <h2 id="retrieving-the-results-of-the-validation-task">Retrieving the results of the validation task</h2>
-
 <p>When the previous command completed, it created a variable containing the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers">HTTP headers</a> from the response (<code>$ResHeaders</code>). <code>$ResHeaders</code> contains a <code>Location</code> property, which you can use to retrieve the task results, as follows.</p>
-
 <div class="callout info">
     <div class="callout-wrapper">
         <span>
@@ -288,28 +256,19 @@ Invoke-RestMethod @Params
         </div>
     </div>
 </div>
-
-<pre><code class="language-powershell">$Params = @{
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Params = @{
     Uri = $ResHeaders.Location[0]
-    Authentication = &quot;Bearer&quot;
+    Authentication = <span style="color:#e6db74">&#34;Bearer&#34;</span>
     Token = $Token
-    ContentType = &quot;application/json&quot;
-    StatusCodeVariable = &quot;StatusCode&quot;
+    ContentType = <span style="color:#e6db74">&#34;application/json&#34;</span>
+    StatusCodeVariable = <span style="color:#e6db74">&#34;StatusCode&#34;</span>
 }
 Invoke-RestMethod @Params
-</code></pre>
-
-<p>If the validation succeeds, the API returns a <code>204</code> <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status">HTTP response code</a> with no content. You can check the status code by printing the <code>$StatusCode</code> variable to the console. If the validation detects issues, it&rsquo;ll return an error; for instance:</p>
-
-<pre><code class="language-powershell">Invoke-RestMethod: {&quot;error&quot;:{&quot;code&quot;:&quot;MissingRegistrationsForTypes&quot;,&quot;message&quot;:&quot;The subscription '037d15db-9c32-4493-a4dd-65054fc5a44f' is not registered for resource types 'Microsoft.Storage/storageAccounts (westeurope)'.&quot;}}
-</code></pre>
-
-<h2 id="conclusion">Conclusion</h2>
-
+</code></pre></div><p>If the validation succeeds, the API returns a <code>204</code> <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status">HTTP response code</a> with no content. You can check the status code by printing the <code>$StatusCode</code> variable to the console. If the validation detects issues, it&rsquo;ll return an error; for instance:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Invoke-RestMethod<span style="color:#960050;background-color:#1e0010">:</span> {<span style="color:#e6db74">&#34;error&#34;</span><span style="color:#960050;background-color:#1e0010">:</span>{<span style="color:#e6db74">&#34;code&#34;</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#e6db74">&#34;MissingRegistrationsForTypes&#34;</span>,<span style="color:#e6db74">&#34;message&#34;</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#e6db74">&#34;The subscription &#39;037d15db-9c32-4493-a4dd-65054fc5a44f&#39; is not registered for resource types &#39;Microsoft.Storage/storageAccounts (westeurope)&#39;.&#34;</span>}}
+</code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>In this tutorial, you&rsquo;ve learned how to use the <code>Invoke-RestMethod</code> PowerShell cmdlet to validate potential resource moves in Azure.</p>
-
 <p>I hope this has been informative for you and thank you for reading!</p>
-
 <div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
      <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
@@ -354,8 +313,9 @@ Invoke-RestMethod @Params
         <article class="post-card">
 
     
+    
     <a class="post-card-image-link" href="https://ryanjan.uk/2021/05/13/powershell-splatting/">
-        <img class="post-card-image" src="/images/2021/05/powershell.jpg" loading="lazy" />
+        <img class="post-card-image" src="/2021/05/13/powershell-splatting/feature-image.png" loading="lazy" />
     </a>
     
 
@@ -368,7 +328,7 @@ Invoke-RestMethod @Params
                 <div class="post-card-primary-tag">powershell</div>
                 
                 
-                <h2 class="post-card-title">PowerShell Tips: What is splatting and should I use it?</h2>
+                <h2 class="post-card-title">What is PowerShell splatting and how does it work?</h2>
             </header>
             <section class="post-card-excerpt">
                 <p>In this post I am going to demonstrate a very useful PowerShell technique called splatting. But what is splatting? Here is the official
@@ -397,7 +357,7 @@ description from the about_Splatting doc.</p>
                 <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
                 
                 <span class="post-card-byline-date">13 May 2021 <span class="bull"> &bull; </span>
-                    4 min read</span>
+                    7 min read</span>
             </div>
             
         </footer>
@@ -407,9 +367,10 @@ description from the about_Splatting doc.</p>
         <article class="post-card">
 
     
-    <a class="post-card-image-link" href="https://ryanjan.uk/2019/10/15/add-hard-disks-async-with-powercli/">
-        <img class="post-card-image" src="/images/2019/10/wait-image.jpg" loading="lazy" />
-    </a>
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/2019/10/15/add-hard-disks-async-with-powercli/">
+            <img class="post-card-image" src="/images/2019/10/wait-image.jpg" loading="lazy" />
+        </a>
     
 
     <div class="post-card-content">
@@ -459,9 +420,10 @@ description from the about_Splatting doc.</p>
         <article class="post-card">
 
     
-    <a class="post-card-image-link" href="https://ryanjan.uk/2019/06/19/vsphere-global-permissions-with-powershell/">
-        <img class="post-card-image" src="/images/2019/06/closed-coming-soon-door-4291.jpg" loading="lazy" />
-    </a>
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/2019/06/19/vsphere-global-permissions-with-powershell/">
+            <img class="post-card-image" src="/images/2019/06/closed-coming-soon-door-4291.jpg" loading="lazy" />
+        </a>
     
 
     <div class="post-card-content">

@@ -140,32 +140,23 @@
         </div>
 
         
-        <figure class="article-image">
-            <img src="/images/2019/06/closed-coming-soon-door-4291.jpg" alt="Managing vSphere Global Permissions with PowerShell" />
-        </figure>
+            
+            <figure class="article-image">
+                <img src="/images/2019/06/closed-coming-soon-door-4291.jpg" alt="Managing vSphere Global Permissions with PowerShell" />
+            </figure>
+            
         
     </header>
 
     <section class="gh-content gh-canvas">
-        
-
-<h2 id="introduction">Introduction</h2>
-
+        <h2 id="introduction">Introduction</h2>
 <p>It appears that working with vSphere global permissions in PowerCLI is not yet possible. It is also my understanding that there is not currently a public API available in vCenter which allows you to manipulate global permissions either. However, thanks to William Lam&rsquo;s awesome <a href="https://www.virtuallyghetto.com/2017/03/automating-vsphere-global-permissions-with-powercli.html">blog post from 2017</a>, I learned that it is possible to add/remove global permissions via the Managed Object Browser (MOB). What&rsquo;s more, William provides two example PowerShell functions showing how to trigger the required MOB methods using standard <code>Invoke-WebRequest</code> calls. This is great, but unfortunately he only covered adding and removing permissions and I really needed to be able to list the current global permissions on a vCenter server for auditing purposes. So, I got to work and created a new PowerShell module named <code>VIPerms</code>. This module combines the add/remove examples from William&rsquo;s post with a new function to list all global permissions. In this post I will demonstrate how to install and use this module.</p>
-
 <h2 id="installation">Installation</h2>
-
 <p>As with most PowerShell modules VIPerms is available to install via the PowerShell Gallery.</p>
-
-<pre><code class="language-powershell">Install-Module -Name &quot;VIPerms&quot; -Scope &quot;CurrentUser&quot;
-</code></pre>
-
-<p>Once installed you can import the module into your session.</p>
-
-<pre><code class="language-powershell">Import-Module -Name &quot;VIPerms&quot;
-</code></pre>
-
-<div class="in-article-ad">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Install-Module -Name <span style="color:#e6db74">&#34;VIPerms&#34;</span> -Scope <span style="color:#e6db74">&#34;CurrentUser&#34;</span>
+</code></pre></div><p>Once installed you can import the module into your session.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Import-Module -Name <span style="color:#e6db74">&#34;VIPerms&#34;</span>
+</code></pre></div><div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
      <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
           data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
@@ -173,26 +164,15 @@
           (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
 </div>
-
 <h2 id="connecting-to-a-vcenter-server">Connecting to a vCenter Server</h2>
-
 <p>The first step is to connect to your vCenter server.</p>
-
-<pre><code class="language-powershell">Connect-VIMobServer -Server &quot;vcenter.example.com&quot;
-</code></pre>
-
-<p>This will prompt for credentials. You will need to use the <code>administrator@vsphere.local</code> account in order to access and manage the global permissions.</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-VIMobServer -Server <span style="color:#e6db74">&#34;vcenter.example.com&#34;</span>
+</code></pre></div><p>This will prompt for credentials. You will need to use the <code>administrator@vsphere.local</code> account in order to access and manage the global permissions.</p>
 <p>If you use self-signed certificates in your environment you will need to skip certificate checking.</p>
-
-<pre><code class="language-powershell">Connect-VIMobServer -Server &quot;vcenter.example.com&quot; -SkipCertificateCheck
-</code></pre>
-
-<h2 id="listing-global-permissions">Listing Global Permissions</h2>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-VIMobServer -Server <span style="color:#e6db74">&#34;vcenter.example.com&#34;</span> -SkipCertificateCheck
+</code></pre></div><h2 id="listing-global-permissions">Listing Global Permissions</h2>
 <p>To list all global permissions for your vCenter server use the <code>Get-VIGlobalPermission</code> function.</p>
-
-<pre><code class="language-powershell">Get-VIGlobalPermission
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-VIGlobalPermission
 
 Principal                                                            PrincipalType Role            Propagate
 ---------                                                            ------------- ----            ---------
@@ -202,16 +182,11 @@ VSPHERE.LOCAL\vsphere-webclient-b2df90b0-1e03-11e6-b844-005056bf2aaa User       
 VSPHERE.LOCAL\Administrators                                         Group         Admin           true
 VSPHERE.LOCAL\Administrator                                          User          Admin           true
 ...
-</code></pre>
-
-<h2 id="creating-global-permissions">Creating Global Permissions</h2>
-
+</code></pre></div><h2 id="creating-global-permissions">Creating Global Permissions</h2>
 <p>The <code>New-VIGlobalPermission</code> function will allow you to create a global permission. You must supply a user/group
 name and the identifier of the required role to assign.</p>
-
 <p>First use the <code>Get-VIMobRole</code> function to get the identifier for the specific role.</p>
-
-<pre><code class="language-powershell">Get-VIMobRole
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-VIMobRole
 
 Name     Description Id
 ----     ----------- --
@@ -219,46 +194,25 @@ Admin    Admin       -1
 ReadOnly ReadOnly    -2
 View     View        -3
 ...
-</code></pre>
-
-<p>Then use the <code>New-VIGlobalPermission</code> function to create the permission. For example to assign the <code>Admin</code> role
+</code></pre></div><p>Then use the <code>New-VIGlobalPermission</code> function to create the permission. For example to assign the <code>Admin</code> role
 to the vSphere user <code>VSPHERE.LOCAL\test-user</code> you would use.</p>
-
-<pre><code class="language-powershell">New-VIGlobalPermission -Name &quot;VSPHERE.LOCAL\test-user&quot; -RoleId -1
-</code></pre>
-
-<p>If you are assigning a role to a group you will need to use the <code>-IsGroup</code> parameter.</p>
-
-<pre><code class="language-powershell">New-VIGlobalPermission -Name &quot;VSPHERE.LOCAL\group-of-users&quot; -IsGroup -RoleId -1
-</code></pre>
-
-<p>By default the global permission will propagate to all children objects. If you would like to override this
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">New-VIGlobalPermission -Name <span style="color:#e6db74">&#34;VSPHERE.LOCAL\test-user&#34;</span> -RoleId -1
+</code></pre></div><p>If you are assigning a role to a group you will need to use the <code>-IsGroup</code> parameter.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">New-VIGlobalPermission -Name <span style="color:#e6db74">&#34;VSPHERE.LOCAL\group-of-users&#34;</span> -IsGroup -RoleId -1
+</code></pre></div><p>By default the global permission will propagate to all children objects. If you would like to override this
 you can use the <code>-Propagate</code> parameter.</p>
-
-<pre><code class="language-powershell">New-VIGlobalPermission -Name &quot;VSPHERE.LOCAL\group-of-users&quot; -IsGroup -RoleId -1 -Propagate:$false
-</code></pre>
-
-<blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">New-VIGlobalPermission -Name <span style="color:#e6db74">&#34;VSPHERE.LOCAL\group-of-users&#34;</span> -IsGroup -RoleId -1 -Propagate<span style="color:#960050;background-color:#1e0010">:</span>$false
+</code></pre></div><blockquote>
 <p><strong>NOTE</strong>
 If you are already using the VMware.PowerCLI module you can use the official <code>Get-VIRole</code> CmdLet in place of the <code>Get-VIMobRole</code> function included in VIPerms.</p>
 </blockquote>
-
 <h2 id="removing-global-permissions">Removing Global Permissions</h2>
-
 <p>The <code>Remove-VIGlobalPermission</code> function will allow you to delete a global permission. You only need to specify the user/group with this function.</p>
-
-<pre><code class="language-powershell">Remove-VIGlobalPermission -Name &quot;VSPHERE.LOCAL\test-user&quot;
-</code></pre>
-
-<p>Again, if you are removing a permission from a group you will need to use the <code>-IsGroup</code> parameter.</p>
-
-<pre><code class="language-powershell">Remove-VIGlobalPermission -Name &quot;VSPHERE.LOCAL\group-of-users&quot; -IsGroup
-</code></pre>
-
-<h2 id="conclusion">Conclusion</h2>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Remove-VIGlobalPermission -Name <span style="color:#e6db74">&#34;VSPHERE.LOCAL\test-user&#34;</span>
+</code></pre></div><p>Again, if you are removing a permission from a group you will need to use the <code>-IsGroup</code> parameter.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Remove-VIGlobalPermission -Name <span style="color:#e6db74">&#34;VSPHERE.LOCAL\group-of-users&#34;</span> -IsGroup
+</code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>This module is something that I have put together pretty quickly as I needed to automate some global permissions tasks. I have tested it against vSphere 6.0, 6.5 and 6.7 lab environements and it seems to work fine with all versions. Hopefully it is useful to some other people out there! If you have any questions or feedback then you can find me on <a href="https://twitter.com/_ryanjan_">twitter</a>.</p>
-
 <div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
      <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
@@ -303,9 +257,10 @@ If you are already using the VMware.PowerCLI module you can use the official <co
         <article class="post-card">
 
     
-    <a class="post-card-image-link" href="https://ryanjan.uk/2019/02/10/get-host-cdp-info-with-powercli/">
-        <img class="post-card-image" src="/images/2019/02/cisco-logo-16x9-2-1.jpg" loading="lazy" />
-    </a>
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/2019/02/10/get-host-cdp-info-with-powercli/">
+            <img class="post-card-image" src="/images/2019/02/cisco-logo-16x9-2-1.jpg" loading="lazy" />
+        </a>
     
 
     <div class="post-card-content">
@@ -354,6 +309,7 @@ If you are already using the VMware.PowerCLI module you can use the official <co
         
         <article class="post-card">
 
+    
     
 
     <div class="post-card-content">
@@ -404,9 +360,10 @@ The Symptoms I was initially made aware of this issue as it appeared that certai
         <article class="post-card">
 
     
-    <a class="post-card-image-link" href="https://ryanjan.uk/2018/06/02/powershell-tips-script-optimization/">
-        <img class="post-card-image" src="/images/2018/06/lum3n-193427-unsplash.jpg" loading="lazy" />
-    </a>
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/2018/06/02/powershell-tips-script-optimization/">
+            <img class="post-card-image" src="/images/2018/06/lum3n-193427-unsplash.jpg" loading="lazy" />
+        </a>
     
 
     <div class="post-card-content">

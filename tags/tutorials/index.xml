@@ -6,11 +6,7 @@
     <description>Recent content in tutorials on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Sun, 24 Jun 2018 11:22:20 +0000</lastBuildDate>
-    
-	<atom:link href="https://ryanjan.uk/tags/tutorials/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 24 Jun 2018 11:22:20 +0000</lastBuildDate><atom:link href="https://ryanjan.uk/tags/tutorials/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>vROps Reports and PowerCLI Part 3: A Helper Module</title>
       <link>https://ryanjan.uk/2018/06/24/vrops-reports-and-powercli-part-three-a-helper-module/</link>
@@ -29,7 +25,7 @@
       <guid>https://ryanjan.uk/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/</guid>
       <description>For your reference, here are the articles in this mini-series:
  vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports (this article) vROps Reports and PowerCLI Part 3: A Helper Module  Introduction Following on from the previous article in this mini-series, this article demonstrates how to retrieve a generated report from vROps as a PowerShell object.
-(adsbygoogle = window.</description>
+(adsbygoogle = window.adsbygoogle || []).</description>
     </item>
     
     <item>
@@ -50,7 +46,7 @@
       <guid>https://ryanjan.uk/2018/03/26/installing-gogs-in-a-freenas-jail/</guid>
       <description>I recently stumbled across the Gogs project whilst looking for self-hosted Git solutions. I run a FreeNAS server at home so I thought I would get the app up and running in a jail. Here is how I did it.
 Jail Preparation Create a new jail named gogs and make sure that the jail is up to date by running.
-pkg update &amp;amp;&amp;amp; pkg upgrade  Now install the required packages.</description>
+pkg update &amp;amp;&amp;amp; pkg upgrade Now install the required packages.</description>
     </item>
     
   </channel>

@@ -6,11 +6,7 @@
     <description>Recent content in powercli on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Tue, 15 Oct 2019 14:59:59 +0100</lastBuildDate>
-    
-	<atom:link href="https://ryanjan.uk/tags/powercli/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 15 Oct 2019 14:59:59 +0100</lastBuildDate><atom:link href="https://ryanjan.uk/tags/powercli/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Add Hard Disks to VMs Asynchronously with PowerCLI</title>
       <link>https://ryanjan.uk/2019/10/15/add-hard-disks-async-with-powercli/</link>
@@ -65,7 +61,7 @@
       <guid>https://ryanjan.uk/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/</guid>
       <description>For your reference, here are the articles in this mini-series:
  vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports (this article) vROps Reports and PowerCLI Part 3: A Helper Module  Introduction Following on from the previous article in this mini-series, this article demonstrates how to retrieve a generated report from vROps as a PowerShell object.
-(adsbygoogle = window.</description>
+(adsbygoogle = window.adsbygoogle || []).</description>
     </item>
     
     <item>

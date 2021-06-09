@@ -140,106 +140,89 @@
         </div>
 
         
-        <figure class="article-image">
-            <img src="/images/2018/08/override.jpg" alt="Storage DRS and PowerCLI Part 1: Get VM Overrides" />
-        </figure>
+            
+            <figure class="article-image">
+                <img src="/images/2018/08/override.jpg" alt="Storage DRS and PowerCLI Part 1: Get VM Overrides" />
+            </figure>
+            
         
     </header>
 
     <section class="gh-content gh-canvas">
-        
-
-<h2 id="introduction">Introduction</h2>
-
+        <h2 id="introduction">Introduction</h2>
 <p>With Storage DRS (SDRS) enabled datastore clusters, we have many options to configure overrides on a per-VM basis. For example disabling SDRS for a specific VM or forcing SDRS to keep a VMs VMDK files on separate datastores (anti-affinity). However, one thing which has caught out our 2nd line team recently and caused us some SDRS performance issues is that when you manually Storage vMotion (svMotion) one or more VMDK files and pick a specific datastore as the destination, you have to tick a box that disables SDRS for the particular VM.
-<img src="/images/2018/07/sdrs-disable.png" alt="sdrs-disable" />
+<img src="/images/2018/07/sdrs-disable.png" alt="sdrs-disable">
 This results in a VM Override being created for that VM. Consequently, SDRS will make no attempt to move these VMDKs when trying to rebalance the datastores in the datastore cluster.</p>
-
 <p>To stop this being an issue I have now written a couple of PowerShell scripts using PowerCLI. The first one is to list the current VM Overrides. The second one is to bulk remove the VM Overrides that are not required. In this first post I will show you how to get a list of all VM Overrides for a specific datastore cluster. You can also see this information in the Web Client by going to the Storage view, selecting a datastore cluster, and going to Manage &gt; Settings &gt; VM Overrides.</p>
-
 <h2 id="the-process">The Process</h2>
-
 <p>The first thing to do is to retrieve the datastore cluster object using the <code>Get-View</code> cmdlet (VMware refer to these as Storage Pods).</p>
-
-<pre><code class="language-powershell">$StoragePod = Get-View -ViewType &quot;StoragePod&quot; -Filter @{&quot;Name&quot; = &quot;TESTDATASTORECLUSTER&quot;}
-</code></pre>
-
-<p>I am targeting a single datastore cluster, but you can target all clusters by omitting the <code>-Filter</code> parameter.</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$StoragePod = Get-View -ViewType <span style="color:#e6db74">&#34;StoragePod&#34;</span> -Filter @{<span style="color:#e6db74">&#34;Name&#34;</span> = <span style="color:#e6db74">&#34;TESTDATASTORECLUSTER&#34;</span>}
+</code></pre></div><p>I am targeting a single datastore cluster, but you can target all clusters by omitting the <code>-Filter</code> parameter.</p>
 <p>If you now take a look at the <code>$StoragePod.PodStorageDrsEntry.StorageDrsConfig.VmConfig</code> property, you can see a list of VMs and their current SDRS configuration as follows.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$StoragePod.PodStorageDrsEntry.StorageDrsConfig.VmConfig
 
-<pre><code class="language-powershell">$StoragePod.PodStorageDrsEntry.StorageDrsConfig.VmConfig
 
+Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-1535
+Enabled             <span style="color:#960050;background-color:#1e0010">:</span>
+Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span> False
+IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
+VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
+LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
 
-Vm                  : VirtualMachine-vm-1535
-Enabled             :
-Behavior            :
-IntraVmAffinity     : False
-IntraVmAntiAffinity :
-VirtualDiskRules    :
-LinkedView          :
+Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-461
+Enabled             <span style="color:#960050;background-color:#1e0010">:</span>
+Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span> False
+IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
+VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
+LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
 
-Vm                  : VirtualMachine-vm-461
-Enabled             :
-Behavior            :
-IntraVmAffinity     : False
-IntraVmAntiAffinity :
-VirtualDiskRules    :
-LinkedView          :
+Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-1381
+Enabled             <span style="color:#960050;background-color:#1e0010">:</span> False
+Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
+VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
+LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
 
-Vm                  : VirtualMachine-vm-1381
-Enabled             : False
-Behavior            :
-IntraVmAffinity     :
-IntraVmAntiAffinity :
-VirtualDiskRules    :
-LinkedView          :
+Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-1382
+Enabled             <span style="color:#960050;background-color:#1e0010">:</span> False
+Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
+VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
+LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
 
-Vm                  : VirtualMachine-vm-1382
-Enabled             : False
-Behavior            :
-IntraVmAffinity     :
-IntraVmAntiAffinity :
-VirtualDiskRules    :
-LinkedView          :
+Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-1481
+Enabled             <span style="color:#960050;background-color:#1e0010">:</span> False
+Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
+VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
+LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
 
-Vm                  : VirtualMachine-vm-1481
-Enabled             : False
-Behavior            :
-IntraVmAffinity     :
-IntraVmAntiAffinity :
-VirtualDiskRules    :
-LinkedView          :
-
-Vm                  : VirtualMachine-vm-1527
-Enabled             :
-Behavior            :
-IntraVmAffinity     :
-IntraVmAntiAffinity :
-VirtualDiskRules    :
-LinkedView          :
+Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-1527
+Enabled             <span style="color:#960050;background-color:#1e0010">:</span>
+Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
+VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
+LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
 
 ....
-</code></pre>
-
-<p>As you can see, I have two VMs with IntraVmAffinity overrides configured and three VMs which have SDRS disabled.</p>
-
+</code></pre></div><p>As you can see, I have two VMs with IntraVmAffinity overrides configured and three VMs which have SDRS disabled.</p>
 <p>You may also see VMs in this list with nothing configured, such as <code>VirtualMachine-vm-1527</code> above. This threw me initially, as only a few random VMs without an override configured were showing up. I have since worked out in my lab that any VM which previously had a VM override but has since had it removed, will show up in this state. Meanwhile, any VM which has never had an override will not show in the list at all.</p>
-
 <p>To filter out the VMs in the list that no longer have a VM Override configured, I need to check that the <code>Enabled</code> and <code>IntraVmAffinity</code> properties are not null.</p>
-
-<pre><code class="language-powershell">$VMOverrides = $StoragePod.PodStorageDrsEntry.StorageDrsConfig.VmConfig | Where-Object {
-    -not (
-        ($_.Enabled -eq $null) -and
-        ($_.IntraVmAffinity -eq $null)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VMOverrides = $StoragePod.PodStorageDrsEntry.StorageDrsConfig.VmConfig | Where-Object {
+    <span style="color:#f92672">-not</span> (
+        ($_.Enabled <span style="color:#f92672">-eq</span> $null) <span style="color:#f92672">-and</span>
+        ($_.IntraVmAffinity <span style="color:#f92672">-eq</span> $null)
     )
 }
-</code></pre>
-
-<p>This will store all VMs with a current VM Override in the <code>$VMOverrides</code> object. We can then loop over these and output the data as a PSCustomObject.</p>
-
-<pre><code class="language-powershell">foreach ($Override in $VMOverrides) {
-    [PSCustomObject]@{
+</code></pre></div><p>This will store all VMs with a current VM Override in the <code>$VMOverrides</code> object. We can then loop over these and output the data as a PSCustomObject.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Override <span style="color:#66d9ef">in</span> $VMOverrides) {
+    <span style="color:#66d9ef">[PSCustomObject]</span>@{
         VirtualMachine = $Override.Vm
         SDRSAutomationLevel = $Override.Enabled
         KeepVMDKsTogether = $Override.IntraVmAffinity
@@ -253,35 +236,23 @@ VirtualMachine-vm-1527 False
 VirtualMachine-vm-1528 False
 VirtualMachine-vm-1547 False
 VirtualMachine-vm-844  False
-</code></pre>
-
-<p>While this is great, it is returning the managed object reference (MoRef) for each VM. It would be much better if we could instead display the VM name. You can get the VM name from the MoRef using the <code>Get-VM</code> cmdlet.</p>
-
-<pre><code class="language-powershell">Get-VM -Id &quot;VirtualMachine-vm-844&quot;
+</code></pre></div><p>While this is great, it is returning the managed object reference (MoRef) for each VM. It would be much better if we could instead display the VM name. You can get the VM name from the MoRef using the <code>Get-VM</code> cmdlet.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-VM -Id <span style="color:#e6db74">&#34;VirtualMachine-vm-844&#34;</span>
 
 Name                 PowerState Num CPUs MemoryGB
 ----                 ---------- -------- --------
 Test123              PoweredOn  1        3.000
-</code></pre>
-
-<p>Therefore, I am going to create a hashtable containing the MoRef for each VM as the keys, and the VM name as the values. We can then cross reference this lookup table later.</p>
-
-<pre><code class="language-powershell">$VMLookup = @{}
-foreach ($VM in (Get-VM -Id $VMOverrides.Vm)) {
+</code></pre></div><p>Therefore, I am going to create a hashtable containing the MoRef for each VM as the keys, and the VM name as the values. We can then cross reference this lookup table later.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VMLookup = @{}
+<span style="color:#66d9ef">foreach</span> ($VM <span style="color:#66d9ef">in</span> (Get-VM -Id $VMOverrides.Vm)) {
     $VMLookup.($VM.Id) = $VM.Name
 }
-</code></pre>
-
-<p>To test the lookup table, we can call the hashtable and specify the MoRef as the key. This will return the name of the VM.</p>
-
-<pre><code class="language-powershell">$VMLookup.&quot;VirtualMachine-vm-844&quot;
-</code></pre>
-
-<p>Using this technique, we can now improve our <code>foreach</code> loop from earlier to display the VM name.</p>
-
-<pre><code class="language-powershell">foreach ($Override in $VMOverrides) {
-    [PSCustomObject]@{
-        VirtualMachine = $VMLookup.&quot;$($Override.Vm.Type)-$($Override.Vm.Value)&quot;
+</code></pre></div><p>To test the lookup table, we can call the hashtable and specify the MoRef as the key. This will return the name of the VM.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VMLookup.<span style="color:#e6db74">&#34;VirtualMachine-vm-844&#34;</span>
+</code></pre></div><p>Using this technique, we can now improve our <code>foreach</code> loop from earlier to display the VM name.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Override <span style="color:#66d9ef">in</span> $VMOverrides) {
+    <span style="color:#66d9ef">[PSCustomObject]</span>@{
+        VirtualMachine = $VMLookup.<span style="color:#e6db74">&#34;</span>$($Override.Vm.Type)<span style="color:#e6db74">-</span>$($Override.Vm.Value)<span style="color:#e6db74">&#34;</span>
         SDRSAutomationLevel = $Override.Enabled
         KeepVMDKsTogether = $Override.IntraVmAffinity
     }
@@ -294,9 +265,7 @@ RKTEST1                       False
 RKTEST0                       False
 ZERTOTEST1                    False
 Test123                       False
-</code></pre>
-
-<div class="in-article-ad">
+</code></pre></div><div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
      <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
           data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
@@ -304,75 +273,58 @@ Test123                       False
           (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
 </div>
-
 <p>We now have our list of current VM Overrides for this specific datastore cluster. All the above VMs have SDRS Automation set to false (disabling SDRS); and as there is no entry in the Keep VMDKs Together column, these VMs do not have an override for this setting and therefore will all be using the cluster default.</p>
-
 <p>This output is OK, but when you view the VM Overrides view in the Web Client it is a bit more informative. For example rather than displaying just &ldquo;true&rdquo; or &ldquo;false&rdquo; for the SDRSAutomationLevel the Web Client will display &ldquo;Fully Automated&rdquo; or &ldquo;Disabled&rdquo;, and for KeepVMDKsTogether it will display &ldquo;Yes&rdquo; or &ldquo;No&rdquo;. Also, rather than displaying a blank when there is no override configured for a specific setting, the Web Client will instead display the cluster default, as this is the setting that will be taking effect. For completeness, I will show you have to replicate this behavior in our script.</p>
-
 <p>To display the friendly name for the VM overrides we can use a <code>switch</code> statement when building our <code>PSCustomObject</code>.</p>
-
-<pre><code class="language-powershell">foreach ($Override in $VMOverrides) {
-    [PSCustomObject]@{
-        VirtualMachine = $VMLookup.&quot;$($Override.Vm.Type)-$($Override.Vm.Value)&quot;
-        SDRSAutomationLevel = Switch ($Override.Enabled) {
-            $true {&quot;Fully Automated&quot;}
-            $false {&quot;Disabled&quot;}
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Override <span style="color:#66d9ef">in</span> $VMOverrides) {
+    <span style="color:#66d9ef">[PSCustomObject]</span>@{
+        VirtualMachine = $VMLookup.<span style="color:#e6db74">&#34;</span>$($Override.Vm.Type)<span style="color:#e6db74">-</span>$($Override.Vm.Value)<span style="color:#e6db74">&#34;</span>
+        SDRSAutomationLevel = <span style="color:#66d9ef">Switch</span> ($Override.Enabled) {
+            $true {<span style="color:#e6db74">&#34;Fully Automated&#34;</span>}
+            $false {<span style="color:#e6db74">&#34;Disabled&#34;</span>}
         }
-        KeepVMDKsTogether = Switch ($Override.IntraVmAffinity) {
-            $true {&quot;Yes&quot;}
-            $false {&quot;No&quot;}
+        KeepVMDKsTogether = <span style="color:#66d9ef">Switch</span> ($Override.IntraVmAffinity) {
+            $true {<span style="color:#e6db74">&#34;Yes&#34;</span>}
+            $false {<span style="color:#e6db74">&#34;No&#34;</span>}
         }
     }
 }
-</code></pre>
-
-<p>As you can see, we are now testing the value of both <code>$Override.Enabled</code> and <code>$Override.IntraVmAffinity</code> and depending on whether the value is <code>$true</code> or <code>$false</code> we are returning the required friendly name.</p>
-
+</code></pre></div><p>As you can see, we are now testing the value of both <code>$Override.Enabled</code> and <code>$Override.IntraVmAffinity</code> and depending on whether the value is <code>$true</code> or <code>$false</code> we are returning the required friendly name.</p>
 <p>This takes care of the specific VM overrides but we will still see a number of blanks which are defaulting to the cluster default. To fix this we first need to assign the cluster default settings for both <code>DefaultVmBehavior</code> and <code>DefaultIntraVmAffinity</code> to separate variables. These settings can be retrieved from the <code>$StoragePod</code> object that we created earlier.</p>
-
-<pre><code class="language-powershell">Switch ($StoragePod.PodStorageDrsEntry.StorageDrsConfig.PodConfig.DefaultVmBehavior) {
-    &quot;automated&quot; {$DefaultVmBehavior = &quot;Default (Fully Automated)&quot;}
-    &quot;manual&quot; {$DefaultVmBehavior = &quot;Default (No Automation (Manual Mode))&quot;}
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">Switch</span> ($StoragePod.PodStorageDrsEntry.StorageDrsConfig.PodConfig.DefaultVmBehavior) {
+    <span style="color:#e6db74">&#34;automated&#34;</span> {$DefaultVmBehavior = <span style="color:#e6db74">&#34;Default (Fully Automated)&#34;</span>}
+    <span style="color:#e6db74">&#34;manual&#34;</span> {$DefaultVmBehavior = <span style="color:#e6db74">&#34;Default (No Automation (Manual Mode))&#34;</span>}
 }
 
-Switch ($StoragePod.PodStorageDrsEntry.StorageDrsConfig.PodConfig.DefaultIntraVmAffinity) {
-    $true {$DefaultIntraVmAffinity = &quot;Default (Yes)&quot;}
-    $false {$DefaultIntraVmAffinity = &quot;Default (No)&quot;}
+<span style="color:#66d9ef">Switch</span> ($StoragePod.PodStorageDrsEntry.StorageDrsConfig.PodConfig.DefaultIntraVmAffinity) {
+    $true {$DefaultIntraVmAffinity = <span style="color:#e6db74">&#34;Default (Yes)&#34;</span>}
+    $false {$DefaultIntraVmAffinity = <span style="color:#e6db74">&#34;Default (No)&#34;</span>}
 }
-</code></pre>
-
-<p>Now we have two variables, <code>$DefaultVmBehavior</code> and <code>$DefaultIntraVmAffinity</code>, which contain a friendly name for the cluster default setting e.g. &ldquo;manual&rdquo; becomes &ldquo;Default (No Automation (Manual Mode))&rdquo; which is how it would display in the Web Client. With a simple addition to the two <code>switch</code> statements we used creating our <code>PSCustomObject</code> we can add a test for <code>$null</code> which if true will return this default setting.</p>
-
-<pre><code class="language-powershell">foreach ($Override in $VMOverrides) {
-    [PSCustomObject]@{
-        VirtualMachine = $VMLookup.&quot;$($Override.Vm.Type)-$($Override.Vm.Value)&quot;
-        SDRSAutomationLevel = Switch ($Override.Enabled) {
-            $true {&quot;Fully Automated&quot;}
-            $false {&quot;Disabled&quot;}
+</code></pre></div><p>Now we have two variables, <code>$DefaultVmBehavior</code> and <code>$DefaultIntraVmAffinity</code>, which contain a friendly name for the cluster default setting e.g. &ldquo;manual&rdquo; becomes &ldquo;Default (No Automation (Manual Mode))&rdquo; which is how it would display in the Web Client. With a simple addition to the two <code>switch</code> statements we used creating our <code>PSCustomObject</code> we can add a test for <code>$null</code> which if true will return this default setting.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Override <span style="color:#66d9ef">in</span> $VMOverrides) {
+    <span style="color:#66d9ef">[PSCustomObject]</span>@{
+        VirtualMachine = $VMLookup.<span style="color:#e6db74">&#34;</span>$($Override.Vm.Type)<span style="color:#e6db74">-</span>$($Override.Vm.Value)<span style="color:#e6db74">&#34;</span>
+        SDRSAutomationLevel = <span style="color:#66d9ef">Switch</span> ($Override.Enabled) {
+            $true {<span style="color:#e6db74">&#34;Fully Automated&#34;</span>}
+            $false {<span style="color:#e6db74">&#34;Disabled&#34;</span>}
             $null {$DefaultVmBehavior}
         }
-        KeepVMDKsTogether = Switch ($Override.IntraVmAffinity) {
-            $true {&quot;Yes&quot;}
-            $false {&quot;No&quot;}
+        KeepVMDKsTogether = <span style="color:#66d9ef">Switch</span> ($Override.IntraVmAffinity) {
+            $true {<span style="color:#e6db74">&#34;Yes&#34;</span>}
+            $false {<span style="color:#e6db74">&#34;No&#34;</span>}
             $null {$DefaultIntraVmAffinity}
         }
     }
 }
-</code></pre>
-
-<p>As you can see, now if either <code>$Override.Enabled</code> or <code>$Override.IntraVmAffinity</code> is <code>$null</code>, instead of returning a blank we now return the cluster default variable. The whole script now displays VM overrides in a pretty nice format.</p>
-
-<pre><code class="language-powershell">VirtualMachine                SDRSAutomationLevel       KeepVMDKsTogether
+</code></pre></div><p>As you can see, now if either <code>$Override.Enabled</code> or <code>$Override.IntraVmAffinity</code> is <code>$null</code>, instead of returning a blank we now return the cluster default variable. The whole script now displays VM overrides in a pretty nice format.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">VirtualMachine                SDRSAutomationLevel       KeepVMDKsTogether
 --------------                -------------------       -----------------
-TEST                          Default (Fully Automated) No
-RKTEST1                       Disabled                  Default (Yes)
-RKTEST0                       Disabled                  Default (Yes)
-Test123                       Disabled                  Default (Yes)
+TEST                          <span style="color:#66d9ef">Default</span> (Fully Automated) No
+RKTEST1                       Disabled                  <span style="color:#66d9ef">Default</span> (Yes)
+RKTEST0                       Disabled                  <span style="color:#66d9ef">Default</span> (Yes)
+Test123                       Disabled                  <span style="color:#66d9ef">Default</span> (Yes)
 TEST00008                     Fully Automated           Yes
-</code></pre>
-
-<h2 id="conclusion">Conclusion</h2>
-
+</code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>I hope this has been helpful in showing you how to retrieve the VM Override information for a datastore cluster via PowerCLI. In part 2, I will focus on how to remove VM Overrides in bulk to ensure that Storage DRS performs as effectively as possible in your environment.</p>
 
     </section>
@@ -410,9 +362,10 @@ TEST00008                     Fully Automated           Yes
         <article class="post-card">
 
     
-    <a class="post-card-image-link" href="https://ryanjan.uk/2018/06/24/vrops-reports-and-powercli-part-three-a-helper-module/">
-        <img class="post-card-image" src="/images/2018/05/vmw-vrealize-operations-fast-facts-2.jpg" loading="lazy" />
-    </a>
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/2018/06/24/vrops-reports-and-powercli-part-three-a-helper-module/">
+            <img class="post-card-image" src="/images/2018/05/vmw-vrealize-operations-fast-facts-2.jpg" loading="lazy" />
+        </a>
     
 
     <div class="post-card-content">
@@ -463,9 +416,10 @@ TEST00008                     Fully Automated           Yes
         <article class="post-card">
 
     
-    <a class="post-card-image-link" href="https://ryanjan.uk/2018/06/02/powershell-tips-script-optimization/">
-        <img class="post-card-image" src="/images/2018/06/lum3n-193427-unsplash.jpg" loading="lazy" />
-    </a>
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/2018/06/02/powershell-tips-script-optimization/">
+            <img class="post-card-image" src="/images/2018/06/lum3n-193427-unsplash.jpg" loading="lazy" />
+        </a>
     
 
     <div class="post-card-content">
@@ -515,9 +469,10 @@ TEST00008                     Fully Automated           Yes
         <article class="post-card">
 
     
-    <a class="post-card-image-link" href="https://ryanjan.uk/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/">
-        <img class="post-card-image" src="/images/2018/05/vmw-vrealize-operations-fast-facts-1.jpg" loading="lazy" />
-    </a>
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/">
+            <img class="post-card-image" src="/images/2018/05/vmw-vrealize-operations-fast-facts-1.jpg" loading="lazy" />
+        </a>
     
 
     <div class="post-card-content">
@@ -534,7 +489,7 @@ TEST00008                     Fully Automated           Yes
             <section class="post-card-excerpt">
                 <p>For your reference, here are the articles in this mini-series:
  vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports (this article) vROps Reports and PowerCLI Part 3: A Helper Module  Introduction Following on from the previous article in this mini-series, this article demonstrates how to retrieve a generated report from vROps as a PowerShell object.
-(adsbygoogle = window.</p>
+(adsbygoogle = window.adsbygoogle || []).</p>
             </section>
         </a>
 

@@ -141,42 +141,30 @@
         </div>
 
         
-        <figure class="article-image">
-            <img src="/images/2018/05/vmw-vrealize-operations-fast-facts-2.jpg" alt="vROps Reports and PowerCLI Part 3: A Helper Module" />
-        </figure>
+            
+            <figure class="article-image">
+                <img src="/images/2018/05/vmw-vrealize-operations-fast-facts-2.jpg" alt="vROps Reports and PowerCLI Part 3: A Helper Module" />
+            </figure>
+            
         
     </header>
 
     <section class="gh-content gh-canvas">
-        
-
-<p>For your reference here is a list of the articles in this mini-series.</p>
-
+        <p>For your reference here is a list of the articles in this mini-series.</p>
 <ul>
 <li><a href="https://ryanjan.uk/2018/05/16/running-vrops-reports-using-powercli/">vROps Reports and PowerCLI Part 1: Generating Reports</a></li>
 <li><a href="#">vROps Reports and PowerCLI Part 2: Downloading Reports</a></li>
 <li><a href="#">vROps Reports and PowerCLI Part 3: A Helper Module</a> (this article)</li>
 </ul>
-
 <h2 id="introduction">Introduction</h2>
-
 <p>If you have been following along with the previous two articles in this series, you should now have a pretty good understanding of how to manipulate the <code>extensionData</code> container via <code>PowerCLI</code> to generate and download reports from vRealize Operations Manager (vROps). However, I&rsquo;m sure you&rsquo;ll agree that using the <code>extensionData</code> container and its methods directly can be pretty cumbersome. That is why I have put together a helper module which provides a couple of functions to help simplify things a bit.</p>
-
 <h2 id="using-the-module">Using The Module</h2>
-
 <h3 id="installation">Installation</h3>
-
 <p>This module is hosted on my public GitHub. Therefore, to install it you first need to clone the repository.</p>
-
-<pre><code class="language-powershell">git clone https://github.com/ryan-jan/vROps-Reports.git
-</code></pre>
-
-<p>Then import the module into your PowerShell session.</p>
-
-<pre><code class="language-powershell">Import-Module .\vROps-Reports\vROps-Reports.psd1
-</code></pre>
-
-<div class="in-article-ad">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">git clone https<span style="color:#960050;background-color:#1e0010">:</span>//github.com/ryan-jan/vROps-Reports.git
+</code></pre></div><p>Then import the module into your PowerShell session.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Import-Module .\vROps-Reports\vROps-Reports.psd1
+</code></pre></div><div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
      <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
           data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
@@ -184,176 +172,140 @@
           (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
 </div>
-
 <h3 id="generating-a-report">Generating A Report</h3>
-
 <p>The first thing we need to do is find the <code>ReportDefinition</code> (that&rsquo;s a Report Template if you are looking in the Web UI) that we want to generate and assign it to a variable. For this we use the <code>Get-OMReportDefinition</code> function. If you run this function with no arguments it will return a list of all available definitions. However, I am looking for the Oversized VMs Report in particular so I use the <code>Name</code> parameter to filter the results.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-OMReportDefinition -Name <span style="color:#e6db74">&#39;Oversized VMs&#39;</span>
 
-<pre><code class="language-powershell">Get-OMReportDefinition -Name 'Oversized VMs'
+Name                 <span style="color:#960050;background-color:#1e0010">:</span> Oversized VMs Report
+Description          <span style="color:#960050;background-color:#1e0010">:</span> Oversized VMs Report
+Subject              <span style="color:#960050;background-color:#1e0010">:</span> {Virtual Machine}
+Traversalspecs       <span style="color:#960050;background-color:#1e0010">:</span> {vSphere Networking, Custom Datacenters, vSphere Hosts and Clusters, vSphere Storage}
+LastRunTime          <span style="color:#960050;background-color:#1e0010">:</span> 01/01/0001 00<span style="color:#960050;background-color:#1e0010">:</span>00<span style="color:#960050;background-color:#1e0010">:</span>00
+LastRunTimeSpecified <span style="color:#960050;background-color:#1e0010">:</span> False
+Owner                <span style="color:#960050;background-color:#1e0010">:</span> admin
+Links                <span style="color:#960050;background-color:#1e0010">:</span>
+Any                  <span style="color:#960050;background-color:#1e0010">:</span>
+Id                   <span style="color:#960050;background-color:#1e0010">:</span> 1f69952f-7ff4-4d2c-9446-81a811de19b0
+CreationTime         <span style="color:#960050;background-color:#1e0010">:</span> 01/01/0001 00<span style="color:#960050;background-color:#1e0010">:</span>00<span style="color:#960050;background-color:#1e0010">:</span>00
+Active               <span style="color:#960050;background-color:#1e0010">:</span> True
+ActiveSpecified      <span style="color:#960050;background-color:#1e0010">:</span> True
+AnyAttr              <span style="color:#960050;background-color:#1e0010">:</span>
+</code></pre></div><p>Once I have the <code>Id</code> for the <code>ReportDefinition</code> I can assign it to a variable for later use.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$ReportDefinition = Get-OMReportDefinition -Id 1f69952f-7ff4-4d2c-9446-81a811de19b0
+</code></pre></div><p>Next, we need to assign the <code>TraversalSpec</code> we are targeting to a variable in the same way. We will use the <code>Get-OMTraversalSpec</code> function to achieve this. If you run <code>Get-OMTraversalSpec</code> with no parameters it will return a list of all available <code>TraversalSpec</code> objects. However, if you take a look at the <code>$ReportDefinition</code> variable we just created, you can see which <code>TraversalSpecs</code> the <code>ReportDefinition</code> you are generating will accept.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$ReportDefinition.Traversalspecs
 
-Name                 : Oversized VMs Report
-Description          : Oversized VMs Report
-Subject              : {Virtual Machine}
-Traversalspecs       : {vSphere Networking, Custom Datacenters, vSphere Hosts and Clusters, vSphere Storage}
-LastRunTime          : 01/01/0001 00:00:00
-LastRunTimeSpecified : False
-Owner                : admin
-Links                :
-Any                  :
-Id                   : 1f69952f-7ff4-4d2c-9446-81a811de19b0
-CreationTime         : 01/01/0001 00:00:00
-Active               : True
-ActiveSpecified      : True
-AnyAttr              :
-</code></pre>
+Name                       <span style="color:#960050;background-color:#1e0010">:</span> vSphere Networking
+Description                <span style="color:#960050;background-color:#1e0010">:</span> View the vSphere distributed switches
+RootAdapterKindKey         <span style="color:#960050;background-color:#1e0010">:</span> VMWARE
+RootResourceKindKey        <span style="color:#960050;background-color:#1e0010">:</span> vSphere World
+Any                        <span style="color:#960050;background-color:#1e0010">:</span>
+AdapterInstanceAssociation <span style="color:#960050;background-color:#1e0010">:</span> False
+AnyAttr                    <span style="color:#960050;background-color:#1e0010">:</span>
 
-<p>Once I have the <code>Id</code> for the <code>ReportDefinition</code> I can assign it to a variable for later use.</p>
+Name                       <span style="color:#960050;background-color:#1e0010">:</span> Custom Datacenters
+Description                <span style="color:#960050;background-color:#1e0010">:</span> Navigation <span style="color:#66d9ef">for</span> Custom Datacenters
+RootAdapterKindKey         <span style="color:#960050;background-color:#1e0010">:</span> VMWARE
+RootResourceKindKey        <span style="color:#960050;background-color:#1e0010">:</span> CustomDatacenter
+Any                        <span style="color:#960050;background-color:#1e0010">:</span>
+AdapterInstanceAssociation <span style="color:#960050;background-color:#1e0010">:</span> False
+AnyAttr                    <span style="color:#960050;background-color:#1e0010">:</span>
 
-<pre><code class="language-powershell">$ReportDefinition = Get-OMReportDefinition -Id 1f69952f-7ff4-4d2c-9446-81a811de19b0
-</code></pre>
+Name                       <span style="color:#960050;background-color:#1e0010">:</span> vSphere Hosts and Clusters
+Description                <span style="color:#960050;background-color:#1e0010">:</span> Enables view of resources imported from vCenter like Clusters, Hosts, VMs and ResourcePools
+RootAdapterKindKey         <span style="color:#960050;background-color:#1e0010">:</span> VMWARE
+RootResourceKindKey        <span style="color:#960050;background-color:#1e0010">:</span> vSphere World
+Any                        <span style="color:#960050;background-color:#1e0010">:</span>
+AdapterInstanceAssociation <span style="color:#960050;background-color:#1e0010">:</span> False
+AnyAttr                    <span style="color:#960050;background-color:#1e0010">:</span>
 
-<p>Next, we need to assign the <code>TraversalSpec</code> we are targeting to a variable in the same way. We will use the <code>Get-OMTraversalSpec</code> function to achieve this. If you run <code>Get-OMTraversalSpec</code> with no parameters it will return a list of all available <code>TraversalSpec</code> objects. However, if you take a look at the <code>$ReportDefinition</code> variable we just created, you can see which <code>TraversalSpecs</code> the <code>ReportDefinition</code> you are generating will accept.</p>
-
-<pre><code class="language-powershell">$ReportDefinition.Traversalspecs
-
-Name                       : vSphere Networking
-Description                : View the vSphere distributed switches
-RootAdapterKindKey         : VMWARE
-RootResourceKindKey        : vSphere World
-Any                        :
-AdapterInstanceAssociation : False
-AnyAttr                    :
-
-Name                       : Custom Datacenters
-Description                : Navigation for Custom Datacenters
-RootAdapterKindKey         : VMWARE
-RootResourceKindKey        : CustomDatacenter
-Any                        :
-AdapterInstanceAssociation : False
-AnyAttr                    :
-
-Name                       : vSphere Hosts and Clusters
-Description                : Enables view of resources imported from vCenter like Clusters, Hosts, VMs and ResourcePools
-RootAdapterKindKey         : VMWARE
-RootResourceKindKey        : vSphere World
-Any                        :
-AdapterInstanceAssociation : False
-AnyAttr                    :
-
-Name                       : vSphere Storage
-Description                : Enables view of storage resources imported from vCenter like Datastores and Datastore
+Name                       <span style="color:#960050;background-color:#1e0010">:</span> vSphere Storage
+Description                <span style="color:#960050;background-color:#1e0010">:</span> Enables view of storage resources imported from vCenter like Datastores and Datastore
                              Clusters
-RootAdapterKindKey         : VMWARE
-RootResourceKindKey        : vSphere World
-Any                        :
-AdapterInstanceAssociation : False
-AnyAttr                    :
-</code></pre>
+RootAdapterKindKey         <span style="color:#960050;background-color:#1e0010">:</span> VMWARE
+RootResourceKindKey        <span style="color:#960050;background-color:#1e0010">:</span> vSphere World
+Any                        <span style="color:#960050;background-color:#1e0010">:</span>
+AdapterInstanceAssociation <span style="color:#960050;background-color:#1e0010">:</span> False
+AnyAttr                    <span style="color:#960050;background-color:#1e0010">:</span>
+</code></pre></div><p>I can see that the <code>Oversized VMs Report</code> will only accept four <code>TraversalSpec</code> objects; vSphere Networking, Custom Datacenters, vSphere Hosts and Clusters, and vSphere Storage. I am going to use vSphere Hosts and Clusters in this example. I can find more information about this <code>TraversalSpec</code> using the <code>Get-OMTraversalSpec</code> function with the <code>Name</code> parameter.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-OMTraversalSpec -Name <span style="color:#e6db74">&#34;vSphere Hosts and Clusters&#34;</span>
 
-<p>I can see that the <code>Oversized VMs Report</code> will only accept four <code>TraversalSpec</code> objects; vSphere Networking, Custom Datacenters, vSphere Hosts and Clusters, and vSphere Storage. I am going to use vSphere Hosts and Clusters in this example. I can find more information about this <code>TraversalSpec</code> using the <code>Get-OMTraversalSpec</code> function with the <code>Name</code> parameter.</p>
+Name                       <span style="color:#960050;background-color:#1e0010">:</span> vSphere Hosts and Clusters
+Description                <span style="color:#960050;background-color:#1e0010">:</span> Enables view of resources imported from vCenter like Clusters, Hosts, VMs and ResourcePools
+RootAdapterKindKey         <span style="color:#960050;background-color:#1e0010">:</span> VMWARE
+RootResourceKindKey        <span style="color:#960050;background-color:#1e0010">:</span> vSphere World
+Any                        <span style="color:#960050;background-color:#1e0010">:</span>
+AdapterInstanceAssociation <span style="color:#960050;background-color:#1e0010">:</span> False
+AnyAttr                    <span style="color:#960050;background-color:#1e0010">:</span>
+</code></pre></div><p>I will assign it to a variable in the same way that we did for the <code>ReportDefinition</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$TraversalSpec = Get-OMTraversalSpec -Name <span style="color:#e6db74">&#34;vSphere Hosts and Clusters&#34;</span>
+</code></pre></div><p>Finally, we need to assign the resource that we are targeting to a variable. There is already a <code>Get-OMResource</code> cmdlet in the <code>VMware.VimAutomation.vROps</code> PowerCLI module, so we will use this. You can find more information about this cmdlet <a href="https://pubs.vmware.com/vsphere-6-5/index.jsp?topic=%2Fcom.vmware.powercli.cmdletref.doc%2FGet-OMResource.html">here</a>. I am going to target my whole vCenter instance, but you can target any resource you like e.g. Datacenter, Cluster VM etc.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-OMResource -Name <span style="color:#e6db74">&#39;vcenter.example.com&#39;</span> | Format-List
 
-<pre><code class="language-powershell">Get-OMTraversalSpec -Name &quot;vSphere Hosts and Clusters&quot;
+Name                   <span style="color:#960050;background-color:#1e0010">:</span> vcenter.example.com
+ExtensionData          <span style="color:#960050;background-color:#1e0010">:</span> VMware.VimAutomation.VROps.Views.ResourceDto
+Health                 <span style="color:#960050;background-color:#1e0010">:</span> Green
+HealthValue            <span style="color:#960050;background-color:#1e0010">:</span> 100
+SolutionObjectId       <span style="color:#960050;background-color:#1e0010">:</span>
+DynamicTresholdEnabled <span style="color:#960050;background-color:#1e0010">:</span> True
+AdapterInstanceId      <span style="color:#960050;background-color:#1e0010">:</span> bf9df5f2-7cae-46bc-bee8-42057e43bf02
+Status                 <span style="color:#960050;background-color:#1e0010">:</span> DataReceiving
+State                  <span style="color:#960050;background-color:#1e0010">:</span> Started
+StatusMessage          <span style="color:#960050;background-color:#1e0010">:</span>
+Location               <span style="color:#960050;background-color:#1e0010">:</span> Unknown
+AdapterKind            <span style="color:#960050;background-color:#1e0010">:</span> VMWARE
+ResourceKind           <span style="color:#960050;background-color:#1e0010">:</span> VMwareAdapter Instance
+Created                <span style="color:#960050;background-color:#1e0010">:</span> 26/10/2015 10<span style="color:#960050;background-color:#1e0010">:</span>03<span style="color:#960050;background-color:#1e0010">:</span>58
+Description            <span style="color:#960050;background-color:#1e0010">:</span>
+IsOrphaned             <span style="color:#960050;background-color:#1e0010">:</span> False
+Id                     <span style="color:#960050;background-color:#1e0010">:</span> bf9df5f2-7cae-46bc-bee8-42057e43bf02
 
-Name                       : vSphere Hosts and Clusters
-Description                : Enables view of resources imported from vCenter like Clusters, Hosts, VMs and ResourcePools
-RootAdapterKindKey         : VMWARE
-RootResourceKindKey        : vSphere World
-Any                        :
-AdapterInstanceAssociation : False
-AnyAttr                    :
-</code></pre>
+$Resource = Get-OMResource -Name <span style="color:#e6db74">&#39;vcenter.example.com&#39;</span>
+</code></pre></div><p>Now that we have these three objects, we can use the <code>New-OMReport</code> function to generate the report in vROps.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">New-OMReport -Resource $Resource -ReportDefinition $ReportDefinition -TraversalSpec $TraversalSpec
 
-<p>I will assign it to a variable in the same way that we did for the <code>ReportDefinition</code></p>
+Name               <span style="color:#960050;background-color:#1e0010">:</span>
+Description        <span style="color:#960050;background-color:#1e0010">:</span> Oversized VMs Report
+ResourceId         <span style="color:#960050;background-color:#1e0010">:</span> bf9df5f2-7cae-46bc-bee8-42057e43bf02
+ReportDefinitionId <span style="color:#960050;background-color:#1e0010">:</span> 1f69952f-7ff4-4d2c-9446-81a811de19b0
+TraversalSpec      <span style="color:#960050;background-color:#1e0010">:</span>
+Subject            <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine
+Owner              <span style="color:#960050;background-color:#1e0010">:</span> 786b4832-00f9-46c6-b35e-56bead7d9b87
+CompletionTime     <span style="color:#960050;background-color:#1e0010">:</span> null
+Status             <span style="color:#960050;background-color:#1e0010">:</span> QUEUED
+Links              <span style="color:#960050;background-color:#1e0010">:</span> {linkToSelf, linkToResource, linkToReportDefinition}
+Any                <span style="color:#960050;background-color:#1e0010">:</span>
+Id                 <span style="color:#960050;background-color:#1e0010">:</span> bbe046cf-b2a3-4860-b7e8-f2b85f177520
+AnyAttr            <span style="color:#960050;background-color:#1e0010">:</span>
+</code></pre></div><p>The report is now being generated and as you can see its current status is <code>QUEUED</code>. By specifying its <code>Id</code>, we can use the <code>Get-OMReport</code> function to check the status of this report.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-OMReport -Id bbe046cf-b2a3-4860-b7e8-f2b85f177520
 
-<pre><code class="language-powershell">$TraversalSpec = Get-OMTraversalSpec -Name &quot;vSphere Hosts and Clusters&quot;
-</code></pre>
-
-<p>Finally, we need to assign the resource that we are targeting to a variable. There is already a <code>Get-OMResource</code> cmdlet in the <code>VMware.VimAutomation.vROps</code> PowerCLI module, so we will use this. You can find more information about this cmdlet <a href="https://pubs.vmware.com/vsphere-6-5/index.jsp?topic=%2Fcom.vmware.powercli.cmdletref.doc%2FGet-OMResource.html">here</a>. I am going to target my whole vCenter instance, but you can target any resource you like e.g. Datacenter, Cluster VM etc.</p>
-
-<pre><code class="language-powershell">Get-OMResource -Name 'vcenter.example.com' | Format-List
-
-Name                   : vcenter.example.com
-ExtensionData          : VMware.VimAutomation.VROps.Views.ResourceDto
-Health                 : Green
-HealthValue            : 100
-SolutionObjectId       :
-DynamicTresholdEnabled : True
-AdapterInstanceId      : bf9df5f2-7cae-46bc-bee8-42057e43bf02
-Status                 : DataReceiving
-State                  : Started
-StatusMessage          :
-Location               : Unknown
-AdapterKind            : VMWARE
-ResourceKind           : VMwareAdapter Instance
-Created                : 26/10/2015 10:03:58
-Description            :
-IsOrphaned             : False
-Id                     : bf9df5f2-7cae-46bc-bee8-42057e43bf02
-
-$Resource = Get-OMResource -Name 'vcenter.example.com'
-</code></pre>
-
-<p>Now that we have these three objects, we can use the <code>New-OMReport</code> function to generate the report in vROps.</p>
-
-<pre><code class="language-powershell">New-OMReport -Resource $Resource -ReportDefinition $ReportDefinition -TraversalSpec $TraversalSpec
-
-Name               :
-Description        : Oversized VMs Report
-ResourceId         : bf9df5f2-7cae-46bc-bee8-42057e43bf02
-ReportDefinitionId : 1f69952f-7ff4-4d2c-9446-81a811de19b0
-TraversalSpec      :
-Subject            : VirtualMachine
-Owner              : 786b4832-00f9-46c6-b35e-56bead7d9b87
-CompletionTime     : null
-Status             : QUEUED
-Links              : {linkToSelf, linkToResource, linkToReportDefinition}
-Any                :
-Id                 : bbe046cf-b2a3-4860-b7e8-f2b85f177520
-AnyAttr            :
-</code></pre>
-
-<p>The report is now being generated and as you can see its current status is <code>QUEUED</code>. By specifying its <code>Id</code>, we can use the <code>Get-OMReport</code> function to check the status of this report.</p>
-
-<pre><code class="language-powershell">Get-OMReport -Id bbe046cf-b2a3-4860-b7e8-f2b85f177520
-
-Name               :
-Description        : Oversized VMs Report
-ResourceId         : bf9df5f2-7cae-46bc-bee8-42057e43bf02
-ReportDefinitionId : 1f69952f-7ff4-4d2c-9446-81a811de19b0
-TraversalSpec      :
-Subject            : VirtualMachine
-Owner              : 786b4832-00f9-46c6-b35e-56bead7d9b87
-CompletionTime     : Sun Jun 10 11:12:34 BST 2018
-Status             : COMPLETED
-Links              : {linkToSelf, linkToResource, linkToReportDefinition}
-Any                :
-Id                 : bbe046cf-b2a3-4860-b7e8-f2b85f177520AnyAttr            :
-</code></pre>
-
-<p>That&rsquo;s it! Once the status has changed to <code>COMPLETED</code> the report has been generated and is ready to be received.</p>
-
+Name               <span style="color:#960050;background-color:#1e0010">:</span>
+Description        <span style="color:#960050;background-color:#1e0010">:</span> Oversized VMs Report
+ResourceId         <span style="color:#960050;background-color:#1e0010">:</span> bf9df5f2-7cae-46bc-bee8-42057e43bf02
+ReportDefinitionId <span style="color:#960050;background-color:#1e0010">:</span> 1f69952f-7ff4-4d2c-9446-81a811de19b0
+TraversalSpec      <span style="color:#960050;background-color:#1e0010">:</span>
+Subject            <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine
+Owner              <span style="color:#960050;background-color:#1e0010">:</span> 786b4832-00f9-46c6-b35e-56bead7d9b87
+CompletionTime     <span style="color:#960050;background-color:#1e0010">:</span> Sun Jun 10 11<span style="color:#960050;background-color:#1e0010">:</span>12<span style="color:#960050;background-color:#1e0010">:</span>34 BST 2018
+Status             <span style="color:#960050;background-color:#1e0010">:</span> COMPLETED
+Links              <span style="color:#960050;background-color:#1e0010">:</span> {linkToSelf, linkToResource, linkToReportDefinition}
+Any                <span style="color:#960050;background-color:#1e0010">:</span>
+Id                 <span style="color:#960050;background-color:#1e0010">:</span> bbe046cf-b2a3-4860-b7e8-f2b85f177520AnyAttr            <span style="color:#960050;background-color:#1e0010">:</span>
+</code></pre></div><p>That&rsquo;s it! Once the status has changed to <code>COMPLETED</code> the report has been generated and is ready to be received.</p>
 <h3 id="recieving-a-generated-report">Recieving A Generated Report</h3>
-
 <p>Now we have generated a report, we need to retrieve it from the vROps server. This is where the <code>Recieve-OMReport</code> function comes in to play. Using this function we are able to either download the report as a <code>CSV</code> or <code>PDF</code> file, or retrieve the data into a PowerShell object to manipulate the data further. I&rsquo;m not going to go into great detail on this as it really is quite straight forward.</p>
-
 <p>Here&rsquo;s how you receive the report as a PowerShell object.</p>
-
-<pre><code class="language-powershell">$Report = Get-OMReport -Id bbe046cf-b2a3-4860-b7e8-f2b85f177520
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Report = Get-OMReport -Id bbe046cf-b2a3-4860-b7e8-f2b85f177520
 Receive-OMReport -Report $Report
-</code></pre>
+</code></pre></div><p>Downloading to <code>CSV</code> and <code>PDF</code> files is just as easy.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Report = Get-OMReport -Id bbe046cf-b2a3-4860-b7e8-f2b85f177520
+Receive-OMReport -Report $Report -CSV -Path <span style="color:#e6db74">&#34;C:\Report.csv&#34;</span>
 
-<p>Downloading to <code>CSV</code> and <code>PDF</code> files is just as easy.</p>
+<span style="color:#75715e"># Or as a PDF</span>
 
-<pre><code class="language-powershell">$Report = Get-OMReport -Id bbe046cf-b2a3-4860-b7e8-f2b85f177520
-Receive-OMReport -Report $Report -CSV -Path &quot;C:\Report.csv&quot;
-
-# Or as a PDF
-
-Receive-OMReport -Report $Report -PDF -Path &quot;C:\Report.csv&quot;
-</code></pre>
-
-<h2 id="conclusion">Conclusion</h2>
-
+Receive-OMReport -Report $Report -PDF -Path <span style="color:#e6db74">&#34;C:\Report.csv&#34;</span>
+</code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>I hope you have found these articles helpful in understanding how to fully utilise the vROps API from a PowerCLI session. I use this module frequently and it really does save time when working with the report data from vROps. If you have any suggestions on how this module could be improved or additional functionality that you would like to see, please get in touch via <a href="https://twitter.com/_ryanjan_">Twitter</a> or <a href="https://github.com/ryan-jan">GitHub</a>.</p>
 
     </section>
@@ -391,9 +343,10 @@ Receive-OMReport -Report $Report -PDF -Path &quot;C:\Report.csv&quot;
         <article class="post-card">
 
     
-    <a class="post-card-image-link" href="https://ryanjan.uk/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/">
-        <img class="post-card-image" src="/images/2018/05/vmw-vrealize-operations-fast-facts-1.jpg" loading="lazy" />
-    </a>
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/">
+            <img class="post-card-image" src="/images/2018/05/vmw-vrealize-operations-fast-facts-1.jpg" loading="lazy" />
+        </a>
     
 
     <div class="post-card-content">
@@ -410,7 +363,7 @@ Receive-OMReport -Report $Report -PDF -Path &quot;C:\Report.csv&quot;
             <section class="post-card-excerpt">
                 <p>For your reference, here are the articles in this mini-series:
  vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports (this article) vROps Reports and PowerCLI Part 3: A Helper Module  Introduction Following on from the previous article in this mini-series, this article demonstrates how to retrieve a generated report from vROps as a PowerShell object.
-(adsbygoogle = window.</p>
+(adsbygoogle = window.adsbygoogle || []).</p>
             </section>
         </a>
 
@@ -445,9 +398,10 @@ Receive-OMReport -Report $Report -PDF -Path &quot;C:\Report.csv&quot;
         <article class="post-card">
 
     
-    <a class="post-card-image-link" href="https://ryanjan.uk/2018/05/16/running-vrops-reports-using-powercli/">
-        <img class="post-card-image" src="/images/2018/05/vmw-vrealize-operations-fast-facts.jpg" loading="lazy" />
-    </a>
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/2018/05/16/running-vrops-reports-using-powercli/">
+            <img class="post-card-image" src="/images/2018/05/vmw-vrealize-operations-fast-facts.jpg" loading="lazy" />
+        </a>
     
 
     <div class="post-card-content">
@@ -498,9 +452,10 @@ Receive-OMReport -Report $Report -PDF -Path &quot;C:\Report.csv&quot;
         <article class="post-card">
 
     
-    <a class="post-card-image-link" href="https://ryanjan.uk/2018/06/02/powershell-tips-script-optimization/">
-        <img class="post-card-image" src="/images/2018/06/lum3n-193427-unsplash.jpg" loading="lazy" />
-    </a>
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/2018/06/02/powershell-tips-script-optimization/">
+            <img class="post-card-image" src="/images/2018/06/lum3n-193427-unsplash.jpg" loading="lazy" />
+        </a>
     
 
     <div class="post-card-content">

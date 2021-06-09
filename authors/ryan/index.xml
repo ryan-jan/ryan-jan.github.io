@@ -6,11 +6,7 @@
     <description>Recent content on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Tue, 25 May 2021 09:05:51 +0000</lastBuildDate>
-    
-	<atom:link href="https://ryanjan.uk/authors/ryan/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 25 May 2021 09:05:51 +0000</lastBuildDate><atom:link href="https://ryanjan.uk/authors/ryan/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How to validate Azure resource moves using PowerShell</title>
       <link>https://ryanjan.uk/2021/05/25/how-to-validate-azure-resource-moves-using-powershell/</link>
@@ -21,7 +17,7 @@
     </item>
     
     <item>
-      <title>PowerShell Tips: What is splatting and should I use it?</title>
+      <title>What is PowerShell splatting and how does it work?</title>
       <link>https://ryanjan.uk/2021/05/13/powershell-splatting/</link>
       <pubDate>Thu, 13 May 2021 09:05:51 +0000</pubDate>
       
@@ -122,7 +118,7 @@ The Symptoms I was initially made aware of this issue as it appeared that certai
       <guid>https://ryanjan.uk/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/</guid>
       <description>For your reference, here are the articles in this mini-series:
  vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports (this article) vROps Reports and PowerCLI Part 3: A Helper Module  Introduction Following on from the previous article in this mini-series, this article demonstrates how to retrieve a generated report from vROps as a PowerShell object.
-(adsbygoogle = window.</description>
+(adsbygoogle = window.adsbygoogle || []).</description>
     </item>
     
     <item>
@@ -143,7 +139,7 @@ The Symptoms I was initially made aware of this issue as it appeared that certai
       <guid>https://ryanjan.uk/2018/03/26/installing-gogs-in-a-freenas-jail/</guid>
       <description>I recently stumbled across the Gogs project whilst looking for self-hosted Git solutions. I run a FreeNAS server at home so I thought I would get the app up and running in a jail. Here is how I did it.
 Jail Preparation Create a new jail named gogs and make sure that the jail is up to date by running.
-pkg update &amp;amp;&amp;amp; pkg upgrade  Now install the required packages.</description>
+pkg update &amp;amp;&amp;amp; pkg upgrade Now install the required packages.</description>
     </item>
     
   </channel>

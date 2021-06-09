@@ -6,11 +6,7 @@
     <description>Recent content in esxi on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Wed, 01 May 2019 21:31:47 +0000</lastBuildDate>
-    
-	<atom:link href="https://ryanjan.uk/tags/esxi/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 01 May 2019 21:31:47 +0000</lastBuildDate><atom:link href="https://ryanjan.uk/tags/esxi/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ESXi Host Certificate Renewal Doesn&#39;t Include Full Chain</title>
       <link>https://ryanjan.uk/2019/05/01/esxi-host-certificate-renewal-doesnt-include-full-chain/</link>

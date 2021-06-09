@@ -6,11 +6,7 @@
     <description>Recent content in vcenter on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Tue, 15 Oct 2019 14:59:59 +0100</lastBuildDate>
-    
-	<atom:link href="https://ryanjan.uk/tags/vcenter/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 15 Oct 2019 14:59:59 +0100</lastBuildDate><atom:link href="https://ryanjan.uk/tags/vcenter/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Add Hard Disks to VMs Asynchronously with PowerCLI</title>
       <link>https://ryanjan.uk/2019/10/15/add-hard-disks-async-with-powercli/</link>

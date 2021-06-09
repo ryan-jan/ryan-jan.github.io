@@ -6,11 +6,7 @@
     <description>Recent content in vmware on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Wed, 11 Jul 2018 15:43:08 +0000</lastBuildDate>
-    
-	<atom:link href="https://ryanjan.uk/tags/vmware/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 11 Jul 2018 15:43:08 +0000</lastBuildDate><atom:link href="https://ryanjan.uk/tags/vmware/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ESXi Loses Connectivity to VMFS Datastores.</title>
       <link>https://ryanjan.uk/2018/07/11/vmfs-datastore-connectivity-issue/</link>

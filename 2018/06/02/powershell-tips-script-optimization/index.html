@@ -140,30 +140,26 @@
         </div>
 
         
-        <figure class="article-image">
-            <img src="/images/2018/06/lum3n-193427-unsplash.jpg" alt="PowerShell Tips: Script Optimization" />
-        </figure>
+            
+            <figure class="article-image">
+                <img src="/images/2018/06/lum3n-193427-unsplash.jpg" alt="PowerShell Tips: Script Optimization" />
+            </figure>
+            
         
     </header>
 
     <section class="gh-content gh-canvas">
-        
-
-<h2 id="introduction">Introduction</h2>
-
+        <h2 id="introduction">Introduction</h2>
 <p>A colleague of mine recently asked for some help with a script he was writing. We use vSphere tags in order to determine which backup schedule a given VM is in and he wanted to find all VMs which were not assigned a tag in the category <code>backup-service-level</code>, and therefore were not being backed up. His actual query was regarding filtering out certain VMs which will never be given a backup tag. However, in helping with this I realised that his script was taking over 20 minutes to complete! I decided to take a copy and see if I could speed things up a bit.</p>
-
 <h2 id="the-script">The Script</h2>
-
 <p>Here is the script as it was when I first took a look at it.</p>
-
-<pre><code class="language-powershell">$VmNoTag = @()
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VmNoTag = @()
 
 $VMs = Get-VM
 
-foreach ($VM in $VMs) {
+<span style="color:#66d9ef">foreach</span> ($VM <span style="color:#66d9ef">in</span> $VMs) {
     $Name = $VM.name
-    $Tag = $($VM | Get-TagAssignment -Category 'backup-service-level').tag.name
+    $Tag = $($VM | Get-TagAssignment -Category <span style="color:#e6db74">&#39;backup-service-level&#39;</span>).tag.name
     $Power = $VM.PowerState
         
     $Line = New-Object -TypeName psobject 
@@ -173,29 +169,23 @@ foreach ($VM in $VMs) {
     $VmNoTag += $line
 }
 
-$VmNoTag | Where-Object {$_.Tag -eq $null}
-</code></pre>
-
-<p>It&rsquo;s functional and returns the required results. However, the first thing I noticed is that the <code>Get-TagAssignment</code> cmdlet is being called in every iteration of the <code>foreach</code> loop. This will take a very long time as it has to fetch results from the vCenter API each time it is called. Also, the last line of the script filters the results so that only VMs without a tag assigned are returned. This is iterating though all of the results in the <code>$VMs</code> array for a second time, which will also be contributing a small performance hit.</p>
-
+$VmNoTag | Where-Object {$_.Tag <span style="color:#f92672">-eq</span> $null}
+</code></pre></div><p>It&rsquo;s functional and returns the required results. However, the first thing I noticed is that the <code>Get-TagAssignment</code> cmdlet is being called in every iteration of the <code>foreach</code> loop. This will take a very long time as it has to fetch results from the vCenter API each time it is called. Also, the last line of the script filters the results so that only VMs without a tag assigned are returned. This is iterating though all of the results in the <code>$VMs</code> array for a second time, which will also be contributing a small performance hit.</p>
 <p>In order to effectively measure the performance of the script in its current state I used the <code>Measure-Command</code> cmdlet. As you can see the script takes 24 minutes to run in its current state.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Measure-Command {&amp; .\Get-VMsWithNoTag.ps1}
 
-<pre><code class="language-powershell">Measure-Command {&amp; .\Get-VMsWithNoTag.ps1}
-
-Days              : 0
-Hours             : 0
-Minutes           : 24
-Seconds           : 4
-Milliseconds      : 361
-Ticks             : 14443611146
-TotalDays         : 0.0167171425300926
-TotalHours        : 0.401211420722222
-TotalMinutes      : 24.0726852433333
-TotalSeconds      : 1444.3611146
-TotalMilliseconds : 1444361.1146
-</code></pre>
-
-<div class="in-article-ad">
+Days              <span style="color:#960050;background-color:#1e0010">:</span> 0
+Hours             <span style="color:#960050;background-color:#1e0010">:</span> 0
+Minutes           <span style="color:#960050;background-color:#1e0010">:</span> 24
+Seconds           <span style="color:#960050;background-color:#1e0010">:</span> 4
+Milliseconds      <span style="color:#960050;background-color:#1e0010">:</span> 361
+Ticks             <span style="color:#960050;background-color:#1e0010">:</span> 14443611146
+TotalDays         <span style="color:#960050;background-color:#1e0010">:</span> 0.0167171425300926
+TotalHours        <span style="color:#960050;background-color:#1e0010">:</span> 0.401211420722222
+TotalMinutes      <span style="color:#960050;background-color:#1e0010">:</span> 24.0726852433333
+TotalSeconds      <span style="color:#960050;background-color:#1e0010">:</span> 1444.3611146
+TotalMilliseconds <span style="color:#960050;background-color:#1e0010">:</span> 1444361.1146
+</code></pre></div><div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
      <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
           data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
@@ -203,47 +193,37 @@ TotalMilliseconds : 1444361.1146
           (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
 </div>
-
 <h2 id="optimization">Optimization</h2>
-
 <p>I was pretty sure that calling <code>Get-TagAssignment</code> over and over again was causing the slowness. To fix this, I call <code>Get-TagAssignment</code> once, before the <code>foreach</code> loop, and store the results in an array named <code>$TagAssignments</code>. Then within the <code>foreach</code> loop all I have to do is check whether the <code>$TagAssignments</code> array contains the VM&rsquo;s name. If it doesn&rsquo;t then the VM doesn&rsquo;t have a backup tag assigned and I add it to the <code>$VmNoTag</code> array of results.</p>
-
-<pre><code class="language-powershell">$VmNoTag = @()
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VmNoTag = @()
 
 $VMs = Get-VM
-$TagAssignments = Get-TagAssignment -Category 'backup-service-level'
+$TagAssignments = Get-TagAssignment -Category <span style="color:#e6db74">&#39;backup-service-level&#39;</span>
 
-foreach ($VM in $VMs) {
-    if (!($TagAssignments.Entity.Name -contains $VM.Name)) {
+<span style="color:#66d9ef">foreach</span> ($VM <span style="color:#66d9ef">in</span> $VMs) {
+    <span style="color:#66d9ef">if</span> (!($TagAssignments.Entity.Name <span style="color:#f92672">-contains</span> $VM.Name)) {
         $VmNoTag += $VM    
     }
 }
 
 $VmNoTag
-</code></pre>
-
-<p>I retested the script using the <code>Measure-Command</code> cmdlet and the results were very interesting.</p>
-
-<pre><code class="language-powershell">Measure-Command {&amp; .\Get-VMsWithNoTag.ps1}
+</code></pre></div><p>I retested the script using the <code>Measure-Command</code> cmdlet and the results were very interesting.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Measure-Command {&amp; .\Get-VMsWithNoTag.ps1}
 
 
-Days              : 0
-Hours             : 0
-Minutes           : 0
-Seconds           : 28
-Milliseconds      : 833
-Ticks             : 288335148
-TotalDays         : 0.000333721236111111
-TotalHours        : 0.00800930966666667
-TotalMinutes      : 0.48055858
-TotalSeconds      : 28.8335148
-TotalMilliseconds : 28833.5148
-</code></pre>
-
-<p>That&rsquo;s right 28 seconds! Down from 24 minutes. I was expecting to see an improvement but this amazed me. It just goes to show how important it is to optimize your code.</p>
-
+Days              <span style="color:#960050;background-color:#1e0010">:</span> 0
+Hours             <span style="color:#960050;background-color:#1e0010">:</span> 0
+Minutes           <span style="color:#960050;background-color:#1e0010">:</span> 0
+Seconds           <span style="color:#960050;background-color:#1e0010">:</span> 28
+Milliseconds      <span style="color:#960050;background-color:#1e0010">:</span> 833
+Ticks             <span style="color:#960050;background-color:#1e0010">:</span> 288335148
+TotalDays         <span style="color:#960050;background-color:#1e0010">:</span> 0.000333721236111111
+TotalHours        <span style="color:#960050;background-color:#1e0010">:</span> 0.00800930966666667
+TotalMinutes      <span style="color:#960050;background-color:#1e0010">:</span> 0.48055858
+TotalSeconds      <span style="color:#960050;background-color:#1e0010">:</span> 28.8335148
+TotalMilliseconds <span style="color:#960050;background-color:#1e0010">:</span> 28833.5148
+</code></pre></div><p>That&rsquo;s right 28 seconds! Down from 24 minutes. I was expecting to see an improvement but this amazed me. It just goes to show how important it is to optimize your code.</p>
 <h2 id="conclusion">Conclusion</h2>
-
 <p>This technique of storing a full set of results in an array, and then iterating through the array to find matching values can be a real time saver. I hope you have found it interesting and can use it to speed up some of your scripts.</p>
 
     </section>
@@ -281,9 +261,10 @@ TotalMilliseconds : 28833.5148
         <article class="post-card">
 
     
-    <a class="post-card-image-link" href="https://ryanjan.uk/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/">
-        <img class="post-card-image" src="/images/2018/05/vmw-vrealize-operations-fast-facts-1.jpg" loading="lazy" />
-    </a>
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/2018/05/21/vrops-reports-and-powercli-part-two-downloading-reports/">
+            <img class="post-card-image" src="/images/2018/05/vmw-vrealize-operations-fast-facts-1.jpg" loading="lazy" />
+        </a>
     
 
     <div class="post-card-content">
@@ -300,7 +281,7 @@ TotalMilliseconds : 28833.5148
             <section class="post-card-excerpt">
                 <p>For your reference, here are the articles in this mini-series:
  vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports (this article) vROps Reports and PowerCLI Part 3: A Helper Module  Introduction Following on from the previous article in this mini-series, this article demonstrates how to retrieve a generated report from vROps as a PowerShell object.
-(adsbygoogle = window.</p>
+(adsbygoogle = window.adsbygoogle || []).</p>
             </section>
         </a>
 
@@ -335,9 +316,10 @@ TotalMilliseconds : 28833.5148
         <article class="post-card">
 
     
-    <a class="post-card-image-link" href="https://ryanjan.uk/2018/05/16/running-vrops-reports-using-powercli/">
-        <img class="post-card-image" src="/images/2018/05/vmw-vrealize-operations-fast-facts.jpg" loading="lazy" />
-    </a>
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/2018/05/16/running-vrops-reports-using-powercli/">
+            <img class="post-card-image" src="/images/2018/05/vmw-vrealize-operations-fast-facts.jpg" loading="lazy" />
+        </a>
     
 
     <div class="post-card-content">

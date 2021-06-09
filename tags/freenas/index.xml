@@ -6,11 +6,7 @@
     <description>Recent content in freenas on Ryan Jan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Mon, 26 Mar 2018 22:17:46 +0000</lastBuildDate>
-    
-	<atom:link href="https://ryanjan.uk/tags/freenas/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Mon, 26 Mar 2018 22:17:46 +0000</lastBuildDate><atom:link href="https://ryanjan.uk/tags/freenas/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Installing Gogs In A FreeNAS Jail</title>
       <link>https://ryanjan.uk/2018/03/26/installing-gogs-in-a-freenas-jail/</link>
@@ -19,7 +15,7 @@
       <guid>https://ryanjan.uk/2018/03/26/installing-gogs-in-a-freenas-jail/</guid>
       <description>I recently stumbled across the Gogs project whilst looking for self-hosted Git solutions. I run a FreeNAS server at home so I thought I would get the app up and running in a jail. Here is how I did it.
 Jail Preparation Create a new jail named gogs and make sure that the jail is up to date by running.
-pkg update &amp;amp;&amp;amp; pkg upgrade  Now install the required packages.</description>
+pkg update &amp;amp;&amp;amp; pkg upgrade Now install the required packages.</description>
     </item>
     
   </channel>
