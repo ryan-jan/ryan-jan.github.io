@@ -22,8 +22,7 @@
       <pubDate>Thu, 13 May 2021 09:05:51 +0000</pubDate>
       
       <guid>https://ryanjan.uk/2021/05/13/powershell-splatting/</guid>
-      <description>In this post I am going to demonstrate a very useful PowerShell technique called splatting. But what is splatting? Here is the official
-description from the about_Splatting doc.</description>
+      <description>In this tutorial you&amp;rsquo;ll learn all about splatting, which is a technique used to pass parameter values to a PowerShell command.</description>
     </item>
     
     <item>
