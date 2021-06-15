@@ -14,7 +14,7 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Ryan Jan  | What is PowerShell splatting and how does it work?</title>
+  <title>RyanJan  | What is PowerShell splatting and how does it work?</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
   <meta name="HandheldFriendly" content="True" />
@@ -128,7 +128,7 @@
                     <h4 class="author-name"><a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a></h4>
                     <div class="byline-meta-content">
                         13 May 2021
-                        <span class="byline-reading-time"><span class="bull">&bull;</span> 7 min
+                        <span class="byline-reading-time"><span class="bull">&bull;</span> 8 min
                             read</span>
                     </div>
                 </div>
@@ -276,11 +276,20 @@ Copy-Item -Destination <span style="color:#e6db74">&#34;.\destination-one\&#34;<
     $LimitedParameters.Remove(<span style="color:#e6db74">&#34;b&#34;</span>) | Out-Null
     Invoke-FuncOne @LimitedParameters
 }
+</code></pre></div><div class="code-output">
+    <div class="code-output-bar"><span>Output</span></div>
+    <div class="code-output-inner">
+        <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Invoke-FuncTwo -a <span style="color:#e6db74">&#34;Hello&#34;</span> -b <span style="color:#e6db74">&#34;World&#34;</span> -c <span style="color:#e6db74">&#34;!&#34;</span>
+HelloWorld!
+Hello!
 </code></pre></div>
-<figure class="post-content-figure">
-	<img src="/2021/05/13/powershell-splatting/forwarding-params.png" alt="(.Get 1)" />
-	<figcaption>Output showing Invoke-FuncTwo splatting its parameters to Invoke-FuncOne.</figcaption>
-</figure>
+    </div>
+    
+    <div class="code-output-caption">
+        <span>Output showing Invoke-FuncTwo splatting its parameters to Invoke-FuncOne.</span>
+    </div>
+    
+</div>
 <div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
      <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
@@ -299,11 +308,23 @@ Copy-Item -Destination <span style="color:#e6db74">&#34;.\destination-one\&#34;<
 
 <span style="color:#75715e"># Call the proxy function and specify a parameter called Name.</span>
 Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span>
+</code></pre></div><div class="code-output">
+    <div class="code-output-bar"><span>Output</span></div>
+    <div class="code-output-inner">
+        <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span>
+
+ NPM(K)    PM(M)      WS(M)     CPU(s)      Id  SI ProcessName
+ ------    -----      -----     ------      --  -- -----------
+     25    56.82      50.62       0.00   14832   0 powershell
+     26    56.70      24.09       0.00   21068   0 powershell
 </code></pre></div>
-<figure class="post-content-figure">
-	<img src="/2021/05/13/powershell-splatting/proxy-params.png" alt="(.Get 1)" />
-	<figcaption>Example showing proxy function output.</figcaption>
-</figure>
+    </div>
+    
+    <div class="code-output-caption">
+        <span>Example showing proxy function output.</span>
+    </div>
+    
+</div>
 <p>You can also use the <code>$Args</code> variable combined with named parameters (i.e., those in the <code>param</code> block of a function):</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Define a function with named parameters $a and $b that also passes any other parameters</span>
 <span style="color:#75715e"># to Get-Process by splatting the @Args variable.</span>
@@ -321,11 +342,33 @@ Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span> -
 
 <span style="color:#75715e"># When $b is specified, its value will be printed to the console using Write-Output.</span>
 Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span> -b <span style="color:#e6db74">&#34;Nope, not today!&#34;</span>
+</code></pre></div><div class="code-output">
+    <div class="code-output-bar"><span>Output</span></div>
+    <div class="code-output-inner">
+        <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span> -a<span style="color:#960050;background-color:#1e0010">:</span>$true
+
+ NPM(K)    PM(M)      WS(M)     CPU(s)      Id  SI ProcessName
+ ------    -----      -----     ------      --  -- -----------
+     25    56.82      44.68       0.00   14832   0 powershell
+     26    56.76      23.83       0.00   21068   0 powershell
+     25    56.85      27.45       0.00   22684   0 powershell
+     26    57.57      22.76       0.00   23800   0 powershell
+     25    56.91      23.14       0.00   31348   0 powershell
+     25    57.19      23.48       0.00   37496   0 powershell
+     25    57.61      27.57       0.00   39124   0 powershell
+     25    57.56      25.48       0.00   41688   0 powershell
+     25    57.09      23.49       0.00   47316   0 powershell
+
+PS C:\&gt; Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span> -b <span style="color:#e6db74">&#34;Nope, not today!&#34;</span>
+Nope, not today!
 </code></pre></div>
-<figure class="post-content-figure">
-	<img src="/2021/05/13/powershell-splatting/proxy-params1.png" alt="(.Get 1)" />
-	<figcaption>Another example showing proxy function output.</figcaption>
-</figure>
+    </div>
+    
+    <div class="code-output-caption">
+        <span>Another example showing proxy function output.</span>
+    </div>
+    
+</div>
 <div class="callout info">
     <div class="callout-wrapper">
         <span>
@@ -353,11 +396,30 @@ Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span> -
     -Include <span style="color:#e6db74">&#34;*.txt&#34;</span> `
     -Force
 </code></pre></div><p>This is widely seen as a bad choice. Backticks are hard to read, easy to miss, and easy to mistype. Also, if you accidentally enter a space after a backtick, the command will fail with an error, as you&rsquo;ll see below.</p>
-
-<figure class="post-content-figure">
-	<img src="/2021/05/13/powershell-splatting/backticks-error.png" alt="(.Get 1)" />
-	<figcaption>Output showing an error due to a single white space entered after the backtick on the first line.</figcaption>
-</figure>
+<div class="code-output">
+    <div class="code-output-bar"><span>Output</span></div>
+    <div class="code-output-inner">
+        <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Copy-Item -Path <span style="color:#e6db74">&#34;.\source\&#34;</span> `
+&gt;&gt;     -Destination <span style="color:#e6db74">&#34;.\dest\&#34;</span> `
+&gt;&gt;     -Include <span style="color:#e6db74">&#34;*.txt&#34;</span> `
+&gt;&gt;     -Force
+<span style="color:#75715e">#error</span>
+Copy-Item<span style="color:#960050;background-color:#1e0010">:</span> Cannot find path <span style="color:#e6db74">&#39;C:\source\&#39;</span> because it does not exist.
+-Destination<span style="color:#960050;background-color:#1e0010">:</span>
+Line |
+   2 |      -Destination <span style="color:#e6db74">&#34;.\dest\&#34;</span> `
+     |      ~~~~~~~~~~~~
+     | The term <span style="color:#e6db74">&#39;-Destination&#39;</span> is not recognized as a name of a cmdlet, <span style="color:#66d9ef">function</span>, script file, or executable program.
+Check the spelling of the name, or <span style="color:#66d9ef">if</span> a path was included, verify that the path is correct and <span style="color:#66d9ef">try</span> again.
+<span style="color:#75715e">#enderror</span>
+</code></pre></div>
+    </div>
+    
+    <div class="code-output-caption">
+        <span>Output showing an error due to a single white space entered after the backtick on the first line.</span>
+    </div>
+    
+</div>
 <p>This causes unnecessary confusion and can be hard to debug given that the error message is not usually very helpful. The bottom line is that splatting is a much better option.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>In this tutorial, you&rsquo;ve worked through examples of all the different splatting techniques. Learning how to combine these techniques gives you plenty of options to simplify complex code and make it easier to read. So, make sure your next scripts use splatting and keep writing awesome code!</p>
@@ -568,7 +630,7 @@ Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span> -
     </main>
     <footer class="site-footer outer">
     <div class="inner">
-        <section class="copyright"><a href="https://ryanjan.uk/">Ryan Jan</a> &copy; 2021</section>
+        <section class="copyright"><a href="https://ryanjan.uk/">RyanJan</a> &copy; 2021</section>
         <nav class="site-footer-nav">
             <a href="https://ryanjan.uk/">Latest Posts</a>
             <a href="https://github.com/ryan-jan" target="_blank" rel="noopener">GitHub</a>

@@ -9,7 +9,7 @@ $(".su-modal-open-button").click(() => {
 var hideOverlay = false;
 $(".overlay-ad > span > i").click(() => {
   $(".overlay-ad").hide();
-  hideOverlay = true
+  hideOverlay = true;
 });
 
 $(document).scroll(() => {
@@ -46,3 +46,17 @@ function checkOffset() {
     $(".overlay-ad-wrapper").addClass("fixed");
   }
 }
+
+$(document).ready(function () {
+  $("code").each(function() {
+    var html = $(this).html()
+    html = html.replace(`<span class="token comment">#error</span>`, `<div class="error">`)
+    html = html.replace(`<span class="token comment">#enderror</span>`, "</div>")
+    $(this).html(html)
+    $(".error").each(function() {
+      $(this).children().each(function() {
+        $(this).addClass("error")
+      })
+    })
+  })
+});
