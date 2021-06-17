@@ -6,7 +6,16 @@
     <description>Recent content in esxi on RyanJan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Wed, 01 May 2019 21:31:47 +0000</lastBuildDate><atom:link href="https://ryanjan.uk/tags/esxi/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 17 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://ryanjan.uk/tags/esxi/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to run ESXCLI commands in PowerShell using the PowerCLI Get-EsxCli cmdlet</title>
+      <link>https://ryanjan.uk/2021/06/17/how-to-run-esxcli-commands-in-powershell-using-the-powercli-get-esxcli-cmdlet/</link>
+      <pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://ryanjan.uk/2021/06/17/how-to-run-esxcli-commands-in-powershell-using-the-powercli-get-esxcli-cmdlet/</guid>
+      <description>If you&amp;rsquo;re a vSphere admin, you&amp;rsquo;ll be very familiar with the esxcli command. But have you ever wondered how to run esxcli commands from PowerCLI? Maybe you don&amp;rsquo;t want to enable SSH on your hosts, or perhaps you need to run an esxcli command in a PowerShell script.</description>
+    </item>
+    
     <item>
       <title>ESXi Host Certificate Renewal Doesn&#39;t Include Full Chain</title>
       <link>https://ryanjan.uk/2019/05/01/esxi-host-certificate-renewal-doesnt-include-full-chain/</link>

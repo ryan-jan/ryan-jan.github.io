@@ -251,7 +251,7 @@ Copy-Item @Params -Destination <span style="color:#e6db74">&#34;.\destination-on
 
 <span style="color:#75715e"># Reuse the splatting hashtable to copy all txt files in the .\source\ directory to .\destination-two\.</span>
 <span style="color:#75715e"># It doesn&#39;t matter which position you put the splatting hashtable.</span>
-Copy-Item -Destination <span style="color:#e6db74">&#34;.\destination-one\&#34;</span> @Params
+Copy-Item -Destination <span style="color:#e6db74">&#34;.\destination-two\&#34;</span> @Params
 </code></pre></div><h2 id="forwarding-parameters-using-psboundparameters">Forwarding parameters using $PSBoundParameters</h2>
 <p>The <code>$PSBoundParameters</code> variable is an <a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_automatic_variables?view=powershell-7.1">automatic variable</a>, which contains a dictionary of the parameters (and values) passed to a script or function. In the example below, you&rsquo;ll see how you can use splatting to forward the parameters from one function (<code>Invoke-FuncTwo</code>) to another (<code>Invoke-FuncOne</code>) using the <code>$PSBoundParameters</code> variable. This is an advanced technique and can take some getting your head around, but it does open up some interesting possibilities once you understand it.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">function</span> Invoke-FuncOne {
