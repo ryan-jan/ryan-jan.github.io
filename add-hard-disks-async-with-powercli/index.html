@@ -17,7 +17,7 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>RyanJan  | powershell</title>
+  <title>RyanJan  | Add Hard Disks to VMs Asynchronously with PowerCLI</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
   <meta name="HandheldFriendly" content="True" />
@@ -39,13 +39,29 @@
     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
   
+<meta name="twitter:card" content="summary_large_image">
+
+
+
+<meta name="twitter:creator" content="@_ryanjan_">
+<meta name="twitter:site" content="@_ryanjan_">
+
+<meta property="og:title" content="Add Hard Disks to VMs Asynchronously with PowerCLI">
+<meta property="og:description" content="At the time of writing the New-HardDisk PowerCLI CmdLet does not yet have a -RunAsync parameter. I found this out when trying to create a new 300 GiB eagerly zeroed disk on multiple VMs in one go. I soon realised that I was going to be sat there for a long time as each new disk was being formatted one at a time.">
+<meta property="og:url" content="https://ryanjan.uk/add-hard-disks-async-with-powercli/">
+
+    
+    <meta property="og:image" content="https://ryanjan.uk/images/2019/10/wait-image.jpg">
+    
+
+
 </head>
 
 
 
 
 
-<body class='tag-template' >
+<body class='post-template' >
   <div class="viewport">
     <header id="gh-head" class="gh-head">
       <nav class="gh-head-inner inner gh-container">
@@ -83,294 +99,125 @@
     </header>
     <main>
       
+<article class="article">
+    <header class="article-header gh-canvas">
+        
+        
+        
+        <section class="article-tag">
+            <a href="/tags/powercli">powercli</a>
+        </section>
+        
+        
 
-<section class="outer">
-    <div class="inner posts">
-        <div class="post-feed">
-            <header class="post-card post-card-large">
-                <div class="post-card-content">
-                    <div class="post-card-content-link">
-                        <header class="post-card-header">
-                            <div class="post-card-primary-tag">Tagged</div>
-                            <h2 class="post-card-title">POWERSHELL</h2>
-                        </header>
-                        <section class="post-card-excerpt">
-                            <p>
-                                
-                                A collection of 7 posts
-                                
-                            </p>
-                        </section>
+        <h1 class="article-title">Add Hard Disks to VMs Asynchronously with PowerCLI</h1>
+
+        
+
+        <div class="article-byline">
+            <section class="article-byline-content">
+                
+                
+                
+                
+                
+                <ul class="author-list">
+                    <li class="author-list-item">
+                        
+                        <a href="https://ryanjan.uk/authors/ryan/" class="author-avatar">
+                            
+                            <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                        </a>
+                    </li>
+                </ul>
+                <div class="article-byline-meta">
+                    <h4 class="author-name"><a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a></h4>
+                    <div class="byline-meta-content">
+                        15 Oct 2019
+                        <span class="byline-reading-time"><span class="bull">&bull;</span> 3 min
+                            read</span>
                     </div>
                 </div>
-            </header>
-            
-            <article class="post-card">
-
-    
-    
-    <a class="post-card-image-link" href="https://ryanjan.uk/how-to-run-esxcli-commands-in-powershell/">
-        <img class="post-card-image" src="/how-to-run-esxcli-commands-in-powershell/feature-image.png" loading="lazy" />
-    </a>
-    
-
-    <div class="post-card-content">
-        <a class="post-card-content-link" href="https://ryanjan.uk/how-to-run-esxcli-commands-in-powershell/">
-            <header class="post-card-header">
                 
                 
-                
-                <div class="post-card-primary-tag">powercli</div>
-                
-                
-                <h2 class="post-card-title">How to run ESXCLI commands in PowerShell using the PowerCLI Get-EsxCli cmdlet</h2>
-            </header>
-            <section class="post-card-excerpt">
-                <p>If you&rsquo;re a vSphere admin, you&rsquo;ll be very familiar with the esxcli command. But have you ever wondered how to run esxcli commands from PowerCLI? Maybe you don&rsquo;t want to enable SSH on your hosts, or perhaps you need to run an esxcli command in a PowerShell script.</p>
             </section>
-        </a>
+        </div>
 
-        <footer class="post-card-meta">
+        
             
+            <figure class="article-image">
+                <img src="/images/2019/10/wait-image.jpg" alt="Add Hard Disks to VMs Asynchronously with PowerCLI" />
+            </figure>
             
-            
-            
-            
-            <ul class="author-list">
-                <li class="author-list-item">
-                    
-                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
-                        
-                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
-                    </a>
-                </li>
-            </ul>
-            
-            <div class="post-card-byline-content">
-                
-                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
-                
-                <span class="post-card-byline-date">17 Jun 2021 <span class="bull"> &bull; </span>
-                    8 min read</span>
-            </div>
-            
-        </footer>
-    </div>
+        
+    </header>
+
+    <section class="gh-content gh-canvas">
+        <h2 id="introduction">Introduction</h2>
+<p>At the time of writing the <code>New-HardDisk</code> PowerCLI CmdLet does not yet have a <code>-RunAsync</code> parameter. I found this out when trying to create a new 300 GiB eagerly zeroed disk on multiple VMs in one go. I soon realised that I was going to be sat there for a long time as each new disk was being formatted one at a time. So, I asked around on the PowerCLI Slack channel for any ideas and <a href="https://twitter.com/ROIdude">Steve Kaplan</a> helpfully reminded me that I should be able to work out how to add these disks asynchronously using the Code Capture feature in the HTML5 web client, and he was right! I have put together a script which you can grab from my <a href="https://github.com/ryan-jan/Blog-Scripts/blob/master/powershell/New-HardDiskAsync.ps1">GitHub</a> to make things easier and I will give some brief examples below.</p>
+<h2 id="using-the-new-harddiskasyncps1-script">Using the New-HardDiskAsync.ps1 Script</h2>
+<p>Once you have a copy of the script downloaded from my GitHub repository, you will first need to connect to a vCenter server using the <code>Connect-VIServer</code> CmdLet.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-VIServer -Server <span style="color:#e6db74">&#34;vcenter.example.com&#34;</span>
+</code></pre></div><p>First lets add a single 200 GiB thin provisioned disk to the VM named <code>vm0123</code>.</p>
+<p>NOTE - These examples assume that the script is saved in the current working directory.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\New-HardDiskAsync.ps1 -Name <span style="color:#e6db74">&#34;vm0123&#34;</span> -CapacityGB 200
+</code></pre></div><p>Now lets create a 500 GiB thick provisioned disk which is eager zeroed.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\New-HardDiskAsync.ps1 -Name <span style="color:#e6db74">&#34;vm0123&#34;</span> -CapacityGB 500 -StorageFormat <span style="color:#e6db74">&#34;EagerZeroedThick&#34;</span>
+</code></pre></div><p>We can also use the <code>-Controller</code> parameter to specify a particular SCSI controller if there is more than one assigned to the VM (by default if there is more than one assigned and this parameter is not specified we will pick the first SCSI controller with free capacity).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$ScsiController = Get-ScsiController -VM <span style="color:#e6db74">&#34;vm0123&#34;</span>
+.\New-HardDiskAsync.ps1 -Name <span style="color:#e6db74">&#34;vm0123&#34;</span> -CapacityGB 500 -Controller $ScsiController[1]
+</code></pre></div><p>NOTE - In the example above I am simply specifying which SCSI controller to use based on its index position in the <code>$ScsiController</code> array.</p>
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<p>You will notice that a task object is returned by this script. This can be used to check the progress of the asynchronous task which is registered with the vCenter server by the script. In order to do this we will store the output from this script in a variable and then use the <code>Get-Task</code> CmdLet to see the status.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Task = .\New-HardDiskAsync.ps1 -Name <span style="color:#e6db74">&#34;vm0123&#34;</span> -CapacityGB 200
+Get-Task -Id $Task.Id
+
+Name                           State      % Complete Start Time   Finish Time
+----                           -----      ---------- ----------   -----------
+ReconfigVM_Task                Success           100 03<span style="color:#960050;background-color:#1e0010">:</span>44<span style="color:#960050;background-color:#1e0010">:</span>35 PM  03<span style="color:#960050;background-color:#1e0010">:</span>44<span style="color:#960050;background-color:#1e0010">:</span>35 PM
+</code></pre></div><h2 id="conclusion">Conclusion</h2>
+<p>Armed with my new script I was able to save a lot of time when adding my 300 GiB thick disks to a couple of hundred VMs. Hopefully this will also help some other people out in the future, at least until VMware add implement a <code>-RunAsync</code> parameter on the <code>New-HardDisk</code> CmdLet!</p>
+
+    </section>
+
 </article>
-            
-            <article class="post-card">
 
-    
-    
-        <a class="post-card-image-link" href="https://ryanjan.uk/how-to-validate-azure-resource-moves-using-powershell/">
-            <img class="post-card-image" src="/images/2021/05/azure-resources.png" loading="lazy" />
-        </a>
-    
-
-    <div class="post-card-content">
-        <a class="post-card-content-link" href="https://ryanjan.uk/how-to-validate-azure-resource-moves-using-powershell/">
-            <header class="post-card-header">
-                
-                
-                
-                <div class="post-card-primary-tag">powershell</div>
-                
-                
-                <h2 class="post-card-title">How to validate Azure resource moves using PowerShell</h2>
-            </header>
-            <section class="post-card-excerpt">
-                <p>The validate move resources API operation in Azure lets you pre-validate a potential move without actually moving any resources. This can be helpful when planning complex move scenarios.</p>
-            </section>
-        </a>
-
-        <footer class="post-card-meta">
-            
-            
-            
-            
-            
-            <ul class="author-list">
-                <li class="author-list-item">
-                    
-                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
-                        
-                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
-                    </a>
-                </li>
-            </ul>
-            
-            <div class="post-card-byline-content">
-                
-                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
-                
-                <span class="post-card-byline-date">25 May 2021 <span class="bull"> &bull; </span>
-                    4 min read</span>
-            </div>
-            
-        </footer>
+<div class="overlay-ad fixed">
+    <span><i class="fa fa-times-circle"></i></span>
+    <div class="overlay-ad-wrapper fixed">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <ins class="adsbygoogle" style="display:block; width:300px; height:250px" data-ad-client="ca-pub-8907477009760148"
+            data-ad-slot="3736399917"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
     </div>
-</article>
-            
-            <article class="post-card">
+</div>
 
-    
-    
-    <a class="post-card-image-link" href="https://ryanjan.uk/powershell-splatting/">
-        <img class="post-card-image" src="/powershell-splatting/feature-image.png" loading="lazy" />
-    </a>
-    
-
-    <div class="post-card-content">
-        <a class="post-card-content-link" href="https://ryanjan.uk/powershell-splatting/">
-            <header class="post-card-header">
-                
-                
-                
-                <div class="post-card-primary-tag">powershell</div>
-                
-                
-                <h2 class="post-card-title">What is PowerShell splatting and how does it work?</h2>
-            </header>
-            <section class="post-card-excerpt">
-                <p>In this tutorial you&rsquo;ll learn all about splatting, which is a technique used to pass parameter values to a PowerShell command.</p>
-            </section>
+<section class="footer-cta">
+    <div class="inner">
+        <h2>Sign up for more like this.</h2>
+        <a class="footer-cta-button su-modal-open-button" href="#/subscribe">
+            <div>Enter your email</div>
+            <span>Subscribe</span>
         </a>
-
-        <footer class="post-card-meta">
-            
-            
-            
-            
-            
-            <ul class="author-list">
-                <li class="author-list-item">
-                    
-                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
-                        
-                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
-                    </a>
-                </li>
-            </ul>
-            
-            <div class="post-card-byline-content">
-                
-                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
-                
-                <span class="post-card-byline-date">13 May 2021 <span class="bull"> &bull; </span>
-                    8 min read</span>
-            </div>
-            
-        </footer>
     </div>
-</article>
-            
-            <article class="post-card">
+</section>
 
-    
-    
-        <a class="post-card-image-link" href="https://ryanjan.uk/add-hard-disks-async-with-powercli/">
-            <img class="post-card-image" src="/images/2019/10/wait-image.jpg" loading="lazy" />
-        </a>
-    
-
-    <div class="post-card-content">
-        <a class="post-card-content-link" href="https://ryanjan.uk/add-hard-disks-async-with-powercli/">
-            <header class="post-card-header">
-                
-                
-                
-                <div class="post-card-primary-tag">powercli</div>
-                
-                
-                <h2 class="post-card-title">Add Hard Disks to VMs Asynchronously with PowerCLI</h2>
-            </header>
-            <section class="post-card-excerpt">
-                <p>At the time of writing the <code>New-HardDisk</code> PowerCLI CmdLet does not yet have a <code>-RunAsync</code> parameter. I found this out when trying to create a new 300 GiB eagerly zeroed disk on multiple VMs in one go. I soon realised that I was going to be sat there for a long time as each new disk was being formatted one at a time.</p>
-            </section>
-        </a>
-
-        <footer class="post-card-meta">
-            
-            
-            
-            
-            
-            <ul class="author-list">
-                <li class="author-list-item">
-                    
-                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
-                        
-                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
-                    </a>
-                </li>
-            </ul>
-            
-            <div class="post-card-byline-content">
-                
-                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
-                
-                <span class="post-card-byline-date">15 Oct 2019 <span class="bull"> &bull; </span>
-                    3 min read</span>
-            </div>
-            
-        </footer>
-    </div>
-</article>
-            
-            <article class="post-card">
-
-    
-    
-        <a class="post-card-image-link" href="https://ryanjan.uk/vsphere-global-permissions-with-powershell/">
-            <img class="post-card-image" src="/images/2019/06/closed-coming-soon-door-4291.jpg" loading="lazy" />
-        </a>
-    
-
-    <div class="post-card-content">
-        <a class="post-card-content-link" href="https://ryanjan.uk/vsphere-global-permissions-with-powershell/">
-            <header class="post-card-header">
-                
-                
-                
-                <div class="post-card-primary-tag">powershell</div>
-                
-                
-                <h2 class="post-card-title">Managing vSphere Global Permissions with PowerShell</h2>
-            </header>
-            <section class="post-card-excerpt">
-                <p>It appears that working with vSphere global permissions in PowerCLI is not yet possible. The VIPerms PowerShell module combines the add/remove examples from William&rsquo;s post with a new function to list all global permissions. In this post I will demonstrate how to install and use this module.</p>
-            </section>
-        </a>
-
-        <footer class="post-card-meta">
-            
-            
-            
-            
-            
-            <ul class="author-list">
-                <li class="author-list-item">
-                    
-                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
-                        
-                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
-                    </a>
-                </li>
-            </ul>
-            
-            <div class="post-card-byline-content">
-                
-                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
-                
-                <span class="post-card-byline-date">19 Jun 2019 <span class="bull"> &bull; </span>
-                    3 min read</span>
-            </div>
-            
-        </footer>
-    </div>
-</article>
-            
-            <article class="post-card">
+<aside class="read-more-wrap">
+    <div class="read-more inner">
+        
+        
+        
+        <article class="post-card">
 
     
     
@@ -422,8 +269,8 @@
         </footer>
     </div>
 </article>
-            
-            <article class="post-card">
+        
+        <article class="post-card">
 
     
     
@@ -475,10 +322,63 @@
         </footer>
     </div>
 </article>
+        
+        <article class="post-card">
+
+    
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/vsphere-global-permissions-with-powershell/">
+            <img class="post-card-image" src="/images/2019/06/closed-coming-soon-door-4291.jpg" loading="lazy" />
+        </a>
+    
+
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="https://ryanjan.uk/vsphere-global-permissions-with-powershell/">
+            <header class="post-card-header">
+                
+                
+                
+                <div class="post-card-primary-tag">powershell</div>
+                
+                
+                <h2 class="post-card-title">Managing vSphere Global Permissions with PowerShell</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>It appears that working with vSphere global permissions in PowerCLI is not yet possible. The VIPerms PowerShell module combines the add/remove examples from William&rsquo;s post with a new function to list all global permissions. In this post I will demonstrate how to install and use this module.</p>
+            </section>
+        </a>
+
+        <footer class="post-card-meta">
             
-        </div>
+            
+            
+            
+            
+            <ul class="author-list">
+                <li class="author-list-item">
+                    
+                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="post-card-byline-content">
+                
+                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
+                
+                <span class="post-card-byline-date">19 Jun 2019 <span class="bull"> &bull; </span>
+                    3 min read</span>
+            </div>
+            
+        </footer>
     </div>
-</section>
+</article>
+        
+        
+    </div>
+</aside>
 
     </main>
     <footer class="site-footer outer">

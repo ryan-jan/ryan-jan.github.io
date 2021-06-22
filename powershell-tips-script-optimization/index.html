@@ -17,7 +17,7 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>RyanJan  | vrops</title>
+  <title>RyanJan  | PowerShell Tips: Script Optimization</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
   <meta name="HandheldFriendly" content="True" />
@@ -39,13 +39,29 @@
     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
   
+<meta name="twitter:card" content="summary_large_image">
+
+
+
+<meta name="twitter:creator" content="@_ryanjan_">
+<meta name="twitter:site" content="@_ryanjan_">
+
+<meta property="og:title" content="PowerShell Tips: Script Optimization">
+<meta property="og:description" content="Introduction A colleague of mine recently asked for some help with a script he was writing. We use vSphere tags in order to determine which backup schedule a given VM is in and he wanted to find all VMs which were not assigned a tag in the category backup-service-level, and therefore were not being backed up. His actual query was regarding filtering out certain VMs which will never be given a backup tag.">
+<meta property="og:url" content="https://ryanjan.uk/powershell-tips-script-optimization/">
+
+    
+    <meta property="og:image" content="https://ryanjan.uk/images/2018/06/lum3n-193427-unsplash.jpg">
+    
+
+
 </head>
 
 
 
 
 
-<body class='tag-template' >
+<body class='post-template' >
   <div class="viewport">
     <header id="gh-head" class="gh-head">
       <nav class="gh-head-inner inner gh-container">
@@ -83,137 +99,170 @@
     </header>
     <main>
       
+<article class="article">
+    <header class="article-header gh-canvas">
+        
+        
+        
+        <section class="article-tag">
+            <a href="/tags/powershell">powershell</a>
+        </section>
+        
+        
 
-<section class="outer">
-    <div class="inner posts">
-        <div class="post-feed">
-            <header class="post-card post-card-large">
-                <div class="post-card-content">
-                    <div class="post-card-content-link">
-                        <header class="post-card-header">
-                            <div class="post-card-primary-tag">Tagged</div>
-                            <h2 class="post-card-title">VROPS</h2>
-                        </header>
-                        <section class="post-card-excerpt">
-                            <p>
-                                
-                                A collection of 4 posts
-                                
-                            </p>
-                        </section>
+        <h1 class="article-title">PowerShell Tips: Script Optimization</h1>
+
+        
+
+        <div class="article-byline">
+            <section class="article-byline-content">
+                
+                
+                
+                
+                
+                <ul class="author-list">
+                    <li class="author-list-item">
+                        
+                        <a href="https://ryanjan.uk/authors/ryan/" class="author-avatar">
+                            
+                            <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                        </a>
+                    </li>
+                </ul>
+                <div class="article-byline-meta">
+                    <h4 class="author-name"><a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a></h4>
+                    <div class="byline-meta-content">
+                        02 Jun 2018
+                        <span class="byline-reading-time"><span class="bull">&bull;</span> 3 min
+                            read</span>
                     </div>
                 </div>
-            </header>
-            
-            <article class="post-card">
-
-    
-    
-        <a class="post-card-image-link" href="https://ryanjan.uk/vrops-upgrade-fail-due-to-swap-issues/">
-            <img class="post-card-image" src="/images/2018/09/vrops70dash.png" loading="lazy" />
-        </a>
-    
-
-    <div class="post-card-content">
-        <a class="post-card-content-link" href="https://ryanjan.uk/vrops-upgrade-fail-due-to-swap-issues/">
-            <header class="post-card-header">
                 
                 
-                
-                <div class="post-card-primary-tag">vrops</div>
-                
-                
-                <h2 class="post-card-title">vRealize Operations Manager Upgrade Fails Due To Swap Issue</h2>
-            </header>
-            <section class="post-card-excerpt">
-                <p>Today I upgraded my non-production vRealize Operations Manager (vROps) appliance from v6.7 to v7.0. However, when applying the initial OS update .pak file via the admin interface, the upgrade immediately failed with the error message &quot;source ./pak_python_wrapper.sh validate.py&quot; failed.
-Initially a colleague of mine pointed me to the well known disk space issues (KB article), but a quick look at the disk stats showed that there was plenty of space available on all partitions.</p>
             </section>
-        </a>
+        </div>
 
-        <footer class="post-card-meta">
+        
             
+            <figure class="article-image">
+                <img src="/images/2018/06/lum3n-193427-unsplash.jpg" alt="PowerShell Tips: Script Optimization" />
+            </figure>
             
-            
-            
-            
-            <ul class="author-list">
-                <li class="author-list-item">
-                    
-                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
-                        
-                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
-                    </a>
-                </li>
-            </ul>
-            
-            <div class="post-card-byline-content">
-                
-                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
-                
-                <span class="post-card-byline-date">24 Sep 2018 <span class="bull"> &bull; </span>
-                    3 min read</span>
-            </div>
-            
-        </footer>
-    </div>
+        
+    </header>
+
+    <section class="gh-content gh-canvas">
+        <h2 id="introduction">Introduction</h2>
+<p>A colleague of mine recently asked for some help with a script he was writing. We use vSphere tags in order to determine which backup schedule a given VM is in and he wanted to find all VMs which were not assigned a tag in the category <code>backup-service-level</code>, and therefore were not being backed up. His actual query was regarding filtering out certain VMs which will never be given a backup tag. However, in helping with this I realised that his script was taking over 20 minutes to complete! I decided to take a copy and see if I could speed things up a bit.</p>
+<h2 id="the-script">The Script</h2>
+<p>Here is the script as it was when I first took a look at it.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VmNoTag = @()
+
+$VMs = Get-VM
+
+<span style="color:#66d9ef">foreach</span> ($VM <span style="color:#66d9ef">in</span> $VMs) {
+    $Name = $VM.name
+    $Tag = $($VM | Get-TagAssignment -Category <span style="color:#e6db74">&#39;backup-service-level&#39;</span>).tag.name
+    $Power = $VM.PowerState
+        
+    $Line = New-Object -TypeName psobject 
+    $Line | Add-Member -MemberType NoteProperty VM -Value $Name
+    $Line | Add-Member -MemberType NoteProperty Tag -Value $Tag
+    $Line | Add-Member -MemberType NoteProperty PowerState -Value $Power
+    $VmNoTag += $line
+}
+
+$VmNoTag | Where-Object {$_.Tag <span style="color:#f92672">-eq</span> $null}
+</code></pre></div><p>It&rsquo;s functional and returns the required results. However, the first thing I noticed is that the <code>Get-TagAssignment</code> cmdlet is being called in every iteration of the <code>foreach</code> loop. This will take a very long time as it has to fetch results from the vCenter API each time it is called. Also, the last line of the script filters the results so that only VMs without a tag assigned are returned. This is iterating though all of the results in the <code>$VMs</code> array for a second time, which will also be contributing a small performance hit.</p>
+<p>In order to effectively measure the performance of the script in its current state I used the <code>Measure-Command</code> cmdlet. As you can see the script takes 24 minutes to run in its current state.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Measure-Command {&amp; .\Get-VMsWithNoTag.ps1}
+
+Days              <span style="color:#960050;background-color:#1e0010">:</span> 0
+Hours             <span style="color:#960050;background-color:#1e0010">:</span> 0
+Minutes           <span style="color:#960050;background-color:#1e0010">:</span> 24
+Seconds           <span style="color:#960050;background-color:#1e0010">:</span> 4
+Milliseconds      <span style="color:#960050;background-color:#1e0010">:</span> 361
+Ticks             <span style="color:#960050;background-color:#1e0010">:</span> 14443611146
+TotalDays         <span style="color:#960050;background-color:#1e0010">:</span> 0.0167171425300926
+TotalHours        <span style="color:#960050;background-color:#1e0010">:</span> 0.401211420722222
+TotalMinutes      <span style="color:#960050;background-color:#1e0010">:</span> 24.0726852433333
+TotalSeconds      <span style="color:#960050;background-color:#1e0010">:</span> 1444.3611146
+TotalMilliseconds <span style="color:#960050;background-color:#1e0010">:</span> 1444361.1146
+</code></pre></div><div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<h2 id="optimization">Optimization</h2>
+<p>I was pretty sure that calling <code>Get-TagAssignment</code> over and over again was causing the slowness. To fix this, I call <code>Get-TagAssignment</code> once, before the <code>foreach</code> loop, and store the results in an array named <code>$TagAssignments</code>. Then within the <code>foreach</code> loop all I have to do is check whether the <code>$TagAssignments</code> array contains the VM&rsquo;s name. If it doesn&rsquo;t then the VM doesn&rsquo;t have a backup tag assigned and I add it to the <code>$VmNoTag</code> array of results.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VmNoTag = @()
+
+$VMs = Get-VM
+$TagAssignments = Get-TagAssignment -Category <span style="color:#e6db74">&#39;backup-service-level&#39;</span>
+
+<span style="color:#66d9ef">foreach</span> ($VM <span style="color:#66d9ef">in</span> $VMs) {
+    <span style="color:#66d9ef">if</span> (!($TagAssignments.Entity.Name <span style="color:#f92672">-contains</span> $VM.Name)) {
+        $VmNoTag += $VM    
+    }
+}
+
+$VmNoTag
+</code></pre></div><p>I retested the script using the <code>Measure-Command</code> cmdlet and the results were very interesting.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Measure-Command {&amp; .\Get-VMsWithNoTag.ps1}
+
+
+Days              <span style="color:#960050;background-color:#1e0010">:</span> 0
+Hours             <span style="color:#960050;background-color:#1e0010">:</span> 0
+Minutes           <span style="color:#960050;background-color:#1e0010">:</span> 0
+Seconds           <span style="color:#960050;background-color:#1e0010">:</span> 28
+Milliseconds      <span style="color:#960050;background-color:#1e0010">:</span> 833
+Ticks             <span style="color:#960050;background-color:#1e0010">:</span> 288335148
+TotalDays         <span style="color:#960050;background-color:#1e0010">:</span> 0.000333721236111111
+TotalHours        <span style="color:#960050;background-color:#1e0010">:</span> 0.00800930966666667
+TotalMinutes      <span style="color:#960050;background-color:#1e0010">:</span> 0.48055858
+TotalSeconds      <span style="color:#960050;background-color:#1e0010">:</span> 28.8335148
+TotalMilliseconds <span style="color:#960050;background-color:#1e0010">:</span> 28833.5148
+</code></pre></div><p>That&rsquo;s right 28 seconds! Down from 24 minutes. I was expecting to see an improvement but this amazed me. It just goes to show how important it is to optimize your code.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This technique of storing a full set of results in an array, and then iterating through the array to find matching values can be a real time saver. I hope you have found it interesting and can use it to speed up some of your scripts.</p>
+
+    </section>
+
 </article>
-            
-            <article class="post-card">
 
-    
-    
-        <a class="post-card-image-link" href="https://ryanjan.uk/vrops-reports-and-powercli-part-three-a-helper-module/">
-            <img class="post-card-image" src="/images/2018/05/vmw-vrealize-operations-fast-facts-2.jpg" loading="lazy" />
-        </a>
-    
-
-    <div class="post-card-content">
-        <a class="post-card-content-link" href="https://ryanjan.uk/vrops-reports-and-powercli-part-three-a-helper-module/">
-            <header class="post-card-header">
-                
-                
-                
-                <div class="post-card-primary-tag">vrops</div>
-                
-                
-                <h2 class="post-card-title">vROps Reports and PowerCLI Part 3: A Helper Module</h2>
-            </header>
-            <section class="post-card-excerpt">
-                <p>For your reference here is a list of the articles in this mini-series.
- vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports vROps Reports and PowerCLI Part 3: A Helper Module (this article)  Introduction If you have been following along with the previous two articles in this series, you should now have a pretty good understanding of how to manipulate the extensionData container via PowerCLI to generate and download reports from vRealize Operations Manager (vROps).</p>
-            </section>
-        </a>
-
-        <footer class="post-card-meta">
-            
-            
-            
-            
-            
-            <ul class="author-list">
-                <li class="author-list-item">
-                    
-                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
-                        
-                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
-                    </a>
-                </li>
-            </ul>
-            
-            <div class="post-card-byline-content">
-                
-                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
-                
-                <span class="post-card-byline-date">24 Jun 2018 <span class="bull"> &bull; </span>
-                    6 min read</span>
-            </div>
-            
-        </footer>
+<div class="overlay-ad fixed">
+    <span><i class="fa fa-times-circle"></i></span>
+    <div class="overlay-ad-wrapper fixed">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <ins class="adsbygoogle" style="display:block; width:300px; height:250px" data-ad-client="ca-pub-8907477009760148"
+            data-ad-slot="3736399917"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
     </div>
-</article>
-            
-            <article class="post-card">
+</div>
+
+<section class="footer-cta">
+    <div class="inner">
+        <h2>Sign up for more like this.</h2>
+        <a class="footer-cta-button su-modal-open-button" href="#/subscribe">
+            <div>Enter your email</div>
+            <span>Subscribe</span>
+        </a>
+    </div>
+</section>
+
+<aside class="read-more-wrap">
+    <div class="read-more inner">
+        
+        
+        
+        <article class="post-card">
 
     
     
@@ -267,8 +316,8 @@ Initially a colleague of mine pointed me to the well known disk space issues (KB
         </footer>
     </div>
 </article>
-            
-            <article class="post-card">
+        
+        <article class="post-card">
 
     
     
@@ -321,10 +370,10 @@ Initially a colleague of mine pointed me to the well known disk space issues (KB
         </footer>
     </div>
 </article>
-            
-        </div>
+        
+        
     </div>
-</section>
+</aside>
 
     </main>
     <footer class="site-footer outer">

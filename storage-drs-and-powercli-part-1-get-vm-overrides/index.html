@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119235055-1"></script>
+  <script>
+    if (window.location.hostname === "localhost") {
+      console.log("Analytics not running on local dev.");
+    } else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'UA-119235055-1');
+    }
+  </script>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>RyanJan  | Storage DRS and PowerCLI Part 1: Get VM Overrides</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="/css/screen.css" />
+
+  
+  <link rel="stylesheet" type="text/css" href="/css/custom/screen-custom.css" />
+  <link rel="stylesheet" type="text/css" href="/css/fontawesome_all.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/prism.css" />
+  <link rel="stylesheet" type="text/css" href="/css/custom/prism-custom.css" />
+  <link rel="stylesheet" type="text/css" href="/css/custom/global-custom.css" />
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700" rel="stylesheet">
+
+  
+  <script data-ad-client="ca-pub-8907477009760148" async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+  
+<meta name="twitter:card" content="summary_large_image">
+
+
+
+<meta name="twitter:creator" content="@_ryanjan_">
+<meta name="twitter:site" content="@_ryanjan_">
+
+<meta property="og:title" content="Storage DRS and PowerCLI Part 1: Get VM Overrides">
+<meta property="og:description" content="Introduction With Storage DRS (SDRS) enabled datastore clusters, we have many options to configure overrides on a per-VM basis. For example disabling SDRS for a specific VM or forcing SDRS to keep a VMs VMDK files on separate datastores (anti-affinity). However, one thing which has caught out our 2nd line team recently and caused us some SDRS performance issues is that when you manually Storage vMotion (svMotion) one or more VMDK files and pick a specific datastore as the destination, you have to tick a box that disables SDRS for the particular VM.">
+<meta property="og:url" content="https://ryanjan.uk/storage-drs-and-powercli-part-1-get-vm-overrides/">
+
+    
+    <meta property="og:image" content="https://ryanjan.uk/images/2018/08/override.jpg">
+    
+
+
+</head>
+
+
+
+
+
+<body class='post-template' >
+  <div class="viewport">
+    <header id="gh-head" class="gh-head">
+      <nav class="gh-head-inner inner gh-container">
+
+        <div class="gh-head-brand">
+          <a class="gh-head-logo" href="/">
+            <img src="/images/favicon.png" />
+          </a>
+          <a class="gh-burger" role="button">
+            <div class="gh-burger-box">
+              <div class="gh-burger-inner"></div>
+            </div>
+          </a>
+        </div>
+        <div class="gh-head-menu">
+          <ul class="nav">
+    <li class="nav-home nav-current"><a href="/">Home</a></li>
+    <li class="nav-about"><a href="/about/">About</a></li>
+</ul>
+        </div>
+        <div class="gh-head-actions">
+          <div class="gh-social">
+            <a class="gh-social-github" href="https://github.com/ryan-jan" title="GitHub" target="_blank"
+              rel="noopener">
+              <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a class="gh-social-twitter" href="https://twitter.com/_ryanjan_" title="Twitter" target="_blank"
+              rel="noopener">
+              <i class="fab fa-twitter fa-lg"></i>
+            </a>
+          </div>
+          <a class="gh-head-button su-modal-open-button" href="#/subscribe">Subscribe</a>
+        </div>
+      </nav>
+    </header>
+    <main>
+      
+<article class="article">
+    <header class="article-header gh-canvas">
+        
+        
+        
+        <section class="article-tag">
+            <a href="/tags/powercli">powercli</a>
+        </section>
+        
+        
+
+        <h1 class="article-title">Storage DRS and PowerCLI Part 1: Get VM Overrides</h1>
+
+        
+
+        <div class="article-byline">
+            <section class="article-byline-content">
+                
+                
+                
+                
+                
+                <ul class="author-list">
+                    <li class="author-list-item">
+                        
+                        <a href="https://ryanjan.uk/authors/ryan/" class="author-avatar">
+                            
+                            <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                        </a>
+                    </li>
+                </ul>
+                <div class="article-byline-meta">
+                    <h4 class="author-name"><a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a></h4>
+                    <div class="byline-meta-content">
+                        30 Jul 2018
+                        <span class="byline-reading-time"><span class="bull">&bull;</span> 7 min
+                            read</span>
+                    </div>
+                </div>
+                
+                
+            </section>
+        </div>
+
+        
+            
+            <figure class="article-image">
+                <img src="/images/2018/08/override.jpg" alt="Storage DRS and PowerCLI Part 1: Get VM Overrides" />
+            </figure>
+            
+        
+    </header>
+
+    <section class="gh-content gh-canvas">
+        <h2 id="introduction">Introduction</h2>
+<p>With Storage DRS (SDRS) enabled datastore clusters, we have many options to configure overrides on a per-VM basis. For example disabling SDRS for a specific VM or forcing SDRS to keep a VMs VMDK files on separate datastores (anti-affinity). However, one thing which has caught out our 2nd line team recently and caused us some SDRS performance issues is that when you manually Storage vMotion (svMotion) one or more VMDK files and pick a specific datastore as the destination, you have to tick a box that disables SDRS for the particular VM.
+<img src="/images/2018/07/sdrs-disable.png" alt="sdrs-disable">
+This results in a VM Override being created for that VM. Consequently, SDRS will make no attempt to move these VMDKs when trying to rebalance the datastores in the datastore cluster.</p>
+<p>To stop this being an issue I have now written a couple of PowerShell scripts using PowerCLI. The first one is to list the current VM Overrides. The second one is to bulk remove the VM Overrides that are not required. In this first post I will show you how to get a list of all VM Overrides for a specific datastore cluster. You can also see this information in the Web Client by going to the Storage view, selecting a datastore cluster, and going to Manage &gt; Settings &gt; VM Overrides.</p>
+<h2 id="the-process">The Process</h2>
+<p>The first thing to do is to retrieve the datastore cluster object using the <code>Get-View</code> cmdlet (VMware refer to these as Storage Pods).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$StoragePod = Get-View -ViewType <span style="color:#e6db74">&#34;StoragePod&#34;</span> -Filter @{<span style="color:#e6db74">&#34;Name&#34;</span> = <span style="color:#e6db74">&#34;TESTDATASTORECLUSTER&#34;</span>}
+</code></pre></div><p>I am targeting a single datastore cluster, but you can target all clusters by omitting the <code>-Filter</code> parameter.</p>
+<p>If you now take a look at the <code>$StoragePod.PodStorageDrsEntry.StorageDrsConfig.VmConfig</code> property, you can see a list of VMs and their current SDRS configuration as follows.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$StoragePod.PodStorageDrsEntry.StorageDrsConfig.VmConfig
+
+
+Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-1535
+Enabled             <span style="color:#960050;background-color:#1e0010">:</span>
+Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span> False
+IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
+VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
+LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
+
+Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-461
+Enabled             <span style="color:#960050;background-color:#1e0010">:</span>
+Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span> False
+IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
+VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
+LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
+
+Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-1381
+Enabled             <span style="color:#960050;background-color:#1e0010">:</span> False
+Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
+VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
+LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
+
+Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-1382
+Enabled             <span style="color:#960050;background-color:#1e0010">:</span> False
+Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
+VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
+LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
+
+Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-1481
+Enabled             <span style="color:#960050;background-color:#1e0010">:</span> False
+Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
+VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
+LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
+
+Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-1527
+Enabled             <span style="color:#960050;background-color:#1e0010">:</span>
+Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span>
+IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
+VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
+LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
+
+....
+</code></pre></div><p>As you can see, I have two VMs with IntraVmAffinity overrides configured and three VMs which have SDRS disabled.</p>
+<p>You may also see VMs in this list with nothing configured, such as <code>VirtualMachine-vm-1527</code> above. This threw me initially, as only a few random VMs without an override configured were showing up. I have since worked out in my lab that any VM which previously had a VM override but has since had it removed, will show up in this state. Meanwhile, any VM which has never had an override will not show in the list at all.</p>
+<p>To filter out the VMs in the list that no longer have a VM Override configured, I need to check that the <code>Enabled</code> and <code>IntraVmAffinity</code> properties are not null.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VMOverrides = $StoragePod.PodStorageDrsEntry.StorageDrsConfig.VmConfig | Where-Object {
+    <span style="color:#f92672">-not</span> (
+        ($_.Enabled <span style="color:#f92672">-eq</span> $null) <span style="color:#f92672">-and</span>
+        ($_.IntraVmAffinity <span style="color:#f92672">-eq</span> $null)
+    )
+}
+</code></pre></div><p>This will store all VMs with a current VM Override in the <code>$VMOverrides</code> object. We can then loop over these and output the data as a PSCustomObject.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Override <span style="color:#66d9ef">in</span> $VMOverrides) {
+    <span style="color:#66d9ef">[PSCustomObject]</span>@{
+        VirtualMachine = $Override.Vm
+        SDRSAutomationLevel = $Override.Enabled
+        KeepVMDKsTogether = $Override.IntraVmAffinity
+    }
+}
+
+VirtualMachine         SDRSAutomationLevel KeepVMDKsTogether
+--------------         ------------------- -----------------
+VirtualMachine-vm-1481 False
+VirtualMachine-vm-1527 False
+VirtualMachine-vm-1528 False
+VirtualMachine-vm-1547 False
+VirtualMachine-vm-844  False
+</code></pre></div><p>While this is great, it is returning the managed object reference (MoRef) for each VM. It would be much better if we could instead display the VM name. You can get the VM name from the MoRef using the <code>Get-VM</code> cmdlet.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-VM -Id <span style="color:#e6db74">&#34;VirtualMachine-vm-844&#34;</span>
+
+Name                 PowerState Num CPUs MemoryGB
+----                 ---------- -------- --------
+Test123              PoweredOn  1        3.000
+</code></pre></div><p>Therefore, I am going to create a hashtable containing the MoRef for each VM as the keys, and the VM name as the values. We can then cross reference this lookup table later.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VMLookup = @{}
+<span style="color:#66d9ef">foreach</span> ($VM <span style="color:#66d9ef">in</span> (Get-VM -Id $VMOverrides.Vm)) {
+    $VMLookup.($VM.Id) = $VM.Name
+}
+</code></pre></div><p>To test the lookup table, we can call the hashtable and specify the MoRef as the key. This will return the name of the VM.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VMLookup.<span style="color:#e6db74">&#34;VirtualMachine-vm-844&#34;</span>
+</code></pre></div><p>Using this technique, we can now improve our <code>foreach</code> loop from earlier to display the VM name.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Override <span style="color:#66d9ef">in</span> $VMOverrides) {
+    <span style="color:#66d9ef">[PSCustomObject]</span>@{
+        VirtualMachine = $VMLookup.<span style="color:#e6db74">&#34;</span>$($Override.Vm.Type)<span style="color:#e6db74">-</span>$($Override.Vm.Value)<span style="color:#e6db74">&#34;</span>
+        SDRSAutomationLevel = $Override.Enabled
+        KeepVMDKsTogether = $Override.IntraVmAffinity
+    }
+}
+
+VirtualMachine                SDRSAutomationLevel KeepVMDKsTogether
+--------------                ------------------- -----------------
+SL_Test                       False
+RKTEST1                       False
+RKTEST0                       False
+ZERTOTEST1                    False
+Test123                       False
+</code></pre></div><div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<p>We now have our list of current VM Overrides for this specific datastore cluster. All the above VMs have SDRS Automation set to false (disabling SDRS); and as there is no entry in the Keep VMDKs Together column, these VMs do not have an override for this setting and therefore will all be using the cluster default.</p>
+<p>This output is OK, but when you view the VM Overrides view in the Web Client it is a bit more informative. For example rather than displaying just &ldquo;true&rdquo; or &ldquo;false&rdquo; for the SDRSAutomationLevel the Web Client will display &ldquo;Fully Automated&rdquo; or &ldquo;Disabled&rdquo;, and for KeepVMDKsTogether it will display &ldquo;Yes&rdquo; or &ldquo;No&rdquo;. Also, rather than displaying a blank when there is no override configured for a specific setting, the Web Client will instead display the cluster default, as this is the setting that will be taking effect. For completeness, I will show you have to replicate this behavior in our script.</p>
+<p>To display the friendly name for the VM overrides we can use a <code>switch</code> statement when building our <code>PSCustomObject</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Override <span style="color:#66d9ef">in</span> $VMOverrides) {
+    <span style="color:#66d9ef">[PSCustomObject]</span>@{
+        VirtualMachine = $VMLookup.<span style="color:#e6db74">&#34;</span>$($Override.Vm.Type)<span style="color:#e6db74">-</span>$($Override.Vm.Value)<span style="color:#e6db74">&#34;</span>
+        SDRSAutomationLevel = <span style="color:#66d9ef">Switch</span> ($Override.Enabled) {
+            $true {<span style="color:#e6db74">&#34;Fully Automated&#34;</span>}
+            $false {<span style="color:#e6db74">&#34;Disabled&#34;</span>}
+        }
+        KeepVMDKsTogether = <span style="color:#66d9ef">Switch</span> ($Override.IntraVmAffinity) {
+            $true {<span style="color:#e6db74">&#34;Yes&#34;</span>}
+            $false {<span style="color:#e6db74">&#34;No&#34;</span>}
+        }
+    }
+}
+</code></pre></div><p>As you can see, we are now testing the value of both <code>$Override.Enabled</code> and <code>$Override.IntraVmAffinity</code> and depending on whether the value is <code>$true</code> or <code>$false</code> we are returning the required friendly name.</p>
+<p>This takes care of the specific VM overrides but we will still see a number of blanks which are defaulting to the cluster default. To fix this we first need to assign the cluster default settings for both <code>DefaultVmBehavior</code> and <code>DefaultIntraVmAffinity</code> to separate variables. These settings can be retrieved from the <code>$StoragePod</code> object that we created earlier.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">Switch</span> ($StoragePod.PodStorageDrsEntry.StorageDrsConfig.PodConfig.DefaultVmBehavior) {
+    <span style="color:#e6db74">&#34;automated&#34;</span> {$DefaultVmBehavior = <span style="color:#e6db74">&#34;Default (Fully Automated)&#34;</span>}
+    <span style="color:#e6db74">&#34;manual&#34;</span> {$DefaultVmBehavior = <span style="color:#e6db74">&#34;Default (No Automation (Manual Mode))&#34;</span>}
+}
+
+<span style="color:#66d9ef">Switch</span> ($StoragePod.PodStorageDrsEntry.StorageDrsConfig.PodConfig.DefaultIntraVmAffinity) {
+    $true {$DefaultIntraVmAffinity = <span style="color:#e6db74">&#34;Default (Yes)&#34;</span>}
+    $false {$DefaultIntraVmAffinity = <span style="color:#e6db74">&#34;Default (No)&#34;</span>}
+}
+</code></pre></div><p>Now we have two variables, <code>$DefaultVmBehavior</code> and <code>$DefaultIntraVmAffinity</code>, which contain a friendly name for the cluster default setting e.g. &ldquo;manual&rdquo; becomes &ldquo;Default (No Automation (Manual Mode))&rdquo; which is how it would display in the Web Client. With a simple addition to the two <code>switch</code> statements we used creating our <code>PSCustomObject</code> we can add a test for <code>$null</code> which if true will return this default setting.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Override <span style="color:#66d9ef">in</span> $VMOverrides) {
+    <span style="color:#66d9ef">[PSCustomObject]</span>@{
+        VirtualMachine = $VMLookup.<span style="color:#e6db74">&#34;</span>$($Override.Vm.Type)<span style="color:#e6db74">-</span>$($Override.Vm.Value)<span style="color:#e6db74">&#34;</span>
+        SDRSAutomationLevel = <span style="color:#66d9ef">Switch</span> ($Override.Enabled) {
+            $true {<span style="color:#e6db74">&#34;Fully Automated&#34;</span>}
+            $false {<span style="color:#e6db74">&#34;Disabled&#34;</span>}
+            $null {$DefaultVmBehavior}
+        }
+        KeepVMDKsTogether = <span style="color:#66d9ef">Switch</span> ($Override.IntraVmAffinity) {
+            $true {<span style="color:#e6db74">&#34;Yes&#34;</span>}
+            $false {<span style="color:#e6db74">&#34;No&#34;</span>}
+            $null {$DefaultIntraVmAffinity}
+        }
+    }
+}
+</code></pre></div><p>As you can see, now if either <code>$Override.Enabled</code> or <code>$Override.IntraVmAffinity</code> is <code>$null</code>, instead of returning a blank we now return the cluster default variable. The whole script now displays VM overrides in a pretty nice format.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">VirtualMachine                SDRSAutomationLevel       KeepVMDKsTogether
+--------------                -------------------       -----------------
+TEST                          <span style="color:#66d9ef">Default</span> (Fully Automated) No
+RKTEST1                       Disabled                  <span style="color:#66d9ef">Default</span> (Yes)
+RKTEST0                       Disabled                  <span style="color:#66d9ef">Default</span> (Yes)
+Test123                       Disabled                  <span style="color:#66d9ef">Default</span> (Yes)
+TEST00008                     Fully Automated           Yes
+</code></pre></div><h2 id="conclusion">Conclusion</h2>
+<p>I hope this has been helpful in showing you how to retrieve the VM Override information for a datastore cluster via PowerCLI. In part 2, I will focus on how to remove VM Overrides in bulk to ensure that Storage DRS performs as effectively as possible in your environment.</p>
+
+    </section>
+
+</article>
+
+<div class="overlay-ad fixed">
+    <span><i class="fa fa-times-circle"></i></span>
+    <div class="overlay-ad-wrapper fixed">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <ins class="adsbygoogle" style="display:block; width:300px; height:250px" data-ad-client="ca-pub-8907477009760148"
+            data-ad-slot="3736399917"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+</div>
+
+<section class="footer-cta">
+    <div class="inner">
+        <h2>Sign up for more like this.</h2>
+        <a class="footer-cta-button su-modal-open-button" href="#/subscribe">
+            <div>Enter your email</div>
+            <span>Subscribe</span>
+        </a>
+    </div>
+</section>
+
+<aside class="read-more-wrap">
+    <div class="read-more inner">
+        
+        
+        
+        <article class="post-card">
+
+    
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/vrops-reports-and-powercli-part-three-a-helper-module/">
+            <img class="post-card-image" src="/images/2018/05/vmw-vrealize-operations-fast-facts-2.jpg" loading="lazy" />
+        </a>
+    
+
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="https://ryanjan.uk/vrops-reports-and-powercli-part-three-a-helper-module/">
+            <header class="post-card-header">
+                
+                
+                
+                <div class="post-card-primary-tag">vrops</div>
+                
+                
+                <h2 class="post-card-title">vROps Reports and PowerCLI Part 3: A Helper Module</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>For your reference here is a list of the articles in this mini-series.
+ vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports vROps Reports and PowerCLI Part 3: A Helper Module (this article)  Introduction If you have been following along with the previous two articles in this series, you should now have a pretty good understanding of how to manipulate the extensionData container via PowerCLI to generate and download reports from vRealize Operations Manager (vROps).</p>
+            </section>
+        </a>
+
+        <footer class="post-card-meta">
+            
+            
+            
+            
+            
+            <ul class="author-list">
+                <li class="author-list-item">
+                    
+                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="post-card-byline-content">
+                
+                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
+                
+                <span class="post-card-byline-date">24 Jun 2018 <span class="bull"> &bull; </span>
+                    6 min read</span>
+            </div>
+            
+        </footer>
+    </div>
+</article>
+        
+        <article class="post-card">
+
+    
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/powershell-tips-script-optimization/">
+            <img class="post-card-image" src="/images/2018/06/lum3n-193427-unsplash.jpg" loading="lazy" />
+        </a>
+    
+
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="https://ryanjan.uk/powershell-tips-script-optimization/">
+            <header class="post-card-header">
+                
+                
+                
+                <div class="post-card-primary-tag">powershell</div>
+                
+                
+                <h2 class="post-card-title">PowerShell Tips: Script Optimization</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>Introduction A colleague of mine recently asked for some help with a script he was writing. We use vSphere tags in order to determine which backup schedule a given VM is in and he wanted to find all VMs which were not assigned a tag in the category backup-service-level, and therefore were not being backed up. His actual query was regarding filtering out certain VMs which will never be given a backup tag.</p>
+            </section>
+        </a>
+
+        <footer class="post-card-meta">
+            
+            
+            
+            
+            
+            <ul class="author-list">
+                <li class="author-list-item">
+                    
+                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="post-card-byline-content">
+                
+                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
+                
+                <span class="post-card-byline-date">02 Jun 2018 <span class="bull"> &bull; </span>
+                    3 min read</span>
+            </div>
+            
+        </footer>
+    </div>
+</article>
+        
+        <article class="post-card">
+
+    
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/vrops-reports-and-powercli-part-two-downloading-reports/">
+            <img class="post-card-image" src="/images/2018/05/vmw-vrealize-operations-fast-facts-1.jpg" loading="lazy" />
+        </a>
+    
+
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="https://ryanjan.uk/vrops-reports-and-powercli-part-two-downloading-reports/">
+            <header class="post-card-header">
+                
+                
+                
+                <div class="post-card-primary-tag">vrops</div>
+                
+                
+                <h2 class="post-card-title">vROps Reports and PowerCLI Part 2: Downloading Reports</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>For your reference, here are the articles in this mini-series:
+ vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports (this article) vROps Reports and PowerCLI Part 3: A Helper Module  Introduction Following on from the previous article in this mini-series, this article demonstrates how to retrieve a generated report from vROps as a PowerShell object.
+(adsbygoogle = window.adsbygoogle || []).</p>
+            </section>
+        </a>
+
+        <footer class="post-card-meta">
+            
+            
+            
+            
+            
+            <ul class="author-list">
+                <li class="author-list-item">
+                    
+                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="post-card-byline-content">
+                
+                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
+                
+                <span class="post-card-byline-date">21 May 2018 <span class="bull"> &bull; </span>
+                    4 min read</span>
+            </div>
+            
+        </footer>
+    </div>
+</article>
+        
+        
+    </div>
+</aside>
+
+    </main>
+    <footer class="site-footer outer">
+    <div class="inner">
+        <section class="copyright"><a href="https://ryanjan.uk/">RyanJan</a> &copy; 2021</section>
+        <nav class="site-footer-nav">
+            <a href="https://ryanjan.uk/">Latest Posts</a>
+            <a href="https://github.com/ryan-jan" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://twitter.com/_ryanjan_" target="_blank" rel="noopener">Twitter</a>
+        </nav>
+    </div>
+</footer>
+  </div>
+
+  <div id="signup-modal" class="su-modal">
+    <div class="su-modal-wrapper">
+      <div class="su-modal-container">
+        <div class="su-modal-content">
+          <span class="su-modal-closeicon">&times;</span>
+          <header class="su-modal-signup-header"><img class="su-modal-signup-logo" src="/images/favicon.png"
+              alt="RyanJan">
+            
+          </header>
+          <form
+            action="https://ryanjan.us1.list-manage.com/subscribe/post?u=60a6496a899e75ef8efe2e2ce&amp;id=9265c5169c"
+            method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+            target="_blank" novalidate>
+            <div class="su-modal-section">
+              <section class="su-modal-input-section">
+                <div class="su-modal-input-labelcontainer">
+                  <label for="input-name" class="su-modal-input-label">Name</label>
+                </div>
+                <input type="text" value="" name="NAME" class="su-modal-input" id="input-name" placeholder="Joe Bloggs">
+              </section>
+              <section class="su-modal-input-section">
+                <div class="su-modal-input-labelcontainer">
+                  <label for="input-email" class="su-modal-input-label">Email</label>
+                </div>
+                <input type="email" value="" name="EMAIL" class="su-modal-input" id="input-email"
+                  placeholder="joe.bloggs@example.com">
+              </section>
+              
+              <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text"
+                  name="b_60a6496a899e75ef8efe2e2ce_9265c5169c" tabindex="-1" value=""></div>
+
+              <button class="su-modal-btn su-modal-btn-main su-modal-btn-primary" type="submit"
+                style="color: rgb(255, 255, 255); background-color: rgb(0, 0, 0); opacity: 1; pointer-events: auto; width: 100%;">Sign
+                up</button>
+
+              <div id="mce-responses" class="clear">
+                <div class="response" id="mce-error-response" style="display:none"></div>
+                <div class="response" id="mce-success-response" style="display:none"></div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script>
+  <script
+    type='text/javascript'>(function ($) { window.fnames = new Array(); window.ftypes = new Array(); fnames[1] = 'NAME'; ftypes[1] = 'text'; fnames[0] = 'EMAIL'; ftypes[0] = 'email'; }(jQuery)); var $mcj = jQuery.noConflict(true);</script>
+
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous">
+    </script>
+  <script src="/js/casper.js"></script>
+  <script>
+    $(document).ready(function () {
+      
+      $('.gh-burger').click(function () {
+        $('body').toggleClass('gh-head-open');
+      });
+      
+      $(".gh-content").fitVids();
+    });
+  </script>
+
+  
+  <script type="text/javascript" src="/js/prism.js"></script>
+  <script type="text/javascript" src="/js/custom/prism-custom.js"></script>
+  <script type="text/javascript" src="/js/custom/custom.js"></script>
+
+  
+</body>
+
+</html>

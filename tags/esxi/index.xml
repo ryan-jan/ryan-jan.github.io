@@ -9,19 +9,19 @@
     <lastBuildDate>Thu, 17 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://ryanjan.uk/tags/esxi/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How to run ESXCLI commands in PowerShell using the PowerCLI Get-EsxCli cmdlet</title>
-      <link>https://ryanjan.uk/2021/06/17/how-to-run-esxcli-commands-in-powershell/</link>
+      <link>https://ryanjan.uk/how-to-run-esxcli-commands-in-powershell/</link>
       <pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://ryanjan.uk/2021/06/17/how-to-run-esxcli-commands-in-powershell/</guid>
+      <guid>https://ryanjan.uk/how-to-run-esxcli-commands-in-powershell/</guid>
       <description>If you&amp;rsquo;re a vSphere admin, you&amp;rsquo;ll be very familiar with the esxcli command. But have you ever wondered how to run esxcli commands from PowerCLI? Maybe you don&amp;rsquo;t want to enable SSH on your hosts, or perhaps you need to run an esxcli command in a PowerShell script.</description>
     </item>
     
     <item>
       <title>ESXi Host Certificate Renewal Doesn&#39;t Include Full Chain</title>
-      <link>https://ryanjan.uk/2019/05/01/esxi-host-certificate-renewal-doesnt-include-full-chain/</link>
+      <link>https://ryanjan.uk/esxi-host-certificate-renewal-doesnt-include-full-chain/</link>
       <pubDate>Wed, 01 May 2019 21:31:47 +0000</pubDate>
       
-      <guid>https://ryanjan.uk/2019/05/01/esxi-host-certificate-renewal-doesnt-include-full-chain/</guid>
+      <guid>https://ryanjan.uk/esxi-host-certificate-renewal-doesnt-include-full-chain/</guid>
       <description>I have just successfully migrated one of our vCenter 6.0 Windows servers to a brand new 6.7 U1 vCenter Server Appliance. After this migration I configured VMCA to be a intermediate certificate authority to our internal CA. The process for this is relatively straight forward, however, there appears to be an issue in 6.7 (and potentially 6.5) whereby hosts which are subsequently issued a new SSL certificate fail to use the full certificate chain, and therefore still show as untrusted in the browser when accessing the ESXi host client.</description>
     </item>
     

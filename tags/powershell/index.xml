@@ -9,64 +9,64 @@
     <lastBuildDate>Thu, 17 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://ryanjan.uk/tags/powershell/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How to run ESXCLI commands in PowerShell using the PowerCLI Get-EsxCli cmdlet</title>
-      <link>https://ryanjan.uk/2021/06/17/how-to-run-esxcli-commands-in-powershell/</link>
+      <link>https://ryanjan.uk/how-to-run-esxcli-commands-in-powershell/</link>
       <pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://ryanjan.uk/2021/06/17/how-to-run-esxcli-commands-in-powershell/</guid>
+      <guid>https://ryanjan.uk/how-to-run-esxcli-commands-in-powershell/</guid>
       <description>If you&amp;rsquo;re a vSphere admin, you&amp;rsquo;ll be very familiar with the esxcli command. But have you ever wondered how to run esxcli commands from PowerCLI? Maybe you don&amp;rsquo;t want to enable SSH on your hosts, or perhaps you need to run an esxcli command in a PowerShell script.</description>
     </item>
     
     <item>
       <title>How to validate Azure resource moves using PowerShell</title>
-      <link>https://ryanjan.uk/2021/05/25/how-to-validate-azure-resource-moves-using-powershell/</link>
+      <link>https://ryanjan.uk/how-to-validate-azure-resource-moves-using-powershell/</link>
       <pubDate>Tue, 25 May 2021 09:05:51 +0000</pubDate>
       
-      <guid>https://ryanjan.uk/2021/05/25/how-to-validate-azure-resource-moves-using-powershell/</guid>
+      <guid>https://ryanjan.uk/how-to-validate-azure-resource-moves-using-powershell/</guid>
       <description>The validate move resources API operation in Azure lets you pre-validate a potential move without actually moving any resources. This can be helpful when planning complex move scenarios.</description>
     </item>
     
     <item>
       <title>What is PowerShell splatting and how does it work?</title>
-      <link>https://ryanjan.uk/2021/05/13/powershell-splatting/</link>
+      <link>https://ryanjan.uk/powershell-splatting/</link>
       <pubDate>Thu, 13 May 2021 09:05:51 +0000</pubDate>
       
-      <guid>https://ryanjan.uk/2021/05/13/powershell-splatting/</guid>
+      <guid>https://ryanjan.uk/powershell-splatting/</guid>
       <description>In this tutorial you&amp;rsquo;ll learn all about splatting, which is a technique used to pass parameter values to a PowerShell command.</description>
     </item>
     
     <item>
       <title>Add Hard Disks to VMs Asynchronously with PowerCLI</title>
-      <link>https://ryanjan.uk/2019/10/15/add-hard-disks-async-with-powercli/</link>
+      <link>https://ryanjan.uk/add-hard-disks-async-with-powercli/</link>
       <pubDate>Tue, 15 Oct 2019 14:59:59 +0100</pubDate>
       
-      <guid>https://ryanjan.uk/2019/10/15/add-hard-disks-async-with-powercli/</guid>
+      <guid>https://ryanjan.uk/add-hard-disks-async-with-powercli/</guid>
       <description>At the time of writing the &lt;code&gt;New-HardDisk&lt;/code&gt; PowerCLI CmdLet does not yet have a &lt;code&gt;-RunAsync&lt;/code&gt; parameter. I found this out when trying to create a new 300 GiB eagerly zeroed disk on multiple VMs in one go. I soon realised that I was going to be sat there for a long time as each new disk was being formatted one at a time.</description>
     </item>
     
     <item>
       <title>Managing vSphere Global Permissions with PowerShell</title>
-      <link>https://ryanjan.uk/2019/06/19/vsphere-global-permissions-with-powershell/</link>
+      <link>https://ryanjan.uk/vsphere-global-permissions-with-powershell/</link>
       <pubDate>Wed, 19 Jun 2019 17:28:24 +0000</pubDate>
       
-      <guid>https://ryanjan.uk/2019/06/19/vsphere-global-permissions-with-powershell/</guid>
+      <guid>https://ryanjan.uk/vsphere-global-permissions-with-powershell/</guid>
       <description>It appears that working with vSphere global permissions in PowerCLI is not yet possible. The VIPerms PowerShell module combines the add/remove examples from William&amp;rsquo;s post with a new function to list all global permissions. In this post I will demonstrate how to install and use this module.</description>
     </item>
     
     <item>
       <title>Get ESXi Host CDP Info With PowerCLI</title>
-      <link>https://ryanjan.uk/2019/02/10/get-host-cdp-info-with-powercli/</link>
+      <link>https://ryanjan.uk/get-host-cdp-info-with-powercli/</link>
       <pubDate>Sun, 10 Feb 2019 13:05:51 +0000</pubDate>
       
-      <guid>https://ryanjan.uk/2019/02/10/get-host-cdp-info-with-powercli/</guid>
+      <guid>https://ryanjan.uk/get-host-cdp-info-with-powercli/</guid>
       <description>I recently had to provide our networking team with a list of ESXi hosts and which switchports each of their physical NICs were connected to. Like many other environments, we are primarily a Cisco house and therefore I was able to get this data by querying the Cisco Discovery Protocol (CDP) information via PowerCLI. Here is how I went about it.</description>
     </item>
     
     <item>
       <title>PowerShell Tips: Script Optimization</title>
-      <link>https://ryanjan.uk/2018/06/02/powershell-tips-script-optimization/</link>
+      <link>https://ryanjan.uk/powershell-tips-script-optimization/</link>
       <pubDate>Sat, 02 Jun 2018 11:53:28 +0000</pubDate>
       
-      <guid>https://ryanjan.uk/2018/06/02/powershell-tips-script-optimization/</guid>
+      <guid>https://ryanjan.uk/powershell-tips-script-optimization/</guid>
       <description>Introduction A colleague of mine recently asked for some help with a script he was writing. We use vSphere tags in order to determine which backup schedule a given VM is in and he wanted to find all VMs which were not assigned a tag in the category backup-service-level, and therefore were not being backed up. His actual query was regarding filtering out certain VMs which will never be given a backup tag.</description>
     </item>
     

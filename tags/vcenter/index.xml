@@ -9,19 +9,19 @@
     <lastBuildDate>Tue, 15 Oct 2019 14:59:59 +0100</lastBuildDate><atom:link href="https://ryanjan.uk/tags/vcenter/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Add Hard Disks to VMs Asynchronously with PowerCLI</title>
-      <link>https://ryanjan.uk/2019/10/15/add-hard-disks-async-with-powercli/</link>
+      <link>https://ryanjan.uk/add-hard-disks-async-with-powercli/</link>
       <pubDate>Tue, 15 Oct 2019 14:59:59 +0100</pubDate>
       
-      <guid>https://ryanjan.uk/2019/10/15/add-hard-disks-async-with-powercli/</guid>
+      <guid>https://ryanjan.uk/add-hard-disks-async-with-powercli/</guid>
       <description>At the time of writing the &lt;code&gt;New-HardDisk&lt;/code&gt; PowerCLI CmdLet does not yet have a &lt;code&gt;-RunAsync&lt;/code&gt; parameter. I found this out when trying to create a new 300 GiB eagerly zeroed disk on multiple VMs in one go. I soon realised that I was going to be sat there for a long time as each new disk was being formatted one at a time.</description>
     </item>
     
     <item>
       <title>Get ESXi Host CDP Info With PowerCLI</title>
-      <link>https://ryanjan.uk/2019/02/10/get-host-cdp-info-with-powercli/</link>
+      <link>https://ryanjan.uk/get-host-cdp-info-with-powercli/</link>
       <pubDate>Sun, 10 Feb 2019 13:05:51 +0000</pubDate>
       
-      <guid>https://ryanjan.uk/2019/02/10/get-host-cdp-info-with-powercli/</guid>
+      <guid>https://ryanjan.uk/get-host-cdp-info-with-powercli/</guid>
       <description>I recently had to provide our networking team with a list of ESXi hosts and which switchports each of their physical NICs were connected to. Like many other environments, we are primarily a Cisco house and therefore I was able to get this data by querying the Cisco Discovery Protocol (CDP) information via PowerCLI. Here is how I went about it.</description>
     </item>
     

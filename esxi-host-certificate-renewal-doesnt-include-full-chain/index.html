@@ -17,7 +17,7 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>RyanJan  | vmware</title>
+  <title>RyanJan  | ESXi Host Certificate Renewal Doesn&#39;t Include Full Chain</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
   <meta name="HandheldFriendly" content="True" />
@@ -39,13 +39,27 @@
     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
   
+<meta name="twitter:card" content="summary_large_image">
+
+
+
+<meta name="twitter:creator" content="@_ryanjan_">
+<meta name="twitter:site" content="@_ryanjan_">
+
+<meta property="og:title" content="ESXi Host Certificate Renewal Doesn&#39;t Include Full Chain">
+<meta property="og:description" content="I have just successfully migrated one of our vCenter 6.0 Windows servers to a brand new 6.7 U1 vCenter Server Appliance. After this migration I configured VMCA to be a intermediate certificate authority to our internal CA. The process for this is relatively straight forward, however, there appears to be an issue in 6.7 (and potentially 6.5) whereby hosts which are subsequently issued a new SSL certificate fail to use the full certificate chain, and therefore still show as untrusted in the browser when accessing the ESXi host client.">
+<meta property="og:url" content="https://ryanjan.uk/esxi-host-certificate-renewal-doesnt-include-full-chain/">
+
+    
+
+
 </head>
 
 
 
 
 
-<body class='tag-template' >
+<body class='post-template' >
   <div class="viewport">
     <header id="gh-head" class="gh-head">
       <nav class="gh-head-inner inner gh-container">
@@ -83,81 +97,132 @@
     </header>
     <main>
       
+<article class="article">
+    <header class="article-header gh-canvas">
+        
+        
+        
+        <section class="article-tag">
+            <a href="/tags/esxi">esxi</a>
+        </section>
+        
+        
 
-<section class="outer">
-    <div class="inner posts">
-        <div class="post-feed">
-            <header class="post-card post-card-large">
-                <div class="post-card-content">
-                    <div class="post-card-content-link">
-                        <header class="post-card-header">
-                            <div class="post-card-primary-tag">Tagged</div>
-                            <h2 class="post-card-title">VMWARE</h2>
-                        </header>
-                        <section class="post-card-excerpt">
-                            <p>
-                                
-                                A collection of 1 post
-                                
-                            </p>
-                        </section>
+        <h1 class="article-title">ESXi Host Certificate Renewal Doesn&#39;t Include Full Chain</h1>
+
+        
+
+        <div class="article-byline">
+            <section class="article-byline-content">
+                
+                
+                
+                
+                
+                <ul class="author-list">
+                    <li class="author-list-item">
+                        
+                        <a href="https://ryanjan.uk/authors/ryan/" class="author-avatar">
+                            
+                            <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                        </a>
+                    </li>
+                </ul>
+                <div class="article-byline-meta">
+                    <h4 class="author-name"><a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a></h4>
+                    <div class="byline-meta-content">
+                        01 May 2019
+                        <span class="byline-reading-time"><span class="bull">&bull;</span> 2 min
+                            read</span>
                     </div>
                 </div>
-            </header>
-            
-            <article class="post-card">
-
-    
-    
-
-    <div class="post-card-content">
-        <a class="post-card-content-link" href="https://ryanjan.uk/vmfs-datastore-connectivity-issue/">
-            <header class="post-card-header">
                 
                 
-                
-                <div class="post-card-primary-tag">vmware</div>
-                
-                
-                <h2 class="post-card-title">ESXi Loses Connectivity to VMFS Datastores.</h2>
-            </header>
-            <section class="post-card-excerpt">
-                <p>Introduction This post explains my recent experiences with certain hosts losing access to some of our VMFS datastores. Hopefully it will help someone avoid the pain that I have been through in diagnosing this issues!
-The Symptoms I was initially made aware of this issue as it appeared that certain hosts were losing connectivity to VMFS datastores. Upon investigation I found the following events being logged very frequently against multiple hosts.</p>
             </section>
-        </a>
-
-        <footer class="post-card-meta">
-            
-            
-            
-            
-            
-            <ul class="author-list">
-                <li class="author-list-item">
-                    
-                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
-                        
-                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
-                    </a>
-                </li>
-            </ul>
-            
-            <div class="post-card-byline-content">
-                
-                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
-                
-                <span class="post-card-byline-date">11 Jul 2018 <span class="bull"> &bull; </span>
-                    6 min read</span>
-            </div>
-            
-        </footer>
-    </div>
-</article>
-            
         </div>
+
+        
+            
+        
+    </header>
+
+    <section class="gh-content gh-canvas">
+        <p>I have just successfully migrated one of our vCenter 6.0 Windows servers to a brand new 6.7 U1 vCenter Server Appliance. After this migration I configured VMCA to be a intermediate certificate authority to our internal CA. The process for this is relatively straight forward, however, there appears to be an issue in 6.7 (and potentially 6.5) whereby hosts which are subsequently issued a new SSL certificate fail to use the full certificate chain, and therefore still show as untrusted in the browser when accessing the ESXi host client. The following steps resolved the issue for me.</p>
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<ol>
+<li>Put the particular host into Maintenance Mode</li>
+<li>Start the SSH service and connect to the host</li>
+<li>Edit the <code>/etc/vmware/rhttpproxy/config.xml</code> file</li>
+</ol>
+<pre><code>vi /etc/vmware/rhttpproxy/config.xml
+</code></pre><ol start="4">
+<li>Either uncomment or add the following item to the <code>&lt;ssl&gt;</code> xml node.</li>
+</ol>
+<pre><code>&lt;keyStoreFile&gt;/etc/vmware/ssl/castore.pem&lt;/keyStoreFile&gt;
+</code></pre><ol start="5">
+<li>For example the full <code>&lt;ssl&gt;</code> node should look similar to the following</li>
+</ol>
+<pre><code>&lt;!-- Remove the following node to disable SSL --&gt;
+&lt;ssl&gt;
+  &lt;!-- The server private key file --&gt;
+  &lt;privateKey&gt;/etc/vmware/ssl/rui.key&lt;/privateKey&gt;
+
+  &lt;!-- The server side certificate file --&gt;
+  &lt;certificate&gt;/etc/vmware/ssl/rui.crt&lt;/certificate&gt;
+
+  &lt;!-- Client-side CAFile verify location --&gt;
+  &lt;keyStoreFile&gt;/etc/vmware/ssl/castore.pem&lt;/keyStoreFile&gt;
+&lt;/ssl&gt;
+</code></pre><ol start="6">
+<li>Save the config file and restart the <code>rhttpproxy</code> service</li>
+</ol>
+<pre><code>/etc/init.d/rhttpproxy restart
+</code></pre><ol start="7">
+<li>Once the service has been restarted, exit the host from Maintenance Mode</li>
+<li>You should now be able to renew the ESXi host certificate successfully via the vSphere Client</li>
+<li>Access the host client to confirm that the host is now using the full certificate chain and no longer displays insecure warnings</li>
+</ol>
+
+    </section>
+
+</article>
+
+<div class="overlay-ad fixed">
+    <span><i class="fa fa-times-circle"></i></span>
+    <div class="overlay-ad-wrapper fixed">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <ins class="adsbygoogle" style="display:block; width:300px; height:250px" data-ad-client="ca-pub-8907477009760148"
+            data-ad-slot="3736399917"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+</div>
+
+<section class="footer-cta">
+    <div class="inner">
+        <h2>Sign up for more like this.</h2>
+        <a class="footer-cta-button su-modal-open-button" href="#/subscribe">
+            <div>Enter your email</div>
+            <span>Subscribe</span>
+        </a>
     </div>
 </section>
+
+<aside class="read-more-wrap">
+    <div class="read-more inner">
+        
+        
+    </div>
+</aside>
 
     </main>
     <footer class="site-footer outer">

@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119235055-1"></script>
+  <script>
+    if (window.location.hostname === "localhost") {
+      console.log("Analytics not running on local dev.");
+    } else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'UA-119235055-1');
+    }
+  </script>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>RyanJan  | Get ESXi Host CDP Info With PowerCLI</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="/css/screen.css" />
+
+  
+  <link rel="stylesheet" type="text/css" href="/css/custom/screen-custom.css" />
+  <link rel="stylesheet" type="text/css" href="/css/fontawesome_all.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/prism.css" />
+  <link rel="stylesheet" type="text/css" href="/css/custom/prism-custom.css" />
+  <link rel="stylesheet" type="text/css" href="/css/custom/global-custom.css" />
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700" rel="stylesheet">
+
+  
+  <script data-ad-client="ca-pub-8907477009760148" async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+  
+<meta name="twitter:card" content="summary_large_image">
+
+
+
+<meta name="twitter:creator" content="@_ryanjan_">
+<meta name="twitter:site" content="@_ryanjan_">
+
+<meta property="og:title" content="Get ESXi Host CDP Info With PowerCLI">
+<meta property="og:description" content="I recently had to provide our networking team with a list of ESXi hosts and which switchports each of their physical NICs were connected to. Like many other environments, we are primarily a Cisco house and therefore I was able to get this data by querying the Cisco Discovery Protocol (CDP) information via PowerCLI. Here is how I went about it.">
+<meta property="og:url" content="https://ryanjan.uk/get-host-cdp-info-with-powercli/">
+
+    
+    <meta property="og:image" content="https://ryanjan.uk/images/2019/02/cisco-logo-16x9-2-1.jpg">
+    
+
+
+</head>
+
+
+
+
+
+<body class='post-template' >
+  <div class="viewport">
+    <header id="gh-head" class="gh-head">
+      <nav class="gh-head-inner inner gh-container">
+
+        <div class="gh-head-brand">
+          <a class="gh-head-logo" href="/">
+            <img src="/images/favicon.png" />
+          </a>
+          <a class="gh-burger" role="button">
+            <div class="gh-burger-box">
+              <div class="gh-burger-inner"></div>
+            </div>
+          </a>
+        </div>
+        <div class="gh-head-menu">
+          <ul class="nav">
+    <li class="nav-home nav-current"><a href="/">Home</a></li>
+    <li class="nav-about"><a href="/about/">About</a></li>
+</ul>
+        </div>
+        <div class="gh-head-actions">
+          <div class="gh-social">
+            <a class="gh-social-github" href="https://github.com/ryan-jan" title="GitHub" target="_blank"
+              rel="noopener">
+              <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a class="gh-social-twitter" href="https://twitter.com/_ryanjan_" title="Twitter" target="_blank"
+              rel="noopener">
+              <i class="fab fa-twitter fa-lg"></i>
+            </a>
+          </div>
+          <a class="gh-head-button su-modal-open-button" href="#/subscribe">Subscribe</a>
+        </div>
+      </nav>
+    </header>
+    <main>
+      
+<article class="article">
+    <header class="article-header gh-canvas">
+        
+        
+        
+        <section class="article-tag">
+            <a href="/tags/powercli">powercli</a>
+        </section>
+        
+        
+
+        <h1 class="article-title">Get ESXi Host CDP Info With PowerCLI</h1>
+
+        
+
+        <div class="article-byline">
+            <section class="article-byline-content">
+                
+                
+                
+                
+                
+                <ul class="author-list">
+                    <li class="author-list-item">
+                        
+                        <a href="https://ryanjan.uk/authors/ryan/" class="author-avatar">
+                            
+                            <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                        </a>
+                    </li>
+                </ul>
+                <div class="article-byline-meta">
+                    <h4 class="author-name"><a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a></h4>
+                    <div class="byline-meta-content">
+                        10 Feb 2019
+                        <span class="byline-reading-time"><span class="bull">&bull;</span> 6 min
+                            read</span>
+                    </div>
+                </div>
+                
+                
+            </section>
+        </div>
+
+        
+            
+            <figure class="article-image">
+                <img src="/images/2019/02/cisco-logo-16x9-2-1.jpg" alt="Get ESXi Host CDP Info With PowerCLI" />
+            </figure>
+            
+        
+    </header>
+
+    <section class="gh-content gh-canvas">
+        <h2 id="introduction">Introduction</h2>
+<p>I recently had to provide our networking team with a list of ESXi hosts and which switchports each of their physical NICs were connected to. Like many other environments, we are primarily a Cisco house and therefore I was able to get this data by querying the Cisco Discovery Protocol (CDP) information via PowerCLI. Here is how I went about it.</p>
+<h2 id="the-process">The Process</h2>
+<p>I will initially show you how to pull this information for a specific host. However, later in the post I will show you a helpful script that I put together to pull this information for multiple hosts based on host or cluster name.</p>
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<p>The first thing to do is connect to your vCenter server.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-VIServer vcenter.example.com
+</code></pre></div><p>Next, get a specific host object and store it in the <code>$VMHost</code> variable.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VMHost = Get-VMHost -Name esxi01.example.com
+</code></pre></div><p>The CDP information is actually found within the <code>NetworkSystem</code> managed object of the <code>HostConfigManager</code> object. This can be accessed using the <code>Get-View</code> CmdLet as follows.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$NetSystem = Get-View $VMHost.ExtensionData.ConfigManager.NetworkSystem
+</code></pre></div><p>If you pipe the <code>$NetSystem</code> object to the <code>Get-Member</code> CmdLet you should see something similar to this.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$NetSystem | Get-Member
+
+
+   TypeName<span style="color:#960050;background-color:#1e0010">:</span> VMware.Vim.HostNetworkSystem
+
+Name                            MemberType Definition
+----                            ---------- ----------
+AddPortGroup                    Method     void AddPortGroup(VMware.Vim.HostPortGroupSpec portgrp)
+AddServiceConsoleVirtualNic     Method     string AddServiceConsoleVirtualNic(string portgroup, VMware.Vim.HostVirtualNicSpec nic)
+AddVirtualNic                   Method     string AddVirtualNic(string portgroup, VMware.Vim.HostVirtualNicSpec nic)
+AddVirtualSwitch                Method     void AddVirtualSwitch(string vswitchName, VMware.Vim.HostVirtualSwitchSpec spec)
+Equals                          Method     bool Equals(System.Object obj)
+GetHashCode                     Method     int GetHashCode()
+GetType                         Method     type GetType()
+QueryNetworkHint                Method     VMware.Vim.PhysicalNicHintInfo[] QueryNetworkHint(string[] device)
+RefreshNetworkSystem            Method     void RefreshNetworkSystem()
+
+...
+...
+
+</code></pre></div><p>This displays all available methods and properties for this object. The method that we are going to use is <code>QueryNetworkHint</code>. To find out the arguments that this method requires you can run the method on its own.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$NetSystem.QueryNetworkHint
+
+OverloadDefinitions
+-------------------
+VMware.Vim.PhysicalNicHintInfo[] QueryNetworkHint(string[] device)
+</code></pre></div><p>We can see that the <code>QueryNetworkHint</code> method requires a single argument, which is an individual physical network device for the host. Helpfully, this information is readily available in our <code>$VMHost</code> variable from earlier. Running the following will list all physical devices for the specific host.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VMHost.ExtensionData.Config.Network.Pnic
+</code></pre></div><p>With these two pieces of information we are able to loop through each physical network device and run the <code>QueryNetworkHint</code> method.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Pnic <span style="color:#66d9ef">in</span> $VMHost.ExtensionData.Config.Network.Pnic) {
+    $NetSystem.QueryNetworkHint($Pnic.Device)
+}
+
+...
+
+Device              <span style="color:#960050;background-color:#1e0010">:</span> vmnic5
+Subnet              <span style="color:#960050;background-color:#1e0010">:</span> {3506, 3505}
+Network             <span style="color:#960050;background-color:#1e0010">:</span>
+ConnectedSwitchPort <span style="color:#960050;background-color:#1e0010">:</span> VMware.Vim.PhysicalNicCdpInfo
+LldpInfo            <span style="color:#960050;background-color:#1e0010">:</span>
+
+Device              <span style="color:#960050;background-color:#1e0010">:</span> vmnic6
+Subnet              <span style="color:#960050;background-color:#1e0010">:</span>
+Network             <span style="color:#960050;background-color:#1e0010">:</span>
+ConnectedSwitchPort <span style="color:#960050;background-color:#1e0010">:</span>
+LldpInfo            <span style="color:#960050;background-color:#1e0010">:</span>
+
+Device              <span style="color:#960050;background-color:#1e0010">:</span> vmnic7
+Subnet              <span style="color:#960050;background-color:#1e0010">:</span> {3506, 3505}
+Network             <span style="color:#960050;background-color:#1e0010">:</span>
+ConnectedSwitchPort <span style="color:#960050;background-color:#1e0010">:</span> VMware.Vim.PhysicalNicCdpInfo
+LldpInfo            <span style="color:#960050;background-color:#1e0010">:</span>
+
+...
+</code></pre></div><p>Looking at that output we can see that the information we are interested in is in the <code>ConnectedSwitchPort</code> property. I can expand the <code>foreach</code> loop as follows to get this information.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Pnic <span style="color:#66d9ef">in</span> $VMHost.ExtensionData.Config.Network.Pnic) {
+    $PnicInfo = $NetSystem.QueryNetworkHint($Pnic.Device)
+    $PnicInfo.ConnectedSwitchPort
+}
+
+
+CdpVersion       <span style="color:#960050;background-color:#1e0010">:</span> 2
+Timeout          <span style="color:#960050;background-color:#1e0010">:</span> 60
+Ttl              <span style="color:#960050;background-color:#1e0010">:</span> 137
+Samples          <span style="color:#960050;background-color:#1e0010">:</span> 21334
+DevId            <span style="color:#960050;background-color:#1e0010">:</span> N5K_1
+Address          <span style="color:#960050;background-color:#1e0010">:</span> 10.222.0.236
+PortId           <span style="color:#960050;background-color:#1e0010">:</span> Ethernet108/1/15
+DeviceCapability <span style="color:#960050;background-color:#1e0010">:</span> VMware.Vim.PhysicalNicCdpDeviceCapability
+SoftwareVersion  <span style="color:#960050;background-color:#1e0010">:</span> Cisco Nexus Operating System (NX-OS) Software, Version 7.0(7)N1(1)
+HardwarePlatform <span style="color:#960050;background-color:#1e0010">:</span> N5K-C5596UP
+IpPrefix         <span style="color:#960050;background-color:#1e0010">:</span> 0.0.0.0
+IpPrefixLen      <span style="color:#960050;background-color:#1e0010">:</span> 0
+Vlan             <span style="color:#960050;background-color:#1e0010">:</span> 1
+FullDuplex       <span style="color:#960050;background-color:#1e0010">:</span> True
+Mtu              <span style="color:#960050;background-color:#1e0010">:</span> 1500
+SystemName       <span style="color:#960050;background-color:#1e0010">:</span> N5K_1
+SystemOID        <span style="color:#960050;background-color:#1e0010">:</span> 1.3.6.1.4.1.9.12.3.1.3.1038
+MgmtAddr         <span style="color:#960050;background-color:#1e0010">:</span> 10.123.96.141
+Location         <span style="color:#960050;background-color:#1e0010">:</span>
+
+CdpVersion       <span style="color:#960050;background-color:#1e0010">:</span> 2
+Timeout          <span style="color:#960050;background-color:#1e0010">:</span> 60
+Ttl              <span style="color:#960050;background-color:#1e0010">:</span> 148
+Samples          <span style="color:#960050;background-color:#1e0010">:</span> 21334
+DevId            <span style="color:#960050;background-color:#1e0010">:</span> N5K_2
+Address          <span style="color:#960050;background-color:#1e0010">:</span> 10.222.0.235
+PortId           <span style="color:#960050;background-color:#1e0010">:</span> Ethernet108/1/15
+DeviceCapability <span style="color:#960050;background-color:#1e0010">:</span> VMware.Vim.PhysicalNicCdpDeviceCapability
+SoftwareVersion  <span style="color:#960050;background-color:#1e0010">:</span> Cisco Nexus Operating System (NX-OS) Software, Version 7.0(7)N1(1)
+HardwarePlatform <span style="color:#960050;background-color:#1e0010">:</span> N5K-C5596UP
+IpPrefix         <span style="color:#960050;background-color:#1e0010">:</span> 0.0.0.0
+IpPrefixLen      <span style="color:#960050;background-color:#1e0010">:</span> 0
+Vlan             <span style="color:#960050;background-color:#1e0010">:</span> 1
+FullDuplex       <span style="color:#960050;background-color:#1e0010">:</span> True
+Mtu              <span style="color:#960050;background-color:#1e0010">:</span> 1500
+SystemName       <span style="color:#960050;background-color:#1e0010">:</span> N5K_2
+SystemOID        <span style="color:#960050;background-color:#1e0010">:</span> 1.3.6.1.4.1.9.12.3.1.3.1038
+MgmtAddr         <span style="color:#960050;background-color:#1e0010">:</span> 10.123.96.142
+Location         <span style="color:#960050;background-color:#1e0010">:</span>
+</code></pre></div><p>There is a lot of information available in this property, most of which I am not interested in. Also, it is not very helpful that I can&rsquo;t tell from this output which physical device (e.g. vmnic0) that each of these blocks of information relate to. To tidy this up we can create a new <code>PSCustomObject</code> in the <code>foreach</code> loop and return only the information we want to see.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Pnic <span style="color:#66d9ef">in</span> $VMHost.ExtensionData.Config.Network.Pnic) {
+    $PnicInfo = $NetSystem.QueryNetworkHint($Pnic.Device)
+    <span style="color:#66d9ef">[PSCustomObject]</span> @{
+        <span style="color:#e6db74">&#39;Device&#39;</span> = $Pnic.Device
+        <span style="color:#e6db74">&#39;DevId&#39;</span> = $PnicInfo.ConnectedSwitchPort.DevId
+        <span style="color:#e6db74">&#39;PortId&#39;</span> = $PnicInfo.ConnectedSwitchPort.PortId
+    }
+}
+
+Device DevId                      PortId
+------ -----                      ------
+vmnic0
+vmnic1
+vmnic2
+vmnic3
+vmnic4
+vmnic5 N5K_1                      Ethernet108/1/14
+vmnic6
+vmnic7 N5K_2                      Ethernet108/1/14
+</code></pre></div><div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<h2 id="a-helper-script">A Helper Script</h2>
+<p>Now that we understand how we can get this information via PowerCLI, I want to show you a helper script/function that I have put together. This script enables us to target specific hosts by hostname or cluster name and also allows us to filter which physical NICs we are interested in. The script is available on <a href="https://github.com/ryan-jan/Blog-Scripts/blob/master/Get-VMHostCDPInfo.ps1">my GitHub</a>.</p>
+<p>Once you have the script downloaded you will need to connect to your vCenter server before running it.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-VIServer -Server vcenter.example.com
+</code></pre></div><p>Here are a few examples of how you can use this script, note that the script excludes any physical NICs which do not have CDP information available. First, lets get a single host&rsquo;s CDP information.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\Get-VMHostCDPInfo.ps1 -VMHost <span style="color:#e6db74">&#39;esxi01.example.com&#39;</span> | Format-Table
+</code></pre></div><p>I am using <code>Format-Table</code> to present the large dataset in a more friendy way. Now lets get CDP information for all hosts in the cluster <code>Cluster01</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\Get-VMHostCDPInfo.ps1 -Cluster <span style="color:#e6db74">&#39;Cluster01&#39;</span> | Format-Table -GroupBy VMHost
+
+   VMHost<span style="color:#960050;background-color:#1e0010">:</span> esxi01.example.com
+
+VMHost                Pnic   CdpVersion Timeout Ttl Samples DevId                      Address      PortId           DeviceCapability
+------                ----   ---------- ------- --- ------- -----                      -------      ------           ----------------
+esxi01.example.com    vmnic0          2      60 125  351248 N5K_5                      10.222.0.231 Ethernet109/1/30 VMware.Vim.PhysicalNicCdpDeviceCapability
+esxi01.example.com    vmnic1          2      60 124  351248 N5K_5                      10.222.0.231 Ethernet109/1/29 VMware.Vim.PhysicalNicCdpDeviceCapability
+esxi01.example.com    vmnic3          2      60 135  351249 N5K_5                      10.222.0.231 Ethernet109/1/27 VMware.Vim.PhysicalNicCdpDeviceCapability
+esxi01.example.com    vmnic4          2      60 163  351249 N5K_5                      10.222.0.230 Ethernet109/1/31 VMware.Vim.PhysicalNicCdpDeviceCapability
+esxi01.example.com    vmnic5          2      60 160  351249 N5K_5                      10.222.0.230 Ethernet109/1/30 VMware.Vim.PhysicalNicCdpDeviceCapability
+esxi01.example.com    vmnic7          2      60 160  351250 N5K_5                      10.222.0.230 Ethernet109/1/29 VMware.Vim.PhysicalNicCdpDeviceCapability
+
+
+   VMHost<span style="color:#960050;background-color:#1e0010">:</span> esxi02.example.com
+
+VMHost                Pnic   CdpVersion Timeout Ttl Samples DevId                      Address      PortId           DeviceCapability
+------                ----   ---------- ------- --- ------- -----                      -------      ------           ----------------
+esxi02.example.com    vmnic0          2      60 143  346948 N5K_5                      10.222.0.231 Ethernet101/1/21 VMware.Vim.PhysicalNicCdpDeviceCapability
+esxi02.example.com    vmnic1          2      60 143  346948 N5K_5                      10.222.0.231 Ethernet101/1/20 VMware.Vim.PhysicalNicCdpDeviceCapability
+esxi02.example.com    vmnic3          2      60 165  346948 N5K_5                      10.222.0.231 Ethernet101/1/19 VMware.Vim.PhysicalNicCdpDeviceCapability
+esxi02.example.com    vmnic4          2      60 131  346947 N5K_5                      10.222.0.230 Ethernet101/1/21 VMware.Vim.PhysicalNicCdpDeviceCapability
+esxi02.example.com    vmnic5          2      60 170  346948 N5K_5                      10.222.0.230 Ethernet101/1/20 VMware.Vim.PhysicalNicCdpDeviceCapability
+esxi02.example.com    vmnic7          2      60 156  346948 N5K_5                      10.222.0.230 Ethernet101/1/19 VMware.Vim.PhysicalNicCdpDeviceCapability
+</code></pre></div><p>In this example I also used the <code>-GroupBy</code> parameter of <code>Format-Table</code> to display the information grouped by each host. Now lets get CDP information for both <code>esxi01.example.com</code> and <code>esxi02.example.com</code> but filter the results to show just <code>vmnic5</code> and <code>vmnic7</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\Get-VMHostCDPInfo.ps1 -VMHost <span style="color:#e6db74">&#39;esxi01.example.com&#39;</span>, <span style="color:#e6db74">&#39;esxi02.exmple.com&#39;</span> -Vmnic <span style="color:#e6db74">&#39;vmnic5&#39;</span>, <span style="color:#e6db74">&#39;vmnic7&#39;</span> | Format-Table -GroupBy VMHost
+
+   VMHost<span style="color:#960050;background-color:#1e0010">:</span> esxi01.example.com
+
+VMHost                Pnic   CdpVersion Timeout Ttl Samples DevId                      Address      PortId           DeviceCapability
+------                ----   ---------- ------- --- ------- -----                      -------      ------           ----------------
+esxi01.example.com    vmnic5          2      60 155  436320 N5K_5                      10.222.0.231 Ethernet105/1/20 VMware.Vim.PhysicalNicCdpDeviceCapability
+esxi01.example.com    vmnic7          2      60 133  436320 N5K_5                      10.222.0.231 Ethernet105/1/18 VMware.Vim.PhysicalNicCdpDeviceCapability
+
+
+   VMHost<span style="color:#960050;background-color:#1e0010">:</span> esxi02.example.com
+
+VMHost                Pnic   CdpVersion Timeout Ttl Samples DevId                      Address      PortId          DeviceCapability
+------                ----   ---------- ------- --- ------- -----                      -------      ------          ----------------
+esxi02.example.com    vmnic5          2      60 121  341221 N5K_5                      10.222.0.235 Ethernet102/1/7 VMware.Vim.PhysicalNicCdpDeviceCapability
+esxi02.example.com    vmnic7          2      60 146  341222 N5K_5                      10.222.0.235 Ethernet102/1/6 VMware.Vim.PhysicalNicCdpDeviceCapability
+</code></pre></div><p>And obviously you can use <code>Select-Object</code> to return only the columns that you require if you wish.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\Get-VMHostCDPInfo.ps1 -VMHost <span style="color:#e6db74">&#39;esxi01.example.com&#39;</span> -Vmnic <span style="color:#e6db74">&#39;vmnic5&#39;</span>, <span style="color:#e6db74">&#39;vmnic7&#39;</span> | Select-Object VMhost, Pnic, DevId, Address, PortId
+
+VMHost  <span style="color:#960050;background-color:#1e0010">:</span> esxi01.example.com
+Pnic    <span style="color:#960050;background-color:#1e0010">:</span> vmnic5
+DevId   <span style="color:#960050;background-color:#1e0010">:</span> N5K_5
+Address <span style="color:#960050;background-color:#1e0010">:</span> 10.222.0.231
+PortId  <span style="color:#960050;background-color:#1e0010">:</span> Ethernet105/1/20
+
+VMHost  <span style="color:#960050;background-color:#1e0010">:</span> esxi01.example.com
+Pnic    <span style="color:#960050;background-color:#1e0010">:</span> vmnic7
+DevId   <span style="color:#960050;background-color:#1e0010">:</span> N5K_5
+Address <span style="color:#960050;background-color:#1e0010">:</span> 10.222.0.231
+PortId  <span style="color:#960050;background-color:#1e0010">:</span> Ethernet105/1/18
+</code></pre></div><h2 id="conclusion">Conclusion</h2>
+<p>I hope you have found this post and the helper script useful. It really did come in handy for me when gathering this information for our network team recently!</p>
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+
+    </section>
+
+</article>
+
+<div class="overlay-ad fixed">
+    <span><i class="fa fa-times-circle"></i></span>
+    <div class="overlay-ad-wrapper fixed">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <ins class="adsbygoogle" style="display:block; width:300px; height:250px" data-ad-client="ca-pub-8907477009760148"
+            data-ad-slot="3736399917"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+</div>
+
+<section class="footer-cta">
+    <div class="inner">
+        <h2>Sign up for more like this.</h2>
+        <a class="footer-cta-button su-modal-open-button" href="#/subscribe">
+            <div>Enter your email</div>
+            <span>Subscribe</span>
+        </a>
+    </div>
+</section>
+
+<aside class="read-more-wrap">
+    <div class="read-more inner">
+        
+        
+        
+        <article class="post-card">
+
+    
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/powershell-tips-script-optimization/">
+            <img class="post-card-image" src="/images/2018/06/lum3n-193427-unsplash.jpg" loading="lazy" />
+        </a>
+    
+
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="https://ryanjan.uk/powershell-tips-script-optimization/">
+            <header class="post-card-header">
+                
+                
+                
+                <div class="post-card-primary-tag">powershell</div>
+                
+                
+                <h2 class="post-card-title">PowerShell Tips: Script Optimization</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>Introduction A colleague of mine recently asked for some help with a script he was writing. We use vSphere tags in order to determine which backup schedule a given VM is in and he wanted to find all VMs which were not assigned a tag in the category backup-service-level, and therefore were not being backed up. His actual query was regarding filtering out certain VMs which will never be given a backup tag.</p>
+            </section>
+        </a>
+
+        <footer class="post-card-meta">
+            
+            
+            
+            
+            
+            <ul class="author-list">
+                <li class="author-list-item">
+                    
+                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="post-card-byline-content">
+                
+                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
+                
+                <span class="post-card-byline-date">02 Jun 2018 <span class="bull"> &bull; </span>
+                    3 min read</span>
+            </div>
+            
+        </footer>
+    </div>
+</article>
+        
+        <article class="post-card">
+
+    
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/storage-drs-and-powercli-part-1-get-vm-overrides/">
+            <img class="post-card-image" src="/images/2018/08/override.jpg" loading="lazy" />
+        </a>
+    
+
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="https://ryanjan.uk/storage-drs-and-powercli-part-1-get-vm-overrides/">
+            <header class="post-card-header">
+                
+                
+                
+                <div class="post-card-primary-tag">powercli</div>
+                
+                
+                <h2 class="post-card-title">Storage DRS and PowerCLI Part 1: Get VM Overrides</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>Introduction With Storage DRS (SDRS) enabled datastore clusters, we have many options to configure overrides on a per-VM basis. For example disabling SDRS for a specific VM or forcing SDRS to keep a VMs VMDK files on separate datastores (anti-affinity). However, one thing which has caught out our 2nd line team recently and caused us some SDRS performance issues is that when you manually Storage vMotion (svMotion) one or more VMDK files and pick a specific datastore as the destination, you have to tick a box that disables SDRS for the particular VM.</p>
+            </section>
+        </a>
+
+        <footer class="post-card-meta">
+            
+            
+            
+            
+            
+            <ul class="author-list">
+                <li class="author-list-item">
+                    
+                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="post-card-byline-content">
+                
+                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
+                
+                <span class="post-card-byline-date">30 Jul 2018 <span class="bull"> &bull; </span>
+                    7 min read</span>
+            </div>
+            
+        </footer>
+    </div>
+</article>
+        
+        <article class="post-card">
+
+    
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/vrops-reports-and-powercli-part-three-a-helper-module/">
+            <img class="post-card-image" src="/images/2018/05/vmw-vrealize-operations-fast-facts-2.jpg" loading="lazy" />
+        </a>
+    
+
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="https://ryanjan.uk/vrops-reports-and-powercli-part-three-a-helper-module/">
+            <header class="post-card-header">
+                
+                
+                
+                <div class="post-card-primary-tag">vrops</div>
+                
+                
+                <h2 class="post-card-title">vROps Reports and PowerCLI Part 3: A Helper Module</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>For your reference here is a list of the articles in this mini-series.
+ vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports vROps Reports and PowerCLI Part 3: A Helper Module (this article)  Introduction If you have been following along with the previous two articles in this series, you should now have a pretty good understanding of how to manipulate the extensionData container via PowerCLI to generate and download reports from vRealize Operations Manager (vROps).</p>
+            </section>
+        </a>
+
+        <footer class="post-card-meta">
+            
+            
+            
+            
+            
+            <ul class="author-list">
+                <li class="author-list-item">
+                    
+                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="post-card-byline-content">
+                
+                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
+                
+                <span class="post-card-byline-date">24 Jun 2018 <span class="bull"> &bull; </span>
+                    6 min read</span>
+            </div>
+            
+        </footer>
+    </div>
+</article>
+        
+        
+    </div>
+</aside>
+
+    </main>
+    <footer class="site-footer outer">
+    <div class="inner">
+        <section class="copyright"><a href="https://ryanjan.uk/">RyanJan</a> &copy; 2021</section>
+        <nav class="site-footer-nav">
+            <a href="https://ryanjan.uk/">Latest Posts</a>
+            <a href="https://github.com/ryan-jan" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://twitter.com/_ryanjan_" target="_blank" rel="noopener">Twitter</a>
+        </nav>
+    </div>
+</footer>
+  </div>
+
+  <div id="signup-modal" class="su-modal">
+    <div class="su-modal-wrapper">
+      <div class="su-modal-container">
+        <div class="su-modal-content">
+          <span class="su-modal-closeicon">&times;</span>
+          <header class="su-modal-signup-header"><img class="su-modal-signup-logo" src="/images/favicon.png"
+              alt="RyanJan">
+            
+          </header>
+          <form
+            action="https://ryanjan.us1.list-manage.com/subscribe/post?u=60a6496a899e75ef8efe2e2ce&amp;id=9265c5169c"
+            method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+            target="_blank" novalidate>
+            <div class="su-modal-section">
+              <section class="su-modal-input-section">
+                <div class="su-modal-input-labelcontainer">
+                  <label for="input-name" class="su-modal-input-label">Name</label>
+                </div>
+                <input type="text" value="" name="NAME" class="su-modal-input" id="input-name" placeholder="Joe Bloggs">
+              </section>
+              <section class="su-modal-input-section">
+                <div class="su-modal-input-labelcontainer">
+                  <label for="input-email" class="su-modal-input-label">Email</label>
+                </div>
+                <input type="email" value="" name="EMAIL" class="su-modal-input" id="input-email"
+                  placeholder="joe.bloggs@example.com">
+              </section>
+              
+              <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text"
+                  name="b_60a6496a899e75ef8efe2e2ce_9265c5169c" tabindex="-1" value=""></div>
+
+              <button class="su-modal-btn su-modal-btn-main su-modal-btn-primary" type="submit"
+                style="color: rgb(255, 255, 255); background-color: rgb(0, 0, 0); opacity: 1; pointer-events: auto; width: 100%;">Sign
+                up</button>
+
+              <div id="mce-responses" class="clear">
+                <div class="response" id="mce-error-response" style="display:none"></div>
+                <div class="response" id="mce-success-response" style="display:none"></div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script>
+  <script
+    type='text/javascript'>(function ($) { window.fnames = new Array(); window.ftypes = new Array(); fnames[1] = 'NAME'; ftypes[1] = 'text'; fnames[0] = 'EMAIL'; ftypes[0] = 'email'; }(jQuery)); var $mcj = jQuery.noConflict(true);</script>
+
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous">
+    </script>
+  <script src="/js/casper.js"></script>
+  <script>
+    $(document).ready(function () {
+      
+      $('.gh-burger').click(function () {
+        $('body').toggleClass('gh-head-open');
+      });
+      
+      $(".gh-content").fitVids();
+    });
+  </script>
+
+  
+  <script type="text/javascript" src="/js/prism.js"></script>
+  <script type="text/javascript" src="/js/custom/prism-custom.js"></script>
+  <script type="text/javascript" src="/js/custom/custom.js"></script>
+
+  
+</body>
+
+</html>
