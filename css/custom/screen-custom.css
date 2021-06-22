@@ -25,7 +25,7 @@
 
 .gh-canvas {
     display: grid;
-    grid-template-columns: [full-start] minmax(4vmin, auto) [wide-start] minmax(auto, 240px) [main-start] min(840px, calc(100% - 8vw)) [main-end] minmax(auto, 240px) [wide-end] minmax(4vmin, auto) [full-end];
+    grid-template-columns: [full-start] minmax(4vmin, auto) [wide-start] minmax(auto, 240px) [main-start] min(745px, calc(100% - 8vw)) [main-end] minmax(auto, 240px) [wide-end] minmax(4vmin, auto) [full-end];
 }
 
 .gh-content>blockquote,
@@ -128,40 +128,86 @@ blockquote p {
 }
 
 /* code-output */
-div.code-output > div.code-output-inner > div > pre {
-    border-top-left-radius: 0px !important;
-    border-top-right-radius: 0px !important;
-}
-
-div.code-output > div.code-output-bar {
+div.code-output-bar {
     background-color: #363834;
     color: #ABB2BF;
     text-align: center;
-    margin-bottom: -20px;
     padding: 8px 15px;
     border-top-left-radius: 5px !important;
     border-top-right-radius: 5px !important;
 }
 
-div.code-output > div.code-output-caption {
-    padding: .5rem .5rem 0;
+div.code-output-inner {
+    margin-top: 0px !important;
+}
+
+div.code-output-inner > div > pre {
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    margin-top: 0px;
+}
+
+div.code-output-caption {
     text-align: center;
     color: rgba(0, 0, 0, .5);
     font-weight: 600;
     font-size: 1.3rem;
     line-height: 1.4em;
-    margin-top: -7px;
+    margin-top: 0px !important;
 }
 
 .error {
     color: #E53935 !important;
 }
 
-/* overlay ad */
-.overlay-ad {
-    display: none;
+/* overlay toc */
+@media only screen and (min-width: 1366px) {
+    .overlay-toc {
+        width: 170px;
+        color: #738a94;
+    }
+
+    .overlay-toc > .toc-title {
+        font-weight: 600;
+        font-size: 17px;
+        padding-left: 10px;
+    }
+
+    .overlay-toc ul {
+        text-decoration: none;
+        list-style: none;
+        padding: 0 10px;
+        font-weight: 500;
+        font-size: 16px;
+    }
+
+    .overlay-toc ul li {
+        padding-left: 0px;
+        padding-top: 15px;
+        display: list-item;
+    }
+
+    .overlay-toc ul li a {
+        color: #738a94 !important;
+        line-height: 23px;
+        overflow-wrap: break-word;
+        text-decoration: none;
+    }
+
+    .overlay-toc.fixed {
+        position: fixed;
+        right: 50%;
+        margin-right: 400px;
+    }
+
+    .overlay-toc.sticky {
+        position: absolute;
+        right: 50%;
+        margin-right: 400px;
+    }
 }
 
+/* overlay ad */
 @media only screen and (min-width: 1366px) {
     .overlay-ad.fixed {
         position: fixed;

@@ -5,11 +5,14 @@
   
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119235055-1"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', 'UA-119235055-1');
+    if (window.location.hostname === "localhost") {
+      console.log("Analytics not running on local dev.");
+    } else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'UA-119235055-1');
+    }
   </script>
 
   <meta charset="utf-8" />
@@ -29,7 +32,7 @@
   <link rel="stylesheet" type="text/css" href="/css/custom/global-custom.css" />
 
   
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700" rel="stylesheet">
 
   
   <script data-ad-client="ca-pub-8907477009760148" async
@@ -76,7 +79,6 @@
     <li class="nav-home nav-current"><a href="/">Home</a></li>
     <li class="nav-about"><a href="/about/">About</a></li>
 </ul>
-
         </div>
         <div class="gh-head-actions">
           <div class="gh-social">
@@ -278,20 +280,18 @@ Copy-Item -Destination <span style="color:#e6db74">&#34;.\destination-two\&#34;<
     $LimitedParameters.Remove(<span style="color:#e6db74">&#34;b&#34;</span>) | Out-Null
     Invoke-FuncOne @LimitedParameters
 }
-</code></pre></div><div class="code-output">
-    <div class="code-output-bar"><span>Output</span></div>
-    <div class="code-output-inner">
-        <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Invoke-FuncTwo -a <span style="color:#e6db74">&#34;Hello&#34;</span> -b <span style="color:#e6db74">&#34;World&#34;</span> -c <span style="color:#e6db74">&#34;!&#34;</span>
+</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="code-output-inner">
+    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Invoke-FuncTwo -a <span style="color:#e6db74">&#34;Hello&#34;</span> -b <span style="color:#e6db74">&#34;World&#34;</span> -c <span style="color:#e6db74">&#34;!&#34;</span>
 HelloWorld!
 Hello!
 </code></pre></div>
-    </div>
-    
-    <div class="code-output-caption">
-        <span>Output showing Invoke-FuncTwo splatting its parameters to Invoke-FuncOne.</span>
-    </div>
-    
 </div>
+
+<div class="code-output-caption">
+    <span>Output showing Invoke-FuncTwo splatting its parameters to Invoke-FuncOne.</span>
+</div>
+
 <div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
      <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
@@ -310,23 +310,21 @@ Hello!
 
 <span style="color:#75715e"># Call the proxy function and specify a parameter called Name.</span>
 Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span>
-</code></pre></div><div class="code-output">
-    <div class="code-output-bar"><span>Output</span></div>
-    <div class="code-output-inner">
-        <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span>
+</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="code-output-inner">
+    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span>
 
  NPM(K)    PM(M)      WS(M)     CPU(s)      Id  SI ProcessName
  ------    -----      -----     ------      --  -- -----------
      25    56.82      50.62       0.00   14832   0 powershell
      26    56.70      24.09       0.00   21068   0 powershell
 </code></pre></div>
-    </div>
-    
-    <div class="code-output-caption">
-        <span>Example showing proxy function output.</span>
-    </div>
-    
 </div>
+
+<div class="code-output-caption">
+    <span>Example showing proxy function output.</span>
+</div>
+
 <p>You can also use the <code>$Args</code> variable combined with named parameters (i.e., those in the <code>param</code> block of a function):</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Define a function with named parameters $a and $b that also passes any other parameters</span>
 <span style="color:#75715e"># to Get-Process by splatting the @Args variable.</span>
@@ -344,10 +342,9 @@ Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span> -
 
 <span style="color:#75715e"># When $b is specified, its value will be printed to the console using Write-Output.</span>
 Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span> -b <span style="color:#e6db74">&#34;Nope, not today!&#34;</span>
-</code></pre></div><div class="code-output">
-    <div class="code-output-bar"><span>Output</span></div>
-    <div class="code-output-inner">
-        <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span> -a<span style="color:#960050;background-color:#1e0010">:</span>$true
+</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="code-output-inner">
+    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span> -a<span style="color:#960050;background-color:#1e0010">:</span>$true
 
  NPM(K)    PM(M)      WS(M)     CPU(s)      Id  SI ProcessName
  ------    -----      -----     ------      --  -- -----------
@@ -364,13 +361,12 @@ Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span> -
 PS C:\&gt; Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span> -b <span style="color:#e6db74">&#34;Nope, not today!&#34;</span>
 Nope, not today!
 </code></pre></div>
-    </div>
-    
-    <div class="code-output-caption">
-        <span>Another example showing proxy function output.</span>
-    </div>
-    
 </div>
+
+<div class="code-output-caption">
+    <span>Another example showing proxy function output.</span>
+</div>
+
 <div class="callout info">
     <div class="callout-wrapper">
         <span>
@@ -398,10 +394,9 @@ Nope, not today!
     -Include <span style="color:#e6db74">&#34;*.txt&#34;</span> `
     -Force
 </code></pre></div><p>This is widely seen as a bad choice. Backticks are hard to read, easy to miss, and easy to mistype. Also, if you accidentally enter a space after a backtick, the command will fail with an error, as you&rsquo;ll see below.</p>
-<div class="code-output">
-    <div class="code-output-bar"><span>Output</span></div>
-    <div class="code-output-inner">
-        <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Copy-Item -Path <span style="color:#e6db74">&#34;.\source\&#34;</span> `
+<div class="code-output-bar"><span>Output</span></div>
+<div class="code-output-inner">
+    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Copy-Item -Path <span style="color:#e6db74">&#34;.\source\&#34;</span> `
 &gt;&gt;     -Destination <span style="color:#e6db74">&#34;.\dest\&#34;</span> `
 &gt;&gt;     -Include <span style="color:#e6db74">&#34;*.txt&#34;</span> `
 &gt;&gt;     -Force
@@ -415,13 +410,12 @@ Line |
 Check the spelling of the name, or <span style="color:#66d9ef">if</span> a path was included, verify that the path is correct and <span style="color:#66d9ef">try</span> again.
 <span style="color:#75715e">#enderror</span>
 </code></pre></div>
-    </div>
-    
-    <div class="code-output-caption">
-        <span>Output showing an error due to a single white space entered after the backtick on the first line.</span>
-    </div>
-    
 </div>
+
+<div class="code-output-caption">
+    <span>Output showing an error due to a single white space entered after the backtick on the first line.</span>
+</div>
+
 <p>This causes unnecessary confusion and can be hard to debug given that the error message is not usually very helpful. The bottom line is that splatting is a much better option.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>In this tutorial, you&rsquo;ve worked through examples of all the different splatting techniques. Learning how to combine these techniques gives you plenty of options to simplify complex code and make it easier to read. So, make sure your next scripts use splatting and keep writing awesome code!</p>
