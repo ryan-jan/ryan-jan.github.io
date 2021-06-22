@@ -208,6 +208,10 @@ div.code-output-caption {
 }
 
 /* overlay ad */
+.overlay-ad {
+    display: none;
+}
+
 @media only screen and (min-width: 1366px) {
     .overlay-ad.fixed {
         position: fixed;
