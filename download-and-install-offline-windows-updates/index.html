@@ -165,28 +165,12 @@
 </div>
 <h2 id="prerequisites">Prerequisites</h2>
 <p>To follow along with this tutorial, you&rsquo;ll just need to have <a href="https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.1">PowerShell 5.1 or later installed</a>. This tutorial will use PowerShell 7.1 running on a <a href="https://www.microsoft.com/en-us/windows-server">Windows Server 2019</a> server, although all of the processes will also work on a <a href="https://www.microsoft.com/en-gb/windows/get-windows-10">Windows 10</a> workstation.</p>
-<div class="in-article-ad">
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
-          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-</div>
 <h2 id="installing-the-mscatalog-powershell-module">Installing the MSCatalog PowerShell module</h2>
 <p>If you haven&rsquo;t done so already, the first thing you&rsquo;ll need to do is install the latest version of the MSCatalog module from the <a href="https://www.powershellgallery.com">PowerShell Gallery</a>. This is as simple as running the following command.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Install-Module -Name <span style="color:#e6db74">&#34;MSCatalog&#34;</span>
 </code></pre></div><p>If you already have the module installed, it&rsquo;s good practice to make sure it is the latest version. You can do this using the Update-Module cmdlet; for example:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Update-Module -Name <span style="color:#e6db74">&#34;MSCatalog&#34;</span>
-</code></pre></div><div class="in-article-ad">
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
-          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-</div>
-<h2 id="searching-for-updates-using-get-mscatalogupdate">Searching for updates using <code>Get-MSCatalogUpdate</code></h2>
+</code></pre></div><h2 id="searching-for-updates-using-get-mscatalogupdate">Searching for updates using <code>Get-MSCatalogUpdate</code></h2>
 <p>Now that you&rsquo;ve got the latest version of MSCatalog installed, you can start querying the Microsoft Update Catalog site. To do this, you&rsquo;ll use the <code>Get-MSCatalogUpdate</code> command.</p>
 <h3 id="searching-by-the-kb-article-number">Searching by the KB article number</h3>
 <p>If you already know the KB article number relating to the update you&rsquo;re searching for, you can simply specify this using the <code>search</code> parameter. For example, the following command will search for updates matching <code>KB5003646</code>.</p>
@@ -515,14 +499,6 @@ Title                                                                           
     <span>Storing a specific update in a variable (`$Update`).</span>
 </div>
 
-<div class="in-article-ad">
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
-          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-</div>
 <p>Then, you can pass the <code>$Update</code> variable to the <code>Update</code> parameter of <code>Save-MSCatalogUpdate</code> to download it. You&rsquo;ll also need to provide a path to the <code>Destination</code> parameter; for example:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Save-MSCatalogUpdate -Update $Update -Destination <span style="color:#e6db74">&#34;C:\Temp&#34;</span>
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
