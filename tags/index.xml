@@ -6,7 +6,25 @@
     <description>Recent content in Tags on RyanJan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Thu, 17 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://ryanjan.uk/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 29 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://ryanjan.uk/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>powershell</title>
+      <link>https://ryanjan.uk/tags/powershell/</link>
+      <pubDate>Tue, 29 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://ryanjan.uk/tags/powershell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>windows</title>
+      <link>https://ryanjan.uk/tags/windows/</link>
+      <pubDate>Tue, 29 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://ryanjan.uk/tags/windows/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>esxi</title>
       <link>https://ryanjan.uk/tags/esxi/</link>
@@ -22,15 +40,6 @@
       <pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate>
       
       <guid>https://ryanjan.uk/tags/powercli/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>powershell</title>
-      <link>https://ryanjan.uk/tags/powershell/</link>
-      <pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://ryanjan.uk/tags/powershell/</guid>
       <description></description>
     </item>
     

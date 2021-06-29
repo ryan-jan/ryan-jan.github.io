@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119235055-1"></script>
+  <script>
+    if (window.location.hostname === "localhost") {
+      console.log("Analytics not running on local dev.");
+    } else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'UA-119235055-1');
+    }
+  </script>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>RyanJan  | How to download and install offline Windows updates with PowerShell</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="/css/screen.css" />
+
+  
+  <link rel="stylesheet" type="text/css" href="/css/custom/screen-custom.css" />
+  <link rel="stylesheet" type="text/css" href="/css/fontawesome_all.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/prism.css" />
+  <link rel="stylesheet" type="text/css" href="/css/custom/prism-custom.css" />
+  <link rel="stylesheet" type="text/css" href="/css/custom/global-custom.css" />
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700" rel="stylesheet">
+
+  
+  <script data-ad-client="ca-pub-8907477009760148" async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+  
+<meta name="twitter:card" content="summary_large_image">
+
+
+
+<meta name="twitter:creator" content="@_ryanjan_">
+<meta name="twitter:site" content="@_ryanjan_">
+
+<meta property="og:title" content="How to download and install offline Windows updates with PowerShell">
+<meta property="og:description" content="This tutorial shows you how to use the MSCatalog PowerShell module to download and install offline Windows updates.">
+<meta property="og:url" content="https://ryanjan.uk/download-and-install-offline-windows-updates/">
+
+    <meta property="og:image" content="https://ryanjan.uk/download-and-install-offline-windows-updates/feature-image.png">
+
+
+</head>
+
+
+
+
+
+<body class='post-template' >
+  <div class="viewport">
+    <header id="gh-head" class="gh-head">
+      <nav class="gh-head-inner inner gh-container">
+
+        <div class="gh-head-brand">
+          <a class="gh-head-logo" href="/">
+            <img src="/images/favicon.png" />
+          </a>
+          <a class="gh-burger" role="button">
+            <div class="gh-burger-box">
+              <div class="gh-burger-inner"></div>
+            </div>
+          </a>
+        </div>
+        <div class="gh-head-menu">
+          <ul class="nav">
+    <li class="nav-home nav-current"><a href="/">Home</a></li>
+    <li class="nav-about"><a href="/about/">About</a></li>
+</ul>
+        </div>
+        <div class="gh-head-actions">
+          <div class="gh-social">
+            <a class="gh-social-github" href="https://github.com/ryan-jan" title="GitHub" target="_blank"
+              rel="noopener">
+              <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a class="gh-social-twitter" href="https://twitter.com/_ryanjan_" title="Twitter" target="_blank"
+              rel="noopener">
+              <i class="fab fa-twitter fa-lg"></i>
+            </a>
+          </div>
+          <a class="gh-head-button su-modal-open-button" href="#/subscribe">Subscribe</a>
+        </div>
+      </nav>
+    </header>
+    <main>
+      
+<article class="article">
+    <header class="article-header gh-canvas">
+        
+        
+        
+        <section class="article-tag">
+            <a href="/tags/powershell">powershell</a>
+        </section>
+        
+        
+
+        <h1 class="article-title">How to download and install offline Windows updates with PowerShell</h1>
+
+        
+
+        <div class="article-byline">
+            <section class="article-byline-content">
+                
+                
+                
+                
+                
+                <ul class="author-list">
+                    <li class="author-list-item">
+                        
+                        <a href="https://ryanjan.uk/authors/ryan/" class="author-avatar">
+                            
+                            <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                        </a>
+                    </li>
+                </ul>
+                <div class="article-byline-meta">
+                    <h4 class="author-name"><a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a></h4>
+                    <div class="byline-meta-content">
+                        29 Jun 2021
+                        <span class="byline-reading-time"><span class="bull">&bull;</span> 20 min
+                            read</span>
+                    </div>
+                </div>
+                
+                
+            </section>
+        </div>
+
+        
+        <figure class="article-image">
+            <img src="/download-and-install-offline-windows-updates/feature-image.png" alt="feature-image.png" />
+        </figure>
+        
+    </header>
+
+    <section class="gh-content gh-canvas">
+        <div class="overlay-toc fixed">
+    <span class="toc-title">CONTENTS</span>
+    <ul id="toc-list"></ul>
+</div>
+<p>Automating <a href="https://windowsupdate.microsoft.com">Windows Update Services</a> can be a pain! It&rsquo;s often easier to install an offline Windows update with <a href="https://docs.microsoft.com/en-us/powershell/">PowerShell</a>, but where can you download offline update files? Thankfully, the <a href="https://www.catalog.update.microsoft.com">Microsoft Update Catalog</a> site provides offline <code>.msu</code> files for all updates that are released. And, using the <a href="https://github.com/ryan-jan/MSCatalog">MSCatalog</a> module, it&rsquo;s a breeze to download and install these offline updates using PowerShell.</p>
+<p>In this tutorial, you&rsquo;ll first learn how to install the MSCatalog PowerShell module and query the Microsoft Update Catalog site. Then, you&rsquo;ll see how to download one or more updates and install them using PowerShell.</p>
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>To follow along with this tutorial, you&rsquo;ll just need to have <a href="https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.1">PowerShell 5.1 or later installed</a>. This tutorial will use PowerShell 7.1 running on a <a href="https://www.microsoft.com/en-us/windows-server">Windows Server 2019</a> server, although all of the processes will also work on a <a href="https://www.microsoft.com/en-gb/windows/get-windows-10">Windows 10</a> workstation.</p>
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<h2 id="installing-the-mscatalog-powershell-module">Installing the MSCatalog PowerShell module</h2>
+<p>If you haven&rsquo;t done so already, the first thing you&rsquo;ll need to do is install the latest version of the MSCatalog module from the <a href="https://www.powershellgallery.com">PowerShell Gallery</a>. This is as simple as running the following command.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Install-Module -Name <span style="color:#e6db74">&#34;MSCatalog&#34;</span>
+</code></pre></div><p>If you already have the module installed, it&rsquo;s good practice to make sure it is the latest version. You can do this using the Update-Module cmdlet; for example:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Update-Module -Name <span style="color:#e6db74">&#34;MSCatalog&#34;</span>
+</code></pre></div><div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<h2 id="searching-for-updates-using-get-mscatalogupdate">Searching for updates using <code>Get-MSCatalogUpdate</code></h2>
+<p>Now that you&rsquo;ve got the latest version of MSCatalog installed, you can start querying the Microsoft Update Catalog site. To do this, you&rsquo;ll use the <code>Get-MSCatalogUpdate</code> command.</p>
+<h3 id="searching-by-the-kb-article-number">Searching by the KB article number</h3>
+<p>If you already know the KB article number relating to the update you&rsquo;re searching for, you can simply specify this using the <code>search</code> parameter. For example, the following command will search for updates matching <code>KB5003646</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;KB5003646&#34;</span>
+</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="code-output-inner">
+    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;KB5003646&#34;</span>
+
+Title                                                                                     Products                   Classification   LastUpdated Size
+-----                                                                                     --------                   --------------   ----------- ----
+2021-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows 10 Version 1809 <span style="color:#66d9ef">for</span> ARM64-based Systems (KB5003646) Windows 10,Windows 10 LTSB Security Updates 2021/06/07  549.6 MB
+2021-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5003646)       Windows Server 2019        Security Updates 2021/06/07  499.5 MB
+2021-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows 10 Version 1809 <span style="color:#66d9ef">for</span> x64-based Systems (KB5003646)   Windows 10,Windows 10 LTSB Security Updates 2021/06/07  499.5 MB
+2021-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows 10 Version 1809 <span style="color:#66d9ef">for</span> x86-based Systems (KB5003646)   Windows 10,Windows 10 LTSB Security Updates 2021/06/07  278.8 MB
+</code></pre></div>
+</div>
+
+<div class="code-output-caption">
+    <span>Search results based on a specific KB article number.</span>
+</div>
+
+<p>This is by far the fastest and most accurate way to search the Microsoft Update Catalog site. But what if you don&rsquo;t know the KB number?</p>
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<h3 id="searching-using-keywords">Searching using keywords</h3>
+<p>If you don&rsquo;t know the KB article number, you can filter the updates by providing one or more keywords to the <code>search</code> parameter. The example below provides a string (<code>Cumulative Update for Windows Server 2019 for x64-based Systems</code>) to the <code>search</code> parameter to filter the results. However, by default, the Microsoft Catalog Update site treats each of the words in this string as individual search terms, and tries to match them using an <code>OR</code> operator (e.g., Title contains &ldquo;Cumulative&rdquo; OR &ldquo;Update&rdquo; OR &ldquo;for&rdquo; etc.). This often provides results that aren&rsquo;t very accurate.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span>
+</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="code-output-inner">
+    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span>
+
+Title                                                                                                                                                    Products                                               Classification   LastUpdated Size
+-----                                                                                                                                                    --------                                               --------------   ----------- ----
+2021-06 Cumulative Update Preview <span style="color:#66d9ef">for</span> Azure Stack HCI, version 20H2 and  Windows Server 2019 Datacenter<span style="color:#960050;background-color:#1e0010">:</span> Azure Edition <span style="color:#66d9ef">for</span> x64-based Systems (KB5003704) Azure Stack HCI                                        Updates          2021/06/15  153.9 MB
+2021-06 Cumulative Update Preview <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5003703)                                                              Windows Server 2019                                    Updates          2021/06/15  500.0 MB
+2021-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 Datacenter<span style="color:#960050;background-color:#1e0010">:</span> Azure Edition <span style="color:#66d9ef">for</span> x64-based Systems (KB5003643)                                            Windows Server 2019 Datacenter<span style="color:#960050;background-color:#1e0010">:</span> Azure Edition Hotpatch Security Updates 2021/06/07  150.7 MB
+2021-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5003646)                                                                      Windows Server 2019                                    Security Updates 2021/06/07  499.5 MB
+2021-06 Cumulative Update <span style="color:#66d9ef">for</span> Azure Stack HCI, version 20H2 and  Windows Server 2019 Datacenter<span style="color:#960050;background-color:#1e0010">:</span> Azure Edition <span style="color:#66d9ef">for</span> x64-based Systems (KB5003643)         Azure Stack HCI                                        Security Updates 2021/06/07  150.7 MB
+2021-05 Cumulative Update Preview <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5003217)                                                              Windows Server 2019                                    Updates          2021/05/20  494.0 MB
+2021-05 Cumulative Update Preview <span style="color:#66d9ef">for</span> Azure Stack HCI, version 20H2 and  Windows Server 2019 Datacenter<span style="color:#960050;background-color:#1e0010">:</span> Azure Edition <span style="color:#66d9ef">for</span> x64-based Systems (KB5003237) Azure Stack HCI                                        Updates          2021/05/20  148.0 MB
+2021-05 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5003171)                                                                      Windows Server 2019                                    Security Updates 2021/05/12  487.9 MB
+2021-05 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 Datacenter<span style="color:#960050;background-color:#1e0010">:</span> Azure Edition <span style="color:#66d9ef">for</span> x64-based Systems (KB5003188)                                            Windows Server 2019 Datacenter<span style="color:#960050;background-color:#1e0010">:</span> Azure Edition Hotpatch Security Updates 2021/05/10  148.0 MB
+2021-05 Cumulative Update <span style="color:#66d9ef">for</span> Azure Stack HCI, version 20H2 and  Windows Server 2019 Datacenter<span style="color:#960050;background-color:#1e0010">:</span> Azure Edition <span style="color:#66d9ef">for</span> x64-based Systems (KB5003188)         Azure Stack HCI                                        Security Updates 2021/05/10  148.0 MB
+2021-04 Cumulative Update Preview <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5001384)                                                              Windows Server 2019                                    Updates          2021/04/22  488.8 MB
+2021-04 Cumulative Update Preview <span style="color:#66d9ef">for</span> Azure Stack HCI, version 20H2 and  Windows Server 2019 Datacenter<span style="color:#960050;background-color:#1e0010">:</span> Azure Edition <span style="color:#66d9ef">for</span> x64-based Systems (KB5001395) Azure Stack HCI                                        Updates          2021/04/22  144.3 MB
+2021-04 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 Datacenter<span style="color:#960050;background-color:#1e0010">:</span> Azure Edition <span style="color:#66d9ef">for</span> x64-based Systems (KB5001343)                                            Windows Server 2019 Datacenter<span style="color:#960050;background-color:#1e0010">:</span> Azure Edition Hotpatch Security Updates 2021/04/12  142.3 MB
+2021-04 Cumulative Update <span style="color:#66d9ef">for</span> Azure Stack HCI, version 20H2 and  Windows Server 2019 Datacenter<span style="color:#960050;background-color:#1e0010">:</span> Azure Edition <span style="color:#66d9ef">for</span> x64-based Systems (KB5001343)         Azure Stack HCI                                        Security Updates 2021/04/12  142.3 MB
+2021-04 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5001342)                                                                      Windows Server 2019                                    Security Updates 2021/04/12  393.6 MB
+2021-03 Cumulative Update Preview <span style="color:#66d9ef">for</span> Azure Stack HCI, version 20H2 and  Windows Server 2019 Datacenter<span style="color:#960050;background-color:#1e0010">:</span> Azure Edition <span style="color:#66d9ef">for</span> x64-based Systems (KB5000849) Azure Stack HCI                                        Updates          2021/03/25  139.8 MB
+2021-03 Cumulative Update Preview <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5000854)                                                              Windows Server 2019                                    Updates          2021/03/25  392.3 MB
+2021-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5001638)                                                                      Windows Server 2019                                    Updates          2021/03/18  391.4 MB
+2021-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5001568)                                                                      Windows Server 2019                                    Updates          2021/03/15  391.5 MB
+2021-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 Datacenter<span style="color:#960050;background-color:#1e0010">:</span> Azure Edition <span style="color:#66d9ef">for</span> x64-based Systems (KB5000801)                                            Windows Server 2019 Datacenter<span style="color:#960050;background-color:#1e0010">:</span> Azure Edition Hotpatch Security Updates 2021/03/08  137.9 MB
+2021-03 Cumulative Update <span style="color:#66d9ef">for</span> Azure Stack HCI, version 20H2 and  Windows Server 2019 Datacenter<span style="color:#960050;background-color:#1e0010">:</span> Azure Edition <span style="color:#66d9ef">for</span> x64-based Systems (KB5000801)         Azure Stack HCI                                        Security Updates 2021/03/08  137.9 MB
+2021-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5000822)                                                                      Windows Server 2019                                    Security Updates 2021/03/08  391.2 MB
+2021-02 Cumulative Update Preview <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4601383)                                                              Windows Server 2019                                    Updates          2021/02/16  383.1 MB
+2021-02 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4601345)                                                                      Windows Server 2019                                    Security Updates 2021/02/08  381.2 MB
+2021-01 Cumulative Update Preview <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4598296)                                                              Windows Server 2019                                    Updates          2021/01/21  380.8 MB
+</code></pre></div>
+</div>
+
+<div class="code-output-caption">
+    <span>Search results based on a keyword search term.</span>
+</div>
+
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<p>To ensure that only results containing the entire search term are returned, you can use the <code>strict</code> switch parameter. For example, the following command will search for updates containing the exact phrase <code>Cumulative Update for Windows Server 2019 for x64-based Systems</code>.</p>
+<div class="callout info">
+    <div class="callout-wrapper">
+        <span>
+            
+            <i class="fas fa-info-circle fa-lg"></i>
+            
+        </span>
+        <div class="callout-content">
+            <p>The search term is matched across all available fields, not just the Title.</p>
+        </div>
+    </div>
+</div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span> -Strict
+</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="code-output-inner">
+    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span> -Strict
+
+Title                                                                               Products            Classification   LastUpdated Size
+-----                                                                               --------            --------------   ----------- ----
+2021-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5003646) Windows Server 2019 Security Updates 2021/06/07  499.5 MB
+2021-05 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5003171) Windows Server 2019 Security Updates 2021/05/12  487.9 MB
+2021-04 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5001342) Windows Server 2019 Security Updates 2021/04/12  393.6 MB
+2021-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5001638) Windows Server 2019 Updates          2021/03/18  391.4 MB
+2021-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5001568) Windows Server 2019 Updates          2021/03/15  391.5 MB
+2021-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5000822) Windows Server 2019 Security Updates 2021/03/08  391.2 MB
+2021-02 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4601345) Windows Server 2019 Security Updates 2021/02/08  381.2 MB
+2021-01 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4598230) Windows Server 2019 Security Updates 2021/01/11  378.1 MB
+2020-12 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4592440) Windows Server 2019 Security Updates 2020/12/06  349.1 MB
+2020-11 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4594442) Windows Server 2019 Updates          2020/11/17  346.3 MB
+2020-11 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4586793) Windows Server 2019 Security Updates 2020/11/06  346.6 MB
+2020-10 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4577668) Windows Server 2019 Security Updates 2020/10/12  368.3 MB
+2020-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4567513) Windows Server 2019 Updates          2020/06/15  332.6 MB
+2020-04 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4550969) Windows Server 2019 Updates          2020/04/20  319.4 MB
+2020-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4554354) Windows Server 2019 Updates          2020/03/30  317.5 MB
+2020-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4541331) Windows Server 2019 Updates          2020/03/16  317.5 MB
+2020-02 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4537818) Windows Server 2019 Updates          2020/02/24  312.2 MB
+2020-01 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4534321) Windows Server 2019 Updates          2020/01/22  285.1 MB
+2019-10 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4520062) Windows Server 2019 Updates          2019/10/14  279.0 MB
+2019-08 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4512534) Windows Server 2019 Updates          2019/08/17  271.1 MB
+2019-07 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4505658) Windows Server 2019 Updates          2019/07/22  261.3 MB
+2019-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4509479) Windows Server 2019 Updates          2019/06/26  248.0 MB
+2019-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4501371) Windows Server 2019 Updates          2019/06/18  245.2 MB
+2019-05 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4497934) Windows Server 2019 Updates          2019/05/20  237.3 MB
+2019-05 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4505056) Windows Server 2019 Updates          2019/05/19  223.3 MB
+</code></pre></div>
+</div>
+
+<div class="code-output-caption">
+    <span>Search results based on a keyword search term using the `Strict` switch parameter.</span>
+</div>
+
+<div class="callout info">
+    <div class="callout-wrapper">
+        <span>
+            
+            <i class="fas fa-info-circle fa-lg"></i>
+            
+        </span>
+        <div class="callout-content">
+            <p>When searching using keywords, you&rsquo;ll get the best results by being as specific as possible.</p>
+        </div>
+    </div>
+</div>
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<h3 id="manipulating-the-search-results">Manipulating the search results</h3>
+<p>By default, the results are sorted by the <code>LastUpdated</code> field in descending order (i.e., the newest update should be first in the list). However, you can use the <code>SortBy</code> and <code>Descending</code> parameters to manipulate the search results, as required.</p>
+<p>For example, the following command will perform the previous search again, but this time the <code>SortBy</code> parameter is set to <code>Size</code>. This will cause the results to be sorted by the Size column in ascending order. If you wanted the results in descending order, you&rsquo;d simply add the <code>Descending</code> switch parameter.</p>
+<div class="callout info">
+    <div class="callout-wrapper">
+        <span>
+            
+            <i class="fas fa-info-circle fa-lg"></i>
+            
+        </span>
+        <div class="callout-content">
+            <p>This example uses PowerShell splatting, which you can learn more about <a href="https://ryanjan.uk/powershell-splatting/">here</a>!</p>
+        </div>
+    </div>
+</div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Params = @{
+    Search = <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span>
+    Strict = $true
+    SortBy = <span style="color:#e6db74">&#34;Size&#34;</span>
+}
+
+Get-MSCatalogUpdate @Params
+</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="code-output-inner">
+    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-MSCatalogUpdate @Params
+
+Title                                                                               Products            Classification   LastUpdated Size
+-----                                                                               --------            --------------   ----------- ----
+2018-10 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4464455) Windows Server 2019 Updates          2018/11/09  85.0 MB
+2018-11 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4469342) Windows Server 2019 Updates          2018/12/04  116.1 MB
+2019-01 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4476976) Windows Server 2019 Updates          2019/01/18  137.7 MB
+2019-02 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4482887) Windows Server 2019 Updates          2019/02/28  152.7 MB
+2019-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4490481) Windows Server 2019 Updates          2019/04/01  164.4 MB
+2019-05 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4501835) Windows Server 2019 Updates          2019/05/01  219.9 MB
+2019-04 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4495667) Windows Server 2019 Updates          2019/05/03  222.0 MB
+2019-05 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4505056) Windows Server 2019 Updates          2019/05/19  223.3 MB
+2019-05 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4497934) Windows Server 2019 Updates          2019/05/20  237.3 MB
+2019-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4501371) Windows Server 2019 Updates          2019/06/18  245.2 MB
+2019-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4509479) Windows Server 2019 Updates          2019/06/26  248.0 MB
+2019-07 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4505658) Windows Server 2019 Updates          2019/07/22  261.3 MB
+2019-08 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4512534) Windows Server 2019 Updates          2019/08/17  271.1 MB
+2019-10 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4520062) Windows Server 2019 Updates          2019/10/14  279.0 MB
+2020-01 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4534321) Windows Server 2019 Updates          2020/01/22  285.1 MB
+2020-02 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4537818) Windows Server 2019 Updates          2020/02/24  312.2 MB
+2020-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4554354) Windows Server 2019 Updates          2020/03/30  317.5 MB
+2020-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4541331) Windows Server 2019 Updates          2020/03/16  317.5 MB
+2020-04 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4550969) Windows Server 2019 Updates          2020/04/20  319.4 MB
+2020-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4567513) Windows Server 2019 Updates          2020/06/15  332.6 MB
+2020-11 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4594442) Windows Server 2019 Updates          2020/11/17  346.3 MB
+2020-11 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4586793) Windows Server 2019 Security Updates 2020/11/06  346.6 MB
+2020-12 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4592440) Windows Server 2019 Security Updates 2020/12/06  349.1 MB
+2020-10 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4577668) Windows Server 2019 Security Updates 2020/10/12  368.3 MB
+2021-01 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4598230) Windows Server 2019 Security Updates 2021/01/11  378.1 MB
+</code></pre></div>
+</div>
+
+<div class="code-output-caption">
+    <span>Search results based on a keyword search term using the `Strict` switch parameter and the `SortBy` parameter.</span>
+</div>
+
+<div class="callout info">
+    <div class="callout-wrapper">
+        <span>
+            
+            <i class="fas fa-info-circle fa-lg"></i>
+            
+        </span>
+        <div class="callout-content">
+            <p>The <code>SortBy</code> parameter accepts any of the following column headers; Title, Products, Classification, LastUpdated, and Size.</p>
+        </div>
+    </div>
+</div>
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<h3 id="returning-more-than-25-results-at-a-time">Returning more than 25 results at a time</h3>
+<p>So far, all of the previous examples have returned a maximum of 25 results. This is because the Microsoft Update Catalog site only provides 25 results at a time . If you want to return all available results, you can specify the <code>AllPages</code> switch parameter. This will make multiple web requests to the Microsoft Update Catalog site to retrieve all available pages of results; for example:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Params = @{
+    Search = <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span>
+    Strict = $true
+    SortBy = <span style="color:#e6db74">&#34;Size&#34;</span>
+    AllPages = $true
+}
+
+Get-MSCatalogUpdate @Params
+</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="code-output-inner">
+    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-MSCatalogUpdate @Params
+
+Title                                                                               Products            Classification   LastUpdated Size
+-----                                                                               --------            --------------   ----------- ----
+2018-10 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4464455) Windows Server 2019 Updates          2018/11/09  85.0 MB
+2018-11 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4469342) Windows Server 2019 Updates          2018/12/04  116.1 MB
+2019-01 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4476976) Windows Server 2019 Updates          2019/01/18  137.7 MB
+2019-02 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4482887) Windows Server 2019 Updates          2019/02/28  152.7 MB
+2019-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4490481) Windows Server 2019 Updates          2019/04/01  164.4 MB
+2019-05 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4501835) Windows Server 2019 Updates          2019/05/01  219.9 MB
+2019-04 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4495667) Windows Server 2019 Updates          2019/05/03  222.0 MB
+2019-05 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4505056) Windows Server 2019 Updates          2019/05/19  223.3 MB
+2019-05 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4497934) Windows Server 2019 Updates          2019/05/20  237.3 MB
+2019-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4501371) Windows Server 2019 Updates          2019/06/18  245.2 MB
+2019-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4509479) Windows Server 2019 Updates          2019/06/26  248.0 MB
+2019-07 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4505658) Windows Server 2019 Updates          2019/07/22  261.3 MB
+2019-08 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4512534) Windows Server 2019 Updates          2019/08/17  271.1 MB
+2019-10 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4520062) Windows Server 2019 Updates          2019/10/14  279.0 MB
+2020-01 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4534321) Windows Server 2019 Updates          2020/01/22  285.1 MB
+2020-02 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4537818) Windows Server 2019 Updates          2020/02/24  312.2 MB
+2020-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4554354) Windows Server 2019 Updates          2020/03/30  317.5 MB
+2020-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4541331) Windows Server 2019 Updates          2020/03/16  317.5 MB
+2020-04 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4550969) Windows Server 2019 Updates          2020/04/20  319.4 MB
+2020-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4567513) Windows Server 2019 Updates          2020/06/15  332.6 MB
+2020-11 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4594442) Windows Server 2019 Updates          2020/11/17  346.3 MB
+2020-11 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4586793) Windows Server 2019 Security Updates 2020/11/06  346.6 MB
+2020-12 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4592440) Windows Server 2019 Security Updates 2020/12/06  349.1 MB
+2020-10 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4577668) Windows Server 2019 Security Updates 2020/10/12  368.3 MB
+2021-01 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4598230) Windows Server 2019 Security Updates 2021/01/11  378.1 MB
+2021-02 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB4601345) Windows Server 2019 Security Updates 2021/02/08  381.2 MB
+2021-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5000822) Windows Server 2019 Security Updates 2021/03/08  391.2 MB
+2021-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5001638) Windows Server 2019 Updates          2021/03/18  391.4 MB
+2021-03 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5001568) Windows Server 2019 Updates          2021/03/15  391.5 MB
+2021-04 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5001342) Windows Server 2019 Security Updates 2021/04/12  393.6 MB
+2021-05 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5003171) Windows Server 2019 Security Updates 2021/05/12  487.9 MB
+2021-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5003646) Windows Server 2019 Security Updates 2021/06/07  499.5 MB
+</code></pre></div>
+</div>
+
+<div class="code-output-caption">
+    <span>Search results based on a keyword search term demonstrating the `AllPages` switch parameter.</span>
+</div>
+
+<div class="callout info">
+    <div class="callout-wrapper">
+        <span>
+            
+            <i class="fas fa-info-circle fa-lg"></i>
+            
+        </span>
+        <div class="callout-content">
+            <p>Even with the <code>AllPages</code> parameter, the Microsoft Catalog Update site will only provide a maximum of 1000 updates per search. This is another reason to make your search terms as specific as possible.</p>
+        </div>
+    </div>
+</div>
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<h2 id="downloading-updates-using-save-mscatalogupdate">Downloading updates using <code>Save-MSCatalogUpdate</code></h2>
+<p>Now that you&rsquo;ve mastered searching for updates using <code>Get-MSCatalogUpdate</code>, you&rsquo;ll need to know how to download them. For this, you&rsquo;ll use the <code>Save-MSCatalogUpdate</code> command.</p>
+<p>The first step is to use <code>Get-MSCatalogUpdate</code> to store a single update in a variable. For example, the following command will store the <code>Cumulative Update for Windows Server 2019 for x64-based Systems (KB5003646)</code> update in the <code>$Update</code> variable.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Update = Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems (KB5003646)&#34;</span>
+</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="code-output-inner">
+    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Store the update in the $Update variable.</span>
+PS C:\&gt; $Update = Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems (KB5003646)&#34;</span>
+
+<span style="color:#75715e"># Print the $Update variable to the console to check that it contains a single update.</span>
+PS C:\&gt; $Update
+
+Title                                                                               Products            Classification   LastUpdated Size
+-----                                                                               --------            --------------   ----------- ----
+2021-06 Cumulative Update <span style="color:#66d9ef">for</span> Windows Server 2019 <span style="color:#66d9ef">for</span> x64-based Systems (KB5003646) Windows Server 2019 Security Updates 2021/06/07  499.5 MB
+</code></pre></div>
+</div>
+
+<div class="code-output-caption">
+    <span>Storing a specific update in a variable (`$Update`).</span>
+</div>
+
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<p>Then, you can pass the <code>$Update</code> variable to the <code>Update</code> parameter of <code>Save-MSCatalogUpdate</code> to download it. You&rsquo;ll also need to provide a path to the <code>Destination</code> parameter; for example:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Save-MSCatalogUpdate -Update $Update -Destination <span style="color:#e6db74">&#34;C:\Temp&#34;</span>
+</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="code-output-inner">
+    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Save the update in $Update to C:\Temp.</span>
+PS C:\&gt; Save-MSCatalogUpdate -Update $Update -Destination <span style="color:#e6db74">&#34;C:\Temp&#34;</span>
+
+<span style="color:#75715e"># The Save-MSCatalogUpdate command doesn&#39;t show any output if successful. Instead,</span>
+<span style="color:#75715e"># you can use Get-ChildItem to see the downloaded file.</span>
+PS C:\&gt; Get-ChildItem -Path <span style="color:#e6db74">&#34;C:\Temp&#34;</span>
+
+    Directory<span style="color:#960050;background-color:#1e0010">:</span> C:\Temp
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a---          18/06/2021    14<span style="color:#960050;background-color:#1e0010">:</span>13      523802045 windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu
+</code></pre></div>
+</div>
+
+<div class="code-output-caption">
+    <span>Downloading an update using the `Update` parameter of the `Save-MSCatalogUpdate` command.</span>
+</div>
+
+<div class="callout info">
+    <div class="callout-wrapper">
+        <span>
+            
+            <i class="fas fa-info-circle fa-lg"></i>
+            
+        </span>
+        <div class="callout-content">
+            <p>If your <code>$Update</code> variable contains more than one update, you can always specify which update to download by its index in the array (e.g., <code>$Update[2]</code> will download the third update in a <a href="https://medium.com/analytics-vidhya/array-indexing-0-based-or-1-based-dd89d631d11c#:~:text=Zero-based%20array%20indexing%20is,in%20today%27s%20modern%20mathematical%20notation.">zero-based array</a>).</p>
+        </div>
+    </div>
+</div>
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<h3 id="sending-the-update-object-down-the-pipeline">Sending the update object down the pipeline</h3>
+<p>The <code>Save-MSCatalogUpdate</code> command can receive the update object to download via the pipeline. This can be useful for writing simple one-liners to quickly download a particular update. For example, to download the latest version of the <code>Cumulative Update for Windows Server 2019 for x64-based Systems</code> you can do the following.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Reference the first update returned by its index in the array (0), and pipe it to the Save-MSCatalogUpdate command.</span>
+(Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span>)[0] | Save-MSCatalogUpdate -Destination <span style="color:#e6db74">&#34;C:\Temp&#34;</span>
+</code></pre></div><h3 id="dealing-with-updates-composed-of-multiple-files">Dealing with updates composed of multiple files</h3>
+<p>Some updates are composed of multiple files. This often happens when there is more than one language available for a particular update. When this is the case, <code>Save-MSCatalogUpdate</code> will detect the available options and prompt you to select which ones to download.</p>
+<p>For example, the following commands attempt to download the <code>Update for Microsoft Office 2013 (KB4011677) 32-Bit Edition</code> update, which contains multiple files. <code>Save-MSCatalogUpdate</code> will prompt you to select the required file by specifying its <code>Id</code>, or you can enter <code>A</code> to download all of the files. In this example, enter <code>11</code> to download the <code>en-us</code> language file.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Update = Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Update for Microsoft Office 2013 (KB4011677) 32-Bit Edition&#34;</span>
+Save-MSCatalogUpdate -Update $Update -Destination <span style="color:#e6db74">&#34;.\&#34;</span>
+</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="code-output-inner">
+    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $Update = Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Update for Microsoft Office 2013 (KB4011677) 32-Bit Edition&#34;</span>
+PS C:\&gt; Save-MSCatalogUpdate -Update $Update -Destination <span style="color:#e6db74">&#34;.\&#34;</span>
+
+Id  FileName
+--  --------
+ 0  proof-ar-sa_d140d14d65cf35bf269443bedf33a91ce25ced17.cab
+ 1  proof-sl-si_7779ffad03046159c9fe46ea8b51cef2359ed043.cab
+ 2  proof-ru-ru_ad51c3015fef4ec84c7bf1bd7ecea3ae50513001.cab
+ 3  proof-fr-fr_cbaeb8d70abf4bdcdeab71b4e49a398ab683712c.cab
+ 4  proof-ko-kr_8b46b86d03f85b4d086ca4d1660a7a21ac42f578.cab
+ 5  proof-de-de_6b6827e86e0dc683245928c6b79dd4ac30347025.cab
+ 6  proof-eu-es_545179291145aef04a5d52fa1a099b9d75fd9579.cab
+ 7  proof-da-dk_ce1216eeb6613c13c05aef035d975244a30104c0.cab
+ 8  proof-hu-hu_2836b2b61c069f8044fadff8da95a7fe863c8ac1.cab
+ 9  proof-cs-cz_e770f507e123ad7041e0bebff98a56c52371ee9e.cab
+10  proof-he-il_2f9d6065513e8b16f071b2cde122fa58af8dcfcf.cab
+11  proof-en-us_1ae4178394992158748a482513090b4b34a4f14b.cab
+12  proof-sk-sk_7deb8a95620b29d6ea18da89280f78a0d27f8483.cab
+13  proof-ja-jp_3b98bb08afebd3008eb35b57a8ad6cfd8d7a3d3f.cab
+14  proof-nl-nl_17cae97668c7823db00841fa29f21c2e7dd3d2f7.cab
+15  proof-gl-es_06ad65e6d87f03024b134bfd1738fb1e5c0dbf73.cab
+16  proof-pt-pt_9b20088d5ecc7b5667ee50ce62c05691f69f6b7b.cab
+17  proof-zh-tw_85ba14c9118dbd2f8f45994bc2be9dd43bea0835.cab
+18  proof-uk-ua_fa2c211f0338f05a7246c5f964dee232d1324c2d.cab
+19  proof-tr-tr_4cebbef622cbc4ba57c4dbee0d599f43517c81ea.cab
+20  proof-sv-se_a76dd4e3f8cd6cd3c78dda6f790e96288e1d342b.cab
+21  proof-lt-lt_555e3ae1896c64e0bf4d090967441c84144f5fc0.cab
+22  proof-it-it_1d501afe89d70168f85ea3ba4abf0f56530d5a07.cab
+23  proof-nb-no_912c5a241d0cc0bdcb1558e80c5c2da43c364ed5.cab
+24  proof-hr-hr_121779d22ece7a765d903506d73e0ac20753b5e8.cab
+25  proof-pt-br_4881529c0171ea6208ce18b5de6c71684bad8976.cab
+26  proof-et-ee_bd4fe166c78101ff937564677cac47a222be34d0.cab
+27  proof-lv-lv_e7b24d89a2a72b1d8f3becef347ec49af736bbb0.cab
+28  proof-th-th_57215ae8456dc0426c9a0a7b30c5c93c53fb93a7.cab
+29  proof-el-gr_2f1ba04c2b0fb19ea1155c3d64a789e9a73b3684.cab
+30  proof-ro-ro_62e712365bcb41cfb64417b228ee44d0a14b1a56.cab
+31  proof-bg-bg_eaba8da224491f79802b27eceed9acfef68b56a4.cab
+32  proof-sr-cyrl-cs_6f091498ad5b32e43838b6993cba9e32785aee61.cab
+33  proof-zh-cn_de159b2b81701d56d070455fb63d062a8c84c31f.cab
+34  proof-nn-no_5554397a926949767d64803f19296b18ca952c50.cab
+35  proof-pl-pl_f911fda3832d574bd077a68b574565d8cd739f33.cab
+36  proof-hi-in_0628542b025c310c8ccef630627acb6f33648909.cab
+37  proof-ca-es_f6e24c8abd81d16ee14e4094e98419fccf19d224.cab
+38  proof-sr-latn-cs_551d05fa7b113d467d36f394976992f95bd192b5.cab
+39  proof-es-es_56697686e635a996b06b216fc3f0b4f7a49686f3.cab
+40  proof-fi-fi_100b6b21d102186192a860630007c06026106b0e.cab
+Multiple files exist <span style="color:#66d9ef">for</span> this update. Enter the Id of the file to download or <span style="color:#e6db74">&#39;A&#39;</span> to download all files.<span style="color:#960050;background-color:#1e0010">:</span> 11
+</code></pre></div>
+</div>
+
+<div class="code-output-caption">
+    <span>Demonstrating the `Save-MSCatalogUpdate` prompt when multiple files are available.</span>
+</div>
+
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<p>In order to avoid this prompt when downloading updates that are composed of multiple language files, <code>Save-MSCatalogUpdate</code> has a <code>Language</code> parameter. You can use this to specify the language to download, in the format <code>language-country</code>; for example:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Update = Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Update for Microsoft Office 2013 (KB4011677) 32-Bit Edition&#34;</span>
+Save-MSCatalogUpdate -Update $Update -Destination <span style="color:#e6db74">&#34;.\&#34;</span> -Language <span style="color:#e6db74">&#34;en-us&#34;</span>
+</code></pre></div><h2 id="installing-offline-updates-using-wusaexe">Installing offline updates using <code>wusa.exe</code></h2>
+<p>With the offline updates downloaded, you&rsquo;re now ready to install them. For this, you&rsquo;ll use the built-in <a href="https://support.microsoft.com/en-us/topic/description-of-the-windows-update-standalone-installer-in-windows-799ba3df-ec7e-b05e-ee13-1cdae8f23b19">Windows Update Standalone Installer</a> tool, <code>wusa.exe</code>. This process is very straightforward as there are only a couple of different parameters available to the <code>wusa.exe</code> command.</p>
+<p>The following example runs the <code>wusa.exe</code> command to install an update (<code>windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu</code> in this case) file located in the current directory. This will run the installer interactively and will prompt for input as required.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">wusa.exe <span style="color:#e6db74">&#34;.\windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu&#34;</span>
+</code></pre></div><p>This is fine, but with most automated solutions, you probably wouldn&rsquo;t want to have to interact with the installer. If this is the case, you can specify the <code>/quiet</code> switch to suppress all user input and restart the computer/server as required; for example;</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">wusa.exe <span style="color:#e6db74">&#34;.\windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu&#34;</span> /quiet
+</code></pre></div><div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+<p>Finally, if you&rsquo;d rather not let <code>wusa.exe</code> automatically reboot your computer/server without warning, you can use the <code>/norestart</code> switch combined with <code>/quiet</code>, as in the example below. This will not allow <code>wusa.exe</code> to trigger any restarts and, therefore, you&rsquo;d need to restart manually once the command completes.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">wusa.exe <span style="color:#e6db74">&#34;.\windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu&#34;</span> /quiet /norestart
+</code></pre></div><h2 id="conclusion">Conclusion</h2>
+<p>In this tutorial, you&rsquo;ve learned how to install the MSCatalog PowerShell module, how to search for and download offline updates from the Microsoft Update Catalog site, and how to install these updates using the built-in <code>wusa.exe</code> tool. Hopefully, this has been interesting to you and will help you when automating offline update tasks in the future. Thanks for reading!</p>
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+</div>
+
+    </section>
+
+</article>
+
+<div class="overlay-ad fixed">
+    <span><i class="fa fa-times-circle"></i></span>
+    <div class="overlay-ad-wrapper fixed">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <ins class="adsbygoogle" style="display:block; width:300px; height:250px" data-ad-client="ca-pub-8907477009760148"
+            data-ad-slot="3736399917"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+</div>
+
+<section class="footer-cta">
+    <div class="inner">
+        <h2>Sign up for more like this.</h2>
+        <a class="footer-cta-button su-modal-open-button" href="#/subscribe">
+            <div>Enter your email</div>
+            <span>Subscribe</span>
+        </a>
+    </div>
+</section>
+
+<aside class="read-more-wrap">
+    <div class="read-more inner">
+        
+        
+        
+        <article class="post-card">
+
+    
+    
+    <a class="post-card-image-link" href="https://ryanjan.uk/how-to-run-esxcli-commands-in-powershell/">
+        <img class="post-card-image" src="/how-to-run-esxcli-commands-in-powershell/feature-image.png" loading="lazy" />
+    </a>
+    
+
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="https://ryanjan.uk/how-to-run-esxcli-commands-in-powershell/">
+            <header class="post-card-header">
+                
+                
+                
+                <div class="post-card-primary-tag">powercli</div>
+                
+                
+                <h2 class="post-card-title">How to run ESXCLI commands in PowerShell using the PowerCLI Get-EsxCli cmdlet</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>If you&rsquo;re a vSphere admin, you&rsquo;ll be very familiar with the esxcli command. But have you ever wondered how to run esxcli commands from PowerCLI? Maybe you don&rsquo;t want to enable SSH on your hosts, or perhaps you need to run an esxcli command in a PowerShell script.</p>
+            </section>
+        </a>
+
+        <footer class="post-card-meta">
+            
+            
+            
+            
+            
+            <ul class="author-list">
+                <li class="author-list-item">
+                    
+                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="post-card-byline-content">
+                
+                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
+                
+                <span class="post-card-byline-date">17 Jun 2021 <span class="bull"> &bull; </span>
+                    8 min read</span>
+            </div>
+            
+        </footer>
+    </div>
+</article>
+        
+        <article class="post-card">
+
+    
+    
+        <a class="post-card-image-link" href="https://ryanjan.uk/how-to-validate-azure-resource-moves-using-powershell/">
+            <img class="post-card-image" src="/images/2021/05/azure-resources.png" loading="lazy" />
+        </a>
+    
+
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="https://ryanjan.uk/how-to-validate-azure-resource-moves-using-powershell/">
+            <header class="post-card-header">
+                
+                
+                
+                <div class="post-card-primary-tag">powershell</div>
+                
+                
+                <h2 class="post-card-title">How to validate Azure resource moves using PowerShell</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>The validate move resources API operation in Azure lets you pre-validate a potential move without actually moving any resources. This can be helpful when planning complex move scenarios.</p>
+            </section>
+        </a>
+
+        <footer class="post-card-meta">
+            
+            
+            
+            
+            
+            <ul class="author-list">
+                <li class="author-list-item">
+                    
+                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="post-card-byline-content">
+                
+                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
+                
+                <span class="post-card-byline-date">25 May 2021 <span class="bull"> &bull; </span>
+                    4 min read</span>
+            </div>
+            
+        </footer>
+    </div>
+</article>
+        
+        <article class="post-card">
+
+    
+    
+    <a class="post-card-image-link" href="https://ryanjan.uk/powershell-splatting/">
+        <img class="post-card-image" src="/powershell-splatting/feature-image.png" loading="lazy" />
+    </a>
+    
+
+    <div class="post-card-content">
+        <a class="post-card-content-link" href="https://ryanjan.uk/powershell-splatting/">
+            <header class="post-card-header">
+                
+                
+                
+                <div class="post-card-primary-tag">powershell</div>
+                
+                
+                <h2 class="post-card-title">What is PowerShell splatting and how does it work?</h2>
+            </header>
+            <section class="post-card-excerpt">
+                <p>In this tutorial you&rsquo;ll learn all about splatting, which is a technique used to pass parameter values to a PowerShell command.</p>
+            </section>
+        </a>
+
+        <footer class="post-card-meta">
+            
+            
+            
+            
+            
+            <ul class="author-list">
+                <li class="author-list-item">
+                    
+                    <a href="https://ryanjan.uk/authors/ryan/" class="static-avatar">
+                        
+                        <img class="author-profile-image" src="/authors/ryan/avatar_hu2133b973be59ca79693e44e4bc908b85_51876_60x60_fill_q75_box_center.jpg" />
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="post-card-byline-content">
+                
+                <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
+                
+                <span class="post-card-byline-date">13 May 2021 <span class="bull"> &bull; </span>
+                    8 min read</span>
+            </div>
+            
+        </footer>
+    </div>
+</article>
+        
+        
+    </div>
+</aside>
+
+    </main>
+    <footer class="site-footer outer">
+    <div class="inner">
+        <section class="copyright"><a href="https://ryanjan.uk/">RyanJan</a> &copy; 2021</section>
+        <nav class="site-footer-nav">
+            <a href="https://ryanjan.uk/">Latest Posts</a>
+            <a href="https://github.com/ryan-jan" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://twitter.com/_ryanjan_" target="_blank" rel="noopener">Twitter</a>
+        </nav>
+    </div>
+</footer>
+  </div>
+
+  <div id="signup-modal" class="su-modal">
+    <div class="su-modal-wrapper">
+      <div class="su-modal-container">
+        <div class="su-modal-content">
+          <span class="su-modal-closeicon">&times;</span>
+          <header class="su-modal-signup-header"><img class="su-modal-signup-logo" src="/images/favicon.png"
+              alt="RyanJan">
+            
+          </header>
+          <form
+            action="https://ryanjan.us1.list-manage.com/subscribe/post?u=60a6496a899e75ef8efe2e2ce&amp;id=9265c5169c"
+            method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+            target="_blank" novalidate>
+            <div class="su-modal-section">
+              <section class="su-modal-input-section">
+                <div class="su-modal-input-labelcontainer">
+                  <label for="input-name" class="su-modal-input-label">Name</label>
+                </div>
+                <input type="text" value="" name="NAME" class="su-modal-input" id="input-name" placeholder="Joe Bloggs">
+              </section>
+              <section class="su-modal-input-section">
+                <div class="su-modal-input-labelcontainer">
+                  <label for="input-email" class="su-modal-input-label">Email</label>
+                </div>
+                <input type="email" value="" name="EMAIL" class="su-modal-input" id="input-email"
+                  placeholder="joe.bloggs@example.com">
+              </section>
+              
+              <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text"
+                  name="b_60a6496a899e75ef8efe2e2ce_9265c5169c" tabindex="-1" value=""></div>
+
+              <button class="su-modal-btn su-modal-btn-main su-modal-btn-primary" type="submit"
+                style="color: rgb(255, 255, 255); background-color: rgb(0, 0, 0); opacity: 1; pointer-events: auto; width: 100%;">Sign
+                up</button>
+
+              <div id="mce-responses" class="clear">
+                <div class="response" id="mce-error-response" style="display:none"></div>
+                <div class="response" id="mce-success-response" style="display:none"></div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script>
+  <script
+    type='text/javascript'>(function ($) { window.fnames = new Array(); window.ftypes = new Array(); fnames[1] = 'NAME'; ftypes[1] = 'text'; fnames[0] = 'EMAIL'; ftypes[0] = 'email'; }(jQuery)); var $mcj = jQuery.noConflict(true);</script>
+
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous">
+    </script>
+  <script src="/js/casper.js"></script>
+  <script>
+    $(document).ready(function () {
+      
+      $('.gh-burger').click(function () {
+        $('body').toggleClass('gh-head-open');
+      });
+      
+      $(".gh-content").fitVids();
+    });
+  </script>
+
+  
+  <script type="text/javascript" src="/js/prism.js"></script>
+  <script type="text/javascript" src="/js/custom/prism-custom.js"></script>
+  <script type="text/javascript" src="/js/custom/custom.js"></script>
+
+  
+</body>
+
+</html>
