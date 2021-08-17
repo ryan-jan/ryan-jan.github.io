@@ -35,8 +35,15 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700" rel="stylesheet">
 
   
-  <script data-ad-client="ca-pub-8907477009760148" async
-    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  
+  
+    
+    <script type="text/javascript">
+        window._mNHandle = window._mNHandle || {};
+        window._mNHandle.queue = window._mNHandle.queue || [];
+        medianet_versionId = "3121199";
+    </script>
+    <script src="https://contextual.media.net/dmedianet.js?cid=8CU87TBK8" async="async"></script>
 
   
 <meta name="twitter:card" content="summary_large_image">
@@ -156,14 +163,18 @@ The Symptoms I was initially made aware of this issue as it appeared that certai
 </code></pre></div><p><img src="/images/2018/07/vSphere-events-2.png" alt="vSphere-events-2"></p>
 <p>These events can be seen in the Web UI but I also ran the following command to monitor the <code>hostd.log</code> file which showed, in real-time, a constant disconnect and reconnect loop.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">tail -f /var/log/hostd.log | grep <span style="color:#e6db74">&#34;&#39;Vimsvc.ha-eventmgr&#39;&#34;</span>
-</code></pre></div><div class="in-article-ad">
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
-          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
+</code></pre></div>
+
+<div id="554517397">
+     <script type="text/javascript">
+         try {
+             window._mNHandle.queue.push(function (){
+                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
+             });
+         }
+         catch (error) {}
      </script>
-</div>
+ </div>
 <h2 id="troubleshooting">Troubleshooting</h2>
 <p>These errors initially led me to believe that the issue was related to fibre channel connectivity of this datastore, so I had the storage team take a look. After much investigation the storage team assured me that they could not see any issues with the LUNs presented to these hosts.</p>
 <p>I then found the following errors logged in the <code>vmkernel.log</code> of the affected hosts.</p>
@@ -210,14 +221,18 @@ An ESXi 5.5 Update 2 or ESXi 6.0 host loses connectivity to a VMFS5 datastore, w
 <p>As I am reletavily new to this company (and as I&rsquo;m sure you&rsquo;ll appreciate there are many configurations in the environment that were made before my time) I decided to take a look at the affected hosts to see if someone has set this advanced setting previously. This is where I found the actual root cause.</p>
 <p>We are currently going through a host refresh for this particular cluster and while the old hosts profile did in fact have ATS heartbeat disabled, all of the new hosts had been given a new profile which did <strong>NOT</strong> have ATS heartbeat disabled. Apparently, this is because the version of IBM Storwise that we were previously running did not support using ATS for the VMFS heartbeat (see <a href="http://www-01.ibm.com/support/docview.wss?uid=ssg1S1005201">http://www-01.ibm.com/support/docview.wss?uid=ssg1S1005201</a>).</p>
 <p>As it happened, the old hosts were all sat in maintenance mode ready to be decommissioned, so I just expedited this process and unmounted the datastores from them. This obvisouly means that all of our new hosts are now using ATS heartbeat for VMFS datastores and the issue has been resolved.</p>
-<div class="in-article-ad">
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
-          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
+
+
+<div id="554517397">
+     <script type="text/javascript">
+         try {
+             window._mNHandle.queue.push(function (){
+                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
+             });
+         }
+         catch (error) {}
      </script>
-</div>
+ </div>
 
     </section>
 

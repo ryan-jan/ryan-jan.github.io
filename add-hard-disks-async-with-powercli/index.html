@@ -35,8 +35,15 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700" rel="stylesheet">
 
   
-  <script data-ad-client="ca-pub-8907477009760148" async
-    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  
+  
+    
+    <script type="text/javascript">
+        window._mNHandle = window._mNHandle || {};
+        window._mNHandle.queue = window._mNHandle.queue || [];
+        medianet_versionId = "3121199";
+    </script>
+    <script src="https://contextual.media.net/dmedianet.js?cid=8CU87TBK8" async="async"></script>
 
   
 <meta name="twitter:card" content="summary_large_image">
@@ -167,14 +174,18 @@
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$ScsiController = Get-ScsiController -VM <span style="color:#e6db74">&#34;vm0123&#34;</span>
 .\New-HardDiskAsync.ps1 -Name <span style="color:#e6db74">&#34;vm0123&#34;</span> -CapacityGB 500 -Controller $ScsiController[1]
 </code></pre></div><p>NOTE - In the example above I am simply specifying which SCSI controller to use based on its index position in the <code>$ScsiController</code> array.</p>
-<div class="in-article-ad">
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
-          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
+
+
+<div id="554517397">
+     <script type="text/javascript">
+         try {
+             window._mNHandle.queue.push(function (){
+                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
+             });
+         }
+         catch (error) {}
      </script>
-</div>
+ </div>
 <p>You will notice that a task object is returned by this script. This can be used to check the progress of the asynchronous task which is registered with the vCenter server by the script. In order to do this we will store the output from this script in a variable and then use the <code>Get-Task</code> CmdLet to see the status.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Task = .\New-HardDiskAsync.ps1 -Name <span style="color:#e6db74">&#34;vm0123&#34;</span> -CapacityGB 200
 Get-Task -Id $Task.Id
