@@ -35,15 +35,8 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700" rel="stylesheet">
 
   
-  
-  
-    
-    <script type="text/javascript">
-        window._mNHandle = window._mNHandle || {};
-        window._mNHandle.queue = window._mNHandle.queue || [];
-        medianet_versionId = "3121199";
-    </script>
-    <script src="https://contextual.media.net/dmedianet.js?cid=8CU87TBK8" async="async"></script>
+  <script data-ad-client="ca-pub-8907477009760148" async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
   
 <meta name="twitter:card" content="summary_large_image">
@@ -162,18 +155,14 @@
 </div>
 <p>Automating <a href="https://windowsupdate.microsoft.com">Windows Update Services</a> can be a pain! It&rsquo;s often easier to install an offline Windows update with <a href="https://docs.microsoft.com/en-us/powershell/">PowerShell</a>, but where can you download offline update files? Thankfully, the <a href="https://www.catalog.update.microsoft.com">Microsoft Update Catalog</a> site provides offline <code>.msu</code> files for all updates that are released. And, using the <a href="https://github.com/ryan-jan/MSCatalog">MSCatalog</a> module, it&rsquo;s a breeze to download and install these offline updates using PowerShell.</p>
 <p>In this tutorial, you&rsquo;ll first learn how to install the MSCatalog PowerShell module and query the Microsoft Update Catalog site. Then, you&rsquo;ll see how to download one or more updates and install them using PowerShell.</p>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h2 id="prerequisites">Prerequisites</h2>
 <p>To follow along with this tutorial, you&rsquo;ll just need to have <a href="https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.1">PowerShell 5.1 or later installed</a>. This tutorial will use PowerShell 7.1 running on a <a href="https://www.microsoft.com/en-us/windows-server">Windows Server 2019</a> server, although all of the processes will also work on a <a href="https://www.microsoft.com/en-gb/windows/get-windows-10">Windows 10</a> workstation.</p>
 <h2 id="installing-the-mscatalog-powershell-module">Installing the MSCatalog PowerShell module</h2>
@@ -204,18 +193,14 @@ Title                                                                           
 </div>
 
 <p>This is by far the fastest and most accurate way to search the Microsoft Update Catalog site. But what if you don&rsquo;t know the KB number?</p>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h3 id="searching-using-keywords">Searching using keywords</h3>
 <p>If you don&rsquo;t know the KB article number, you can filter the updates by providing one or more keywords to the <code>search</code> parameter. The example below provides a string (<code>Cumulative Update for Windows Server 2019 for x64-based Systems</code>) to the <code>search</code> parameter to filter the results. However, by default, the Microsoft Catalog Update site treats each of the words in this string as individual search terms, and tries to match them using an <code>OR</code> operator (e.g., Title contains &ldquo;Cumulative&rdquo; OR &ldquo;Update&rdquo; OR &ldquo;for&rdquo; etc.). This often provides results that aren&rsquo;t very accurate.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span>
@@ -257,18 +242,14 @@ Title                                                                           
     <span>Search results based on a keyword search term.</span>
 </div>
 
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <p>To ensure that only results containing the entire search term are returned, you can use the <code>strict</code> switch parameter. For example, the following command will search for updates containing the exact phrase <code>Cumulative Update for Windows Server 2019 for x64-based Systems</code>.</p>
 <div class="callout info">
     <div class="callout-wrapper">
@@ -333,18 +314,14 @@ Title                                                                           
         </div>
     </div>
 </div>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h3 id="manipulating-the-search-results">Manipulating the search results</h3>
 <p>By default, the results are sorted by the <code>LastUpdated</code> field in descending order (i.e., the newest update should be first in the list). However, you can use the <code>SortBy</code> and <code>Descending</code> parameters to manipulate the search results, as required.</p>
 <p>For example, the following command will perform the previous search again, but this time the <code>SortBy</code> parameter is set to <code>Size</code>. This will cause the results to be sorted by the Size column in ascending order. If you wanted the results in descending order, you&rsquo;d simply add the <code>Descending</code> switch parameter.</p>
@@ -417,18 +394,14 @@ Title                                                                           
         </div>
     </div>
 </div>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h3 id="returning-more-than-25-results-at-a-time">Returning more than 25 results at a time</h3>
 <p>So far, all of the previous examples have returned a maximum of 25 results. This is because the Microsoft Update Catalog site only provides 25 results at a time . If you want to return all available results, you can specify the <code>AllPages</code> switch parameter. This will make multiple web requests to the Microsoft Update Catalog site to retrieve all available pages of results; for example:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Params = @{
@@ -496,18 +469,14 @@ Title                                                                           
         </div>
     </div>
 </div>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h2 id="downloading-updates-using-save-mscatalogupdate">Downloading updates using <code>Save-MSCatalogUpdate</code></h2>
 <p>Now that you&rsquo;ve mastered searching for updates using <code>Get-MSCatalogUpdate</code>, you&rsquo;ll need to know how to download them. For this, you&rsquo;ll use the <code>Save-MSCatalogUpdate</code> command.</p>
 <p>The first step is to use <code>Get-MSCatalogUpdate</code> to store a single update in a variable. For example, the following command will store the <code>Cumulative Update for Windows Server 2019 for x64-based Systems (KB5003646)</code> update in the <code>$Update</code> variable.</p>
@@ -565,18 +534,14 @@ Mode                 LastWriteTime         Length Name
         </div>
     </div>
 </div>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h3 id="sending-the-update-object-down-the-pipeline">Sending the update object down the pipeline</h3>
 <p>The <code>Save-MSCatalogUpdate</code> command can receive the update object to download via the pipeline. This can be useful for writing simple one-liners to quickly download a particular update. For example, to download the latest version of the <code>Cumulative Update for Windows Server 2019 for x64-based Systems</code> you can do the following.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Reference the first update returned by its index in the array (0), and pipe it to the Save-MSCatalogUpdate command.</span>
@@ -642,18 +607,14 @@ Multiple files exist <span style="color:#66d9ef">for</span> this update. Enter t
     <span>Demonstrating the `Save-MSCatalogUpdate` prompt when multiple files are available.</span>
 </div>
 
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <p>In order to avoid this prompt when downloading updates that are composed of multiple language files, <code>Save-MSCatalogUpdate</code> has a <code>Language</code> parameter. You can use this to specify the language to download, in the format <code>language-country</code>; for example:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Update = Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Update for Microsoft Office 2013 (KB4011677) 32-Bit Edition&#34;</span>
 Save-MSCatalogUpdate -Update $Update -Destination <span style="color:#e6db74">&#34;.\&#34;</span> -Language <span style="color:#e6db74">&#34;en-us&#34;</span>
@@ -663,34 +624,26 @@ Save-MSCatalogUpdate -Update $Update -Destination <span style="color:#e6db74">&#
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">wusa.exe <span style="color:#e6db74">&#34;.\windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu&#34;</span>
 </code></pre></div><p>This is fine, but with most automated solutions, you probably wouldn&rsquo;t want to have to interact with the installer. If this is the case, you can specify the <code>/quiet</code> switch to suppress all user input and restart the computer/server as required; for example;</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">wusa.exe <span style="color:#e6db74">&#34;.\windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu&#34;</span> /quiet
-</code></pre></div>
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+</code></pre></div><div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <p>Finally, if you&rsquo;d rather not let <code>wusa.exe</code> automatically reboot your computer/server without warning, you can use the <code>/norestart</code> switch combined with <code>/quiet</code>, as in the example below. This will not allow <code>wusa.exe</code> to trigger any restarts and, therefore, you&rsquo;d need to restart manually once the command completes.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">wusa.exe <span style="color:#e6db74">&#34;.\windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu&#34;</span> /quiet /norestart
 </code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>In this tutorial, you&rsquo;ve learned how to install the MSCatalog PowerShell module, how to search for and download offline updates from the Microsoft Update Catalog site, and how to install these updates using the built-in <code>wusa.exe</code> tool. Hopefully, this has been interesting to you and will help you when automating offline update tasks in the future. Thanks for reading!</p>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 
     </section>
 
@@ -770,7 +723,7 @@ Save-MSCatalogUpdate -Update $Update -Destination <span style="color:#e6db74">&#
                 <a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a>
                 
                 <span class="post-card-byline-date">17 Jun 2021 <span class="bull"> &bull; </span>
-                    9 min read</span>
+                    8 min read</span>
             </div>
             
         </footer>

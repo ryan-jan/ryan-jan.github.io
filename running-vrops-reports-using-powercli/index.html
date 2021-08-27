@@ -35,15 +35,8 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700" rel="stylesheet">
 
   
-  
-  
-    
-    <script type="text/javascript">
-        window._mNHandle = window._mNHandle || {};
-        window._mNHandle.queue = window._mNHandle.queue || [];
-        medianet_versionId = "3121199";
-    </script>
-    <script src="https://contextual.media.net/dmedianet.js?cid=8CU87TBK8" async="async"></script>
+  <script data-ad-client="ca-pub-8907477009760148" async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
   
 <meta name="twitter:card" content="summary_large_image">
@@ -210,18 +203,14 @@ ChangePassword                                Method     void ChangePassword(VMw
 ChangePasswordAsync                           Method     System.Threading.Tasks.Task ChangePasswordAsync(System.Threading.CancellationToken cancellationToken, VMware.VimAutomation.VROps.Views.PasswordCh...
 </code></pre></div><p>I have cut the list short as there are hundreds of properties and methods available, but you can see that this is how all the vROps REST API methods are made available in PowerCLI.</p>
 <p>With this information, and the vROps API documentation that can be accessed via your vROps appliance (e.g. <code>http://vrops.example.com/suite-api</code>), I was able to generate and download a report as a <code>powershell</code> object. This mini-series will guide you through how I did it, starting with generating a report.</p>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h2 id="generating-a-report">Generating A Report</h2>
 <p>The first step is to generate a report. This is made possible by the <code>CreateReport()</code> method of the <code>extensionData</code> container. Looking at the API documentation, you will see that this method takes the <code>&lt;ns3:report&gt;</code> object as its input. The <code>&lt;ns3:report&gt;</code> model shows that it has the following three required properties.</p>
 <table>

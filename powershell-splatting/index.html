@@ -35,15 +35,8 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700" rel="stylesheet">
 
   
-  
-  
-    
-    <script type="text/javascript">
-        window._mNHandle = window._mNHandle || {};
-        window._mNHandle.queue = window._mNHandle.queue || [];
-        medianet_versionId = "3121199";
-    </script>
-    <script src="https://contextual.media.net/dmedianet.js?cid=8CU87TBK8" async="async"></script>
+  <script data-ad-client="ca-pub-8907477009760148" async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
   
 <meta name="twitter:card" content="summary_large_image">
@@ -159,18 +152,14 @@
         <h2 id="introduction">Introduction</h2>
 <p><a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_splatting?view=powershell-7.1">PowerShell splatting</a> is an interesting phrase that refers to a technique used to pass parameter values to a PowerShell command. Instead of supplying a long list of parameters, splatting allows you to use PowerShell objects containing parameter values instead. This helps make your code easier to read and allows you to reuse parameter values between commands more efficiently.</p>
 <p>In this tutorial, you&rsquo;ll learn everything there is to know about PowerShell splatting to help you write more awesome code!</p>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h2 id="prerequisites">Prerequisites</h2>
 <p>To follow along with this tutorial, you&rsquo;ll need to have <a href="https://github.com/PowerShell/PowerShell/releases">PowerShell</a> 7.1 installed. Splatting has been around since PowerShell 2.0, but some of the techniques described in this article, such as overriding splatted parameters, have only been available since version 7.1.</p>
 <h2 id="what-is-powershell-splatting">What is PowerShell splatting?</h2>
@@ -182,18 +171,14 @@ Copy-Item -Path <span style="color:#e6db74">&#34;.\source.txt&#34;</span> -Desti
 <span style="color:#75715e"># Other commands will be configured differently.</span>
 Copy-Item <span style="color:#e6db74">&#34;.\source.txt&#34;</span> <span style="color:#e6db74">&#34;.\dest.txt&#34;</span>
 </code></pre></div><p>These two methods are fine, but can quickly become difficult to deal with once you have many parameters for a command. This is where splatting comes in.</p>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h3 id="splatting-named-parameters-using-hashtables">Splatting named parameters using hashtables</h3>
 <p>To use splatting with named parameters, you first create a hashtable containing key/value pairs for each parameter/value. Then, you pass this variable to the command, replacing the dollar symbol (<code>$</code>) in the name with an At symbol (<code>@</code>); for example:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Create a hashtable containing the parameters and values.</span>
@@ -236,18 +221,14 @@ Copy-Item @Params -WhatIf
         </div>
     </div>
 </div>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h2 id="overriding-splatted-parameters">Overriding splatted parameters</h2>
 <p>In the previous example, you combined splatted and explicitly defined parameters. With the release of PowerShell 7.1, you can now override a splatted parameter in a similar way; for example:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Create a hashtable containing the parameters and values.</span>
@@ -311,18 +292,14 @@ Hello!
     <span>Output showing Invoke-FuncTwo splatting its parameters to Invoke-FuncOne.</span>
 </div>
 
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h2 id="using-splatting-with-proxy-functions">Using splatting with proxy functions</h2>
 <p><a href="https://devblogs.microsoft.com/scripting/proxy-functions-spice-up-your-powershell-core-cmdlets/">Proxy functions</a> are another advanced PowerShell technique. They&rsquo;re essentially a wrapper for an existing command, allowing you to add functionality not already implemented. Using the <code>$Args</code> automatic variable, which contains all unassigned parameters (i.e., parameters that are not named in the <code>param</code> block), you can pass parameters to a proxy function and then use splatting to pass them onto the existing command; for example:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Define a function to simply pass all parameters to the Get-Process command by</span>
@@ -402,18 +379,14 @@ Nope, not today!
         </div>
     </div>
 </div>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h2 id="why-not-just-use-backticks">Why not just use backticks?</h2>
 <p>There is one other technique that you might come across: namely, the use of backticks <code>`</code> to break the command line, so that code becomes more readable; for example:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Copy-Item -Path <span style="color:#e6db74">&#34;.\source\&#34;</span> `
@@ -446,18 +419,14 @@ Check the spelling of the name, or <span style="color:#66d9ef">if</span> a path 
 <p>This causes unnecessary confusion and can be hard to debug given that the error message is not usually very helpful. The bottom line is that splatting is a much better option.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>In this tutorial, you&rsquo;ve worked through examples of all the different splatting techniques. Learning how to combine these techniques gives you plenty of options to simplify complex code and make it easier to read. So, make sure your next scripts use splatting and keep writing awesome code!</p>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 
     </section>
 

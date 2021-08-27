@@ -35,15 +35,8 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700" rel="stylesheet">
 
   
-  
-  
-    
-    <script type="text/javascript">
-        window._mNHandle = window._mNHandle || {};
-        window._mNHandle.queue = window._mNHandle.queue || [];
-        medianet_versionId = "3121199";
-    </script>
-    <script src="https://contextual.media.net/dmedianet.js?cid=8CU87TBK8" async="async"></script>
+  <script data-ad-client="ca-pub-8907477009760148" async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
   
 <meta name="twitter:card" content="summary_large_image">
@@ -139,7 +132,7 @@
                     <h4 class="author-name"><a href="https://ryanjan.uk/authors/ryan/">Ryan Kowalewski</a></h4>
                     <div class="byline-meta-content">
                         17 Jun 2021
-                        <span class="byline-reading-time"><span class="bull">&bull;</span> 9 min
+                        <span class="byline-reading-time"><span class="bull">&bull;</span> 8 min
                             read</span>
                     </div>
                 </div>
@@ -162,18 +155,14 @@
 </div>
 <p>If you&rsquo;re a vSphere admin, you&rsquo;ll be very familiar with the <a href="https://code.vmware.com/docs/13462/esxcli-7-0-u2-concepts-and-examples/GUID-D2EA47F0-E7C2-4918-A07E-7161FB37E073.html"><code>esxcli</code></a> command. But have you ever wondered how to run <code>esxcli</code> commands from <a href="https://developer.vmware.com/powercli">PowerCLI</a>? Maybe you don&rsquo;t want to enable SSH on your hosts, or perhaps you need to run an <code>esxcli</code> command in a PowerShell script. The <a href="https://developer.vmware.com/docs/powercli/latest/vmware.vimautomation.core/commands/get-esxcli/#Default"><code>Get-EsxCli</code></a> cmdlet from the <a href="https://developer.vmware.com/powercli"><code>VMware.PowerCLI</code></a> PowerShell module is the answer!</p>
 <p>In this tutorial, you&rsquo;ll learn how to create an <code>esxcli</code> interface to a host  using PowerCLI, how to investigate the available namespaces, how to invoke <code>esxcli</code> methods, and more! It&rsquo;ll give you all the information you need to get the most out of the <code>Get-EsxCli</code> cmdlet.</p>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h2 id="prerequisites">Prerequisites</h2>
 <p>To follow along with this tutorial, you&rsquo;ll need the following:</p>
 <ul>
@@ -182,18 +171,14 @@
 <li>A vCenter server with at least one managed ESXi host. Both the server and host should be running version 6.5 or later.</li>
 <li>A general working knowledge of the <code>esxcli</code> command.</li>
 </ul>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h2 id="creating-an-interface-to-esxcli-using-get-esxcli">Creating an interface to ESXCLI using Get-EsxCli</h2>
 <p>The first step is to create an interface to an ESXi host using the <code>Get-EsxCli</code> cmdlet. This interface information is stored in a variable, which is then used to invoke <code>esxcli</code> methods.</p>
 <p>The following commands will connect you to your vCenter server and store the <code>esxcli</code> interface in a variable (<code>$EsxCli</code>).</p>
@@ -211,18 +196,14 @@ $EsxCli = Get-EsxCli -VMHost <span style="color:#e6db74">&#34;esx01.example.com&
         </div>
     </div>
 </div>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h2 id="traversing-the-namespace-hierarchy">Traversing the namespace hierarchy</h2>
 <p>With the <code>esxcli</code> interface details now stored in <code>$EsxCli</code>, it&rsquo;s time to look around. To start with, you can simply call the <code>$EsxCli</code> object to view all root namespace elements; for example:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli
@@ -284,18 +265,14 @@ EsxCliElement<span style="color:#960050;background-color:#1e0010">:</span> softw
     <span>Output showing the namespaces available in the `esxcli software` root namespace.</span>
 </div>
 
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h2 id="running-esxcli-commands">Running esxcli commands</h2>
 <p>As you look at the different namespaces, you&rsquo;ll start to see Method Elements and Methods listed in the output. For example, if you call the <code>$EsxCli.software.vib</code> namespace element, you&rsquo;ll see the following:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib
@@ -375,18 +352,14 @@ InvalidOperation<span style="color:#960050;background-color:#1e0010">:</span> Me
     <span>Output showing error when calling a Method Element directly.</span>
 </div>
 
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h3 id="using-the-invoke-method">Using the <code>Invoke()</code> Method</h3>
 <p>Now that you know the difference between Method Elements and Methods, it&rsquo;s time to start running some <code>esxcli</code> commands.</p>
 <p>First, print the <code>$EsxCli.software.vib.get</code> object to the console using the following command. You&rsquo;ll see that it contains its own list of callable Methods.</p>
@@ -454,18 +427,14 @@ Description               <span style="color:#960050;background-color:#1e0010">:
     <span>Partial output showing list of vibs returned from the `esxcli software vib get` command.</span>
 </div>
 
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h2 id="providing-arguments-to-an-esxcli-command">Providing arguments to an esxcli command</h2>
 <p>Now that you have learned how to use the <code>Invoke()</code> method to run an <code>esxcli</code> command in PowerCLI, the next step is to look at how to provide arguments.</p>
 <h3 id="identifying-the-available-arguments">Identifying the available arguments</h3>
@@ -523,18 +492,14 @@ rebootingimage                 Unset, (<span style="color:#66d9ef">[boolean]</sp
 
 </li>
 </ol>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 <h3 id="supplying-arguments-to-the-invoke-method">Supplying arguments to the <code>Invoke()</code> method</h3>
 <p>Now you&rsquo;ll learn how to supply the available arguments to the <code>Invoke()</code> method of an <code>esxcli</code> command. There are two different ways to do this:</p>
 <ol>
@@ -628,18 +593,14 @@ Version                   <span style="color:#960050;background-color:#1e0010">:
 </ol>
 <h2 id="conclusion">Conclusion</h2>
 <p>In this tutorial, you&rsquo;ve learned how to create an <code>esxcli</code> interface in PowerCLI using the <code>Get-EsxCli</code> cmdlet. You then learned how to investigate the namespace hierarchy and invoke <code>esxcli</code> commands with or without arguments, as required. I hope you&rsquo;ve found this interesting and thanks for reading!</p>
-
-
-<div id="554517397">
-     <script type="text/javascript">
-         try {
-             window._mNHandle.queue.push(function (){
-                 window._mNDetails.loadTag("554517397", "300x250", "554517397");
-             });
-         }
-         catch (error) {}
+<div class="in-article-ad">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
      </script>
- </div>
+</div>
 
     </section>
 
