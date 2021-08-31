@@ -7,7 +7,9 @@ $(".su-modal-open-button").click(() => {
 
 // overlay toc stuff
 $(document).scroll(() => {
-  checkTocOffset();
+  if ($(".gh-content").length) {
+    checkTocOffset();
+  }
 });
 
 function checkTocOffset() {
@@ -35,10 +37,12 @@ function checkTocOffset() {
 $(document).ready(function() {
   if (window.innerWidth >= 1366) {
     createTocList("#toc-list");
-    $(".overlay-toc").removeClass("fixed");
-    $(".overlay-toc").addClass("sticky");
-    $(".overlay-toc").offset({ top: $(".gh-content").offset().top });
-    $(".overlay-toc").css({"padding-top": "1.5vmin", "padding-bottom": "0px"})
+    if ($(".overlay-toc").length) {
+      $(".overlay-toc").removeClass("fixed");
+      $(".overlay-toc").addClass("sticky");
+      $(".overlay-toc").offset({ top: $(".gh-content").offset().top });
+      $(".overlay-toc").css({"padding-top": "1.5vmin", "padding-bottom": "0px"})
+    }
   } else {
     $(".overlay-toc").hide()
   }
