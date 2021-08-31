@@ -159,7 +159,7 @@
 <p>In this tutorial, you&rsquo;ll first learn how to install the MSCatalog PowerShell module and query the Microsoft Update Catalog site. Then, you&rsquo;ll see how to download one or more updates and install them using PowerShell.</p>
 <div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+     <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
           data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
      <script>
           (adsbygoogle = window.adsbygoogle || []).push({});
@@ -197,7 +197,7 @@ Title                                                                           
 <p>This is by far the fastest and most accurate way to search the Microsoft Update Catalog site. But what if you don&rsquo;t know the KB number?</p>
 <div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+     <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
           data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
      <script>
           (adsbygoogle = window.adsbygoogle || []).push({});
@@ -244,14 +244,6 @@ Title                                                                           
     <span>Search results based on a keyword search term.</span>
 </div>
 
-<div class="in-article-ad">
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
-          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-</div>
 <p>To ensure that only results containing the entire search term are returned, you can use the <code>strict</code> switch parameter. For example, the following command will search for updates containing the exact phrase <code>Cumulative Update for Windows Server 2019 for x64-based Systems</code>.</p>
 <div class="callout info">
     <div class="callout-wrapper">
@@ -315,14 +307,6 @@ Title                                                                           
             <p>When searching using keywords, you&rsquo;ll get the best results by being as specific as possible.</p>
         </div>
     </div>
-</div>
-<div class="in-article-ad">
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
-          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
 </div>
 <h3 id="manipulating-the-search-results">Manipulating the search results</h3>
 <p>By default, the results are sorted by the <code>LastUpdated</code> field in descending order (i.e., the newest update should be first in the list). However, you can use the <code>SortBy</code> and <code>Descending</code> parameters to manipulate the search results, as required.</p>
@@ -398,7 +382,7 @@ Title                                                                           
 </div>
 <div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+     <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
           data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
      <script>
           (adsbygoogle = window.adsbygoogle || []).push({});
@@ -471,14 +455,6 @@ Title                                                                           
         </div>
     </div>
 </div>
-<div class="in-article-ad">
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
-          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-</div>
 <h2 id="downloading-updates-using-save-mscatalogupdate">Downloading updates using <code>Save-MSCatalogUpdate</code></h2>
 <p>Now that you&rsquo;ve mastered searching for updates using <code>Get-MSCatalogUpdate</code>, you&rsquo;ll need to know how to download them. For this, you&rsquo;ll use the <code>Save-MSCatalogUpdate</code> command.</p>
 <p>The first step is to use <code>Get-MSCatalogUpdate</code> to store a single update in a variable. For example, the following command will store the <code>Cumulative Update for Windows Server 2019 for x64-based Systems (KB5003646)</code> update in the <code>$Update</code> variable.</p>
@@ -535,14 +511,6 @@ Mode                 LastWriteTime         Length Name
             <p>If your <code>$Update</code> variable contains more than one update, you can always specify which update to download by its index in the array (e.g., <code>$Update[2]</code> will download the third update in a <a href="https://medium.com/analytics-vidhya/array-indexing-0-based-or-1-based-dd89d631d11c#:~:text=Zero-based%20array%20indexing%20is,in%20today%27s%20modern%20mathematical%20notation.">zero-based array</a>).</p>
         </div>
     </div>
-</div>
-<div class="in-article-ad">
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
-          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
 </div>
 <h3 id="sending-the-update-object-down-the-pipeline">Sending the update object down the pipeline</h3>
 <p>The <code>Save-MSCatalogUpdate</code> command can receive the update object to download via the pipeline. This can be useful for writing simple one-liners to quickly download a particular update. For example, to download the latest version of the <code>Cumulative Update for Windows Server 2019 for x64-based Systems</code> you can do the following.</p>
@@ -611,7 +579,7 @@ Multiple files exist <span style="color:#66d9ef">for</span> this update. Enter t
 
 <div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
+     <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
           data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
      <script>
           (adsbygoogle = window.adsbygoogle || []).push({});
@@ -626,26 +594,10 @@ Save-MSCatalogUpdate -Update $Update -Destination <span style="color:#e6db74">&#
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">wusa.exe <span style="color:#e6db74">&#34;.\windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu&#34;</span>
 </code></pre></div><p>This is fine, but with most automated solutions, you probably wouldn&rsquo;t want to have to interact with the installer. If this is the case, you can specify the <code>/quiet</code> switch to suppress all user input and restart the computer/server as required; for example;</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">wusa.exe <span style="color:#e6db74">&#34;.\windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu&#34;</span> /quiet
-</code></pre></div><div class="in-article-ad">
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
-          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-</div>
-<p>Finally, if you&rsquo;d rather not let <code>wusa.exe</code> automatically reboot your computer/server without warning, you can use the <code>/norestart</code> switch combined with <code>/quiet</code>, as in the example below. This will not allow <code>wusa.exe</code> to trigger any restarts and, therefore, you&rsquo;d need to restart manually once the command completes.</p>
+</code></pre></div><p>Finally, if you&rsquo;d rather not let <code>wusa.exe</code> automatically reboot your computer/server without warning, you can use the <code>/norestart</code> switch combined with <code>/quiet</code>, as in the example below. This will not allow <code>wusa.exe</code> to trigger any restarts and, therefore, you&rsquo;d need to restart manually once the command completes.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">wusa.exe <span style="color:#e6db74">&#34;.\windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu&#34;</span> /quiet /norestart
 </code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>In this tutorial, you&rsquo;ve learned how to install the MSCatalog PowerShell module, how to search for and download offline updates from the Microsoft Update Catalog site, and how to install these updates using the built-in <code>wusa.exe</code> tool. Hopefully, this has been interesting to you and will help you when automating offline update tasks in the future. Thanks for reading!</p>
-<div class="in-article-ad">
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle" style="display:block; text-align:center; margin:0 auto;" data-ad-layout="in-article"
-          data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-</div>
 
     </section>
 
