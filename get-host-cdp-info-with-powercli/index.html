@@ -168,13 +168,13 @@
      </script>
 </div>
 <p>The first thing to do is connect to your vCenter server.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-VIServer vcenter.example.com
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-VIServer vcenter.example.com
 </code></pre></div><p>Next, get a specific host object and store it in the <code>$VMHost</code> variable.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VMHost = Get-VMHost -Name esxi01.example.com
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VMHost = Get-VMHost -Name esxi01.example.com
 </code></pre></div><p>The CDP information is actually found within the <code>NetworkSystem</code> managed object of the <code>HostConfigManager</code> object. This can be accessed using the <code>Get-View</code> CmdLet as follows.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$NetSystem = Get-View $VMHost.ExtensionData.ConfigManager.NetworkSystem
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$NetSystem = Get-View $VMHost.ExtensionData.ConfigManager.NetworkSystem
 </code></pre></div><p>If you pipe the <code>$NetSystem</code> object to the <code>Get-Member</code> CmdLet you should see something similar to this.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$NetSystem | Get-Member
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$NetSystem | Get-Member
 
 
    TypeName<span style="color:#960050;background-color:#1e0010">:</span> VMware.Vim.HostNetworkSystem
@@ -195,15 +195,15 @@ RefreshNetworkSystem            Method     void RefreshNetworkSystem()
 ...
 
 </code></pre></div><p>This displays all available methods and properties for this object. The method that we are going to use is <code>QueryNetworkHint</code>. To find out the arguments that this method requires you can run the method on its own.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$NetSystem.QueryNetworkHint
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$NetSystem.QueryNetworkHint
 
 OverloadDefinitions
 -------------------
 VMware.Vim.PhysicalNicHintInfo[] QueryNetworkHint(string[] device)
 </code></pre></div><p>We can see that the <code>QueryNetworkHint</code> method requires a single argument, which is an individual physical network device for the host. Helpfully, this information is readily available in our <code>$VMHost</code> variable from earlier. Running the following will list all physical devices for the specific host.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VMHost.ExtensionData.Config.Network.Pnic
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VMHost.ExtensionData.Config.Network.Pnic
 </code></pre></div><p>With these two pieces of information we are able to loop through each physical network device and run the <code>QueryNetworkHint</code> method.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Pnic <span style="color:#66d9ef">in</span> $VMHost.ExtensionData.Config.Network.Pnic) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Pnic <span style="color:#66d9ef">in</span> $VMHost.ExtensionData.Config.Network.Pnic) {
     $NetSystem.QueryNetworkHint($Pnic.Device)
 }
 
@@ -229,7 +229,7 @@ LldpInfo            <span style="color:#960050;background-color:#1e0010">:</span
 
 ...
 </code></pre></div><p>Looking at that output we can see that the information we are interested in is in the <code>ConnectedSwitchPort</code> property. I can expand the <code>foreach</code> loop as follows to get this information.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Pnic <span style="color:#66d9ef">in</span> $VMHost.ExtensionData.Config.Network.Pnic) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Pnic <span style="color:#66d9ef">in</span> $VMHost.ExtensionData.Config.Network.Pnic) {
     $PnicInfo = $NetSystem.QueryNetworkHint($Pnic.Device)
     $PnicInfo.ConnectedSwitchPort
 }
@@ -275,7 +275,7 @@ SystemOID        <span style="color:#960050;background-color:#1e0010">:</span> 1
 MgmtAddr         <span style="color:#960050;background-color:#1e0010">:</span> 10.123.96.142
 Location         <span style="color:#960050;background-color:#1e0010">:</span>
 </code></pre></div><p>There is a lot of information available in this property, most of which I am not interested in. Also, it is not very helpful that I can&rsquo;t tell from this output which physical device (e.g. vmnic0) that each of these blocks of information relate to. To tidy this up we can create a new <code>PSCustomObject</code> in the <code>foreach</code> loop and return only the information we want to see.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Pnic <span style="color:#66d9ef">in</span> $VMHost.ExtensionData.Config.Network.Pnic) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">foreach</span> ($Pnic <span style="color:#66d9ef">in</span> $VMHost.ExtensionData.Config.Network.Pnic) {
     $PnicInfo = $NetSystem.QueryNetworkHint($Pnic.Device)
     <span style="color:#66d9ef">[PSCustomObject]</span> @{
         <span style="color:#e6db74">&#39;Device&#39;</span> = $Pnic.Device
@@ -305,11 +305,11 @@ vmnic7 N5K_2                      Ethernet108/1/14
 <h2 id="a-helper-script">A Helper Script</h2>
 <p>Now that we understand how we can get this information via PowerCLI, I want to show you a helper script/function that I have put together. This script enables us to target specific hosts by hostname or cluster name and also allows us to filter which physical NICs we are interested in. The script is available on <a href="https://github.com/ryan-jan/Blog-Scripts/blob/master/Get-VMHostCDPInfo.ps1">my GitHub</a>.</p>
 <p>Once you have the script downloaded you will need to connect to your vCenter server before running it.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-VIServer -Server vcenter.example.com
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-VIServer -Server vcenter.example.com
 </code></pre></div><p>Here are a few examples of how you can use this script, note that the script excludes any physical NICs which do not have CDP information available. First, lets get a single host&rsquo;s CDP information.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\Get-VMHostCDPInfo.ps1 -VMHost <span style="color:#e6db74">&#39;esxi01.example.com&#39;</span> | Format-Table
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\Get-VMHostCDPInfo.ps1 -VMHost <span style="color:#e6db74">&#39;esxi01.example.com&#39;</span> | Format-Table
 </code></pre></div><p>I am using <code>Format-Table</code> to present the large dataset in a more friendy way. Now lets get CDP information for all hosts in the cluster <code>Cluster01</code>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\Get-VMHostCDPInfo.ps1 -Cluster <span style="color:#e6db74">&#39;Cluster01&#39;</span> | Format-Table -GroupBy VMHost
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\Get-VMHostCDPInfo.ps1 -Cluster <span style="color:#e6db74">&#39;Cluster01&#39;</span> | Format-Table -GroupBy VMHost
 
    VMHost<span style="color:#960050;background-color:#1e0010">:</span> esxi01.example.com
 
@@ -334,7 +334,7 @@ esxi02.example.com    vmnic4          2      60 131  346947 N5K_5               
 esxi02.example.com    vmnic5          2      60 170  346948 N5K_5                      10.222.0.230 Ethernet101/1/20 VMware.Vim.PhysicalNicCdpDeviceCapability
 esxi02.example.com    vmnic7          2      60 156  346948 N5K_5                      10.222.0.230 Ethernet101/1/19 VMware.Vim.PhysicalNicCdpDeviceCapability
 </code></pre></div><p>In this example I also used the <code>-GroupBy</code> parameter of <code>Format-Table</code> to display the information grouped by each host. Now lets get CDP information for both <code>esxi01.example.com</code> and <code>esxi02.example.com</code> but filter the results to show just <code>vmnic5</code> and <code>vmnic7</code>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\Get-VMHostCDPInfo.ps1 -VMHost <span style="color:#e6db74">&#39;esxi01.example.com&#39;</span>, <span style="color:#e6db74">&#39;esxi02.exmple.com&#39;</span> -Vmnic <span style="color:#e6db74">&#39;vmnic5&#39;</span>, <span style="color:#e6db74">&#39;vmnic7&#39;</span> | Format-Table -GroupBy VMHost
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\Get-VMHostCDPInfo.ps1 -VMHost <span style="color:#e6db74">&#39;esxi01.example.com&#39;</span>, <span style="color:#e6db74">&#39;esxi02.exmple.com&#39;</span> -Vmnic <span style="color:#e6db74">&#39;vmnic5&#39;</span>, <span style="color:#e6db74">&#39;vmnic7&#39;</span> | Format-Table -GroupBy VMHost
 
    VMHost<span style="color:#960050;background-color:#1e0010">:</span> esxi01.example.com
 
@@ -351,7 +351,7 @@ VMHost                Pnic   CdpVersion Timeout Ttl Samples DevId               
 esxi02.example.com    vmnic5          2      60 121  341221 N5K_5                      10.222.0.235 Ethernet102/1/7 VMware.Vim.PhysicalNicCdpDeviceCapability
 esxi02.example.com    vmnic7          2      60 146  341222 N5K_5                      10.222.0.235 Ethernet102/1/6 VMware.Vim.PhysicalNicCdpDeviceCapability
 </code></pre></div><p>And obviously you can use <code>Select-Object</code> to return only the columns that you require if you wish.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\Get-VMHostCDPInfo.ps1 -VMHost <span style="color:#e6db74">&#39;esxi01.example.com&#39;</span> -Vmnic <span style="color:#e6db74">&#39;vmnic5&#39;</span>, <span style="color:#e6db74">&#39;vmnic7&#39;</span> | Select-Object VMhost, Pnic, DevId, Address, PortId
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\Get-VMHostCDPInfo.ps1 -VMHost <span style="color:#e6db74">&#39;esxi01.example.com&#39;</span> -Vmnic <span style="color:#e6db74">&#39;vmnic5&#39;</span>, <span style="color:#e6db74">&#39;vmnic7&#39;</span> | Select-Object VMhost, Pnic, DevId, Address, PortId
 
 VMHost  <span style="color:#960050;background-color:#1e0010">:</span> esxi01.example.com
 Pnic    <span style="color:#960050;background-color:#1e0010">:</span> vmnic5

@@ -159,7 +159,7 @@
 <p>A colleague of mine recently asked for some help with a script he was writing. We use vSphere tags in order to determine which backup schedule a given VM is in and he wanted to find all VMs which were not assigned a tag in the category <code>backup-service-level</code>, and therefore were not being backed up. His actual query was regarding filtering out certain VMs which will never be given a backup tag. However, in helping with this I realised that his script was taking over 20 minutes to complete! I decided to take a copy and see if I could speed things up a bit.</p>
 <h2 id="the-script">The Script</h2>
 <p>Here is the script as it was when I first took a look at it.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VmNoTag = @()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VmNoTag = @()
 
 $VMs = Get-VM
 
@@ -178,7 +178,7 @@ $VMs = Get-VM
 $VmNoTag | Where-Object {$_.Tag <span style="color:#f92672">-eq</span> $null}
 </code></pre></div><p>It&rsquo;s functional and returns the required results. However, the first thing I noticed is that the <code>Get-TagAssignment</code> cmdlet is being called in every iteration of the <code>foreach</code> loop. This will take a very long time as it has to fetch results from the vCenter API each time it is called. Also, the last line of the script filters the results so that only VMs without a tag assigned are returned. This is iterating though all of the results in the <code>$VMs</code> array for a second time, which will also be contributing a small performance hit.</p>
 <p>In order to effectively measure the performance of the script in its current state I used the <code>Measure-Command</code> cmdlet. As you can see the script takes 24 minutes to run in its current state.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Measure-Command {&amp; .\Get-VMsWithNoTag.ps1}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Measure-Command {&amp; .\Get-VMsWithNoTag.ps1}
 
 Days              <span style="color:#960050;background-color:#1e0010">:</span> 0
 Hours             <span style="color:#960050;background-color:#1e0010">:</span> 0
@@ -201,7 +201,7 @@ TotalMilliseconds <span style="color:#960050;background-color:#1e0010">:</span> 
 </div>
 <h2 id="optimization">Optimization</h2>
 <p>I was pretty sure that calling <code>Get-TagAssignment</code> over and over again was causing the slowness. To fix this, I call <code>Get-TagAssignment</code> once, before the <code>foreach</code> loop, and store the results in an array named <code>$TagAssignments</code>. Then within the <code>foreach</code> loop all I have to do is check whether the <code>$TagAssignments</code> array contains the VM&rsquo;s name. If it doesn&rsquo;t then the VM doesn&rsquo;t have a backup tag assigned and I add it to the <code>$VmNoTag</code> array of results.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VmNoTag = @()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$VmNoTag = @()
 
 $VMs = Get-VM
 $TagAssignments = Get-TagAssignment -Category <span style="color:#e6db74">&#39;backup-service-level&#39;</span>
@@ -214,7 +214,7 @@ $TagAssignments = Get-TagAssignment -Category <span style="color:#e6db74">&#39;b
 
 $VmNoTag
 </code></pre></div><p>I retested the script using the <code>Measure-Command</code> cmdlet and the results were very interesting.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Measure-Command {&amp; .\Get-VMsWithNoTag.ps1}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Measure-Command {&amp; .\Get-VMsWithNoTag.ps1}
 
 
 Days              <span style="color:#960050;background-color:#1e0010">:</span> 0

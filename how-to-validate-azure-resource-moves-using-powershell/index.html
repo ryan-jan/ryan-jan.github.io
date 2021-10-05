@@ -183,7 +183,7 @@
 <li>The <code>ResourceId</code> of the destination resource group: <code>rg-dest</code> in this example.</li>
 </ul>
 <p>The following code connects to Azure using <a href="https://docs.microsoft.com/en-us/powershell/module/az.accounts/connect-azaccount?view=azps-5.9.0"><code>Connect-AzAccount</code></a> and stores your access token in a variable (<code>$Token</code>).</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-AzAccount
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-AzAccount
 
 <span style="color:#75715e"># Store the access token as a Secure String, as this is required by the</span>
 <span style="color:#75715e"># Invoke-RestMethod command later.</span>
@@ -201,7 +201,7 @@ $Token = (Get-AzAccessToken).Token | ConvertTo-SecureString -AsPlainText -Force
         </div>
     </div>
 </div>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$SourceGroupId = (Get-AzResourceGroup -Name <span style="color:#e6db74">&#34;rg-source&#34;</span>).ResourceId
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$SourceGroupId = (Get-AzResourceGroup -Name <span style="color:#e6db74">&#34;rg-source&#34;</span>).ResourceId
 $SourceResourceId = (Get-AzStorageAccount -Name <span style="color:#e6db74">&#34;st-source&#34;</span> -ResourceGroupName <span style="color:#e6db74">&#34;rg-source&#34;</span>).Id
 $DestGroupId = (Get-AzResourceGroup -Name <span style="color:#e6db74">&#34;rg-dest&#34;</span>).ResourceId
 </code></pre></div><div class="in-article-ad">
@@ -214,12 +214,12 @@ $DestGroupId = (Get-AzResourceGroup -Name <span style="color:#e6db74">&#34;rg-de
 </div>
 <h2 id="send-the-initial-request-to-the-move-validation-api-endpoint">Send the initial request to the move validation API endpoint</h2>
 <p>To start the move validation task, you&rsquo;ll send a <code>POST</code> request to the API endpoint. This request must include a JSON object as the body; for example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
  <span style="color:#f92672">&#34;resources&#34;</span>: [<span style="color:#e6db74">&#34;&lt;resource-id-1&gt;&#34;</span>, <span style="color:#e6db74">&#34;&lt;resource-id-2&gt;&#34;</span>],
  <span style="color:#f92672">&#34;targetResourceGroup&#34;</span>: <span style="color:#e6db74">&#34;/subscriptions/&lt;subscription-id&gt;/resourceGroups/&lt;target-group&gt;&#34;</span>
 }
 </code></pre></div><p>You can create the request body using the variables you stored in the previous step. The code below first creates a PowerShell <a href="https://docs.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-hashtable?view=powershell-7.1">hashtable</a> (<code>$Body</code>) representing the data, and then converts the hashtable to a JSON object (<code>$JsonBody</code>).</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Body = @{
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Body = @{
     resources = @($SourceResourceId)
     targetResourceGroup = $DestGroupId
 }
@@ -237,7 +237,7 @@ $JsonBody = $Body | ConvertTo-Json -Depth 5
         </div>
     </div>
 </div>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Params = @{
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Params = @{
     Uri = <span style="color:#e6db74">&#34;https://management.azure.com$SourceGroupId/validateMoveResources?api-version=2019-05-10&#34;</span>
     Body = $JsonBody
     Method = <span style="color:#e6db74">&#34;Post&#34;</span>
@@ -262,7 +262,7 @@ Invoke-RestMethod @Params
         </div>
     </div>
 </div>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Params = @{
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Params = @{
     Uri = $ResHeaders.Location[0]
     Authentication = <span style="color:#e6db74">&#34;Bearer&#34;</span>
     Token = $Token
@@ -271,7 +271,7 @@ Invoke-RestMethod @Params
 }
 Invoke-RestMethod @Params
 </code></pre></div><p>If the validation succeeds, the API returns a <code>204</code> <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status">HTTP response code</a> with no content. You can check the status code by printing the <code>$StatusCode</code> variable to the console. If the validation detects issues, it&rsquo;ll return an error; for instance:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Invoke-RestMethod<span style="color:#960050;background-color:#1e0010">:</span> {<span style="color:#e6db74">&#34;error&#34;</span><span style="color:#960050;background-color:#1e0010">:</span>{<span style="color:#e6db74">&#34;code&#34;</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#e6db74">&#34;MissingRegistrationsForTypes&#34;</span>,<span style="color:#e6db74">&#34;message&#34;</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#e6db74">&#34;The subscription &#39;037d15db-9c32-4493-a4dd-65054fc5a44f&#39; is not registered for resource types &#39;Microsoft.Storage/storageAccounts (westeurope)&#39;.&#34;</span>}}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Invoke-RestMethod<span style="color:#960050;background-color:#1e0010">:</span> {<span style="color:#e6db74">&#34;error&#34;</span><span style="color:#960050;background-color:#1e0010">:</span>{<span style="color:#e6db74">&#34;code&#34;</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#e6db74">&#34;MissingRegistrationsForTypes&#34;</span>,<span style="color:#e6db74">&#34;message&#34;</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#e6db74">&#34;The subscription &#39;037d15db-9c32-4493-a4dd-65054fc5a44f&#39; is not registered for resource types &#39;Microsoft.Storage/storageAccounts (westeurope)&#39;.&#34;</span>}}
 </code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>In this tutorial, you&rsquo;ve learned how to use the <code>Invoke-RestMethod</code> PowerShell cmdlet to validate potential resource moves in Azure.</p>
 <p>I hope this has been informative for you and thank you for reading!</p>

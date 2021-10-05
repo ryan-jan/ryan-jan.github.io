@@ -166,16 +166,16 @@
 <p>To follow along with this tutorial, you&rsquo;ll need to have <a href="https://github.com/PowerShell/PowerShell/releases">PowerShell</a> 7.1 installed. Splatting has been around since PowerShell 2.0, but some of the techniques described in this article, such as overriding splatted parameters, have only been available since version 7.1.</p>
 <h2 id="what-is-powershell-splatting">What is PowerShell splatting?</h2>
 <p>First, you&rsquo;ll need to be familiar with the basic named and positional PowerShell parameter types. For named parameters, you provide both a parameter name and value to a command; for example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Copy a text file using the Path and Destination named parameters.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Copy a text file using the Path and Destination named parameters.</span>
 Copy-Item -Path <span style="color:#e6db74">&#34;.\source.txt&#34;</span> -Destination <span style="color:#e6db74">&#34;.\dest.txt&#34;</span>
 </code></pre></div><p>For positional parameters, you simply provide the parameter values in the correct order, as you&rsquo;ll see below. The required order is determined by the command itself.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># This works because Copy-Item accepts Path as the first parameter and Destination as the second.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># This works because Copy-Item accepts Path as the first parameter and Destination as the second.</span>
 <span style="color:#75715e"># Other commands will be configured differently.</span>
 Copy-Item <span style="color:#e6db74">&#34;.\source.txt&#34;</span> <span style="color:#e6db74">&#34;.\dest.txt&#34;</span>
 </code></pre></div><p>These two methods are fine, but can quickly become difficult to deal with once you have many parameters for a command. This is where splatting comes in.</p>
 <h3 id="splatting-named-parameters-using-hashtables">Splatting named parameters using hashtables</h3>
 <p>To use splatting with named parameters, you first create a hashtable containing key/value pairs for each parameter/value. Then, you pass this variable to the command, replacing the dollar symbol (<code>$</code>) in the name with an At symbol (<code>@</code>); for example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Create a hashtable containing the parameters and values.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Create a hashtable containing the parameters and values.</span>
 $Params = @{
     Path = <span style="color:#e6db74">&#34;.\source.txt&#34;</span>
     Destination = <span style="color:#e6db74">&#34;.\dest.txt&#34;</span>
@@ -185,7 +185,7 @@ $Params = @{
 Copy-Item @Params
 </code></pre></div><h3 id="splatting-positional-parameters-using-arrays">Splatting positional parameters using arrays</h3>
 <p>To use splatting with positional parameters, you create an array containing each parameter value in the correct order and pass this to the command, in the same way as above; for example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Create an array containing each parameter value in the correct ordered position.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Create an array containing each parameter value in the correct ordered position.</span>
 $Params = @(
     <span style="color:#e6db74">&#34;.\source.txt&#34;</span>,
     <span style="color:#e6db74">&#34;.\dest.txt&#34;</span>
@@ -195,7 +195,7 @@ $Params = @(
 Copy-Item @Params
 </code></pre></div><h2 id="combining-explicit-and-splatted-parameters">Combining explicit and splatted parameters</h2>
 <p>It&rsquo;s often useful to combine parameter splatting with explicitly defined parameters. For example, you might want to include the <code>WhatIf</code> switch parameter to test a copy operation before actually copying the files, as you&rsquo;ll see below.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Create a hashtable containing the parameters and values.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Create a hashtable containing the parameters and values.</span>
 $Params = @{
     Path = <span style="color:#e6db74">&#34;.\source.txt&#34;</span>
     Destination = <span style="color:#e6db74">&#34;.\dest.txt&#34;</span>
@@ -225,7 +225,7 @@ Copy-Item @Params -WhatIf
 </div>
 <h2 id="overriding-splatted-parameters">Overriding splatted parameters</h2>
 <p>In the previous example, you combined splatted and explicitly defined parameters. With the release of PowerShell 7.1, you can now override a splatted parameter in a similar way; for example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Create a hashtable containing the parameters and values.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Create a hashtable containing the parameters and values.</span>
 $Params = @{
     Path = <span style="color:#e6db74">&#34;.\source.txt&#34;</span>
     Destination = <span style="color:#e6db74">&#34;.\dest.txt&#34;</span>
@@ -237,7 +237,7 @@ Copy-Item @Params -WhatIf<span style="color:#960050;background-color:#1e0010">:<
 </code></pre></div><p>In previous versions of PowerShell this will throw an error complaining that the <code>WhatIf</code> parameter is specified more than once.</p>
 <h2 id="reusing-splatted-parameters">Reusing splatted parameters</h2>
 <p>Another useful application of splatting is to define a set of parameters once, and then reuse them in subsequent commands; for example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Create a hashtable containing the parameters and values to reuse.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Create a hashtable containing the parameters and values to reuse.</span>
 $Params = @{
     Path = <span style="color:#e6db74">&#34;.\source\&#34;</span>
     Force = $true
@@ -252,7 +252,7 @@ Copy-Item @Params -Destination <span style="color:#e6db74">&#34;.\destination-on
 Copy-Item -Destination <span style="color:#e6db74">&#34;.\destination-two\&#34;</span> @Params
 </code></pre></div><h2 id="forwarding-parameters-using-psboundparameters">Forwarding parameters using $PSBoundParameters</h2>
 <p>The <code>$PSBoundParameters</code> variable is an <a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_automatic_variables?view=powershell-7.1">automatic variable</a>, which contains a dictionary of the parameters (and values) passed to a script or function. In the example below, you&rsquo;ll see how you can use splatting to forward the parameters from one function (<code>Invoke-FuncTwo</code>) to another (<code>Invoke-FuncOne</code>) using the <code>$PSBoundParameters</code> variable. This is an advanced technique and can take some getting your head around, but it does open up some interesting possibilities once you understand it.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">function</span> Invoke-FuncOne {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">function</span> Invoke-FuncOne {
     <span style="color:#66d9ef">param</span> ($a, $b, $c)
     $Output = <span style="color:#e6db74">&#34;&#34;</span>
         <span style="color:#66d9ef">if</span> ($a) {$Output += $a}
@@ -276,7 +276,7 @@ Copy-Item -Destination <span style="color:#e6db74">&#34;.\destination-two\&#34;<
 }
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Invoke-FuncTwo -a <span style="color:#e6db74">&#34;Hello&#34;</span> -b <span style="color:#e6db74">&#34;World&#34;</span> -c <span style="color:#e6db74">&#34;!&#34;</span>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Invoke-FuncTwo -a <span style="color:#e6db74">&#34;Hello&#34;</span> -b <span style="color:#e6db74">&#34;World&#34;</span> -c <span style="color:#e6db74">&#34;!&#34;</span>
 HelloWorld!
 Hello!
 </code></pre></div>
@@ -296,7 +296,7 @@ Hello!
 </div>
 <h2 id="using-splatting-with-proxy-functions">Using splatting with proxy functions</h2>
 <p><a href="https://devblogs.microsoft.com/scripting/proxy-functions-spice-up-your-powershell-core-cmdlets/">Proxy functions</a> are another advanced PowerShell technique. They&rsquo;re essentially a wrapper for an existing command, allowing you to add functionality not already implemented. Using the <code>$Args</code> automatic variable, which contains all unassigned parameters (i.e., parameters that are not named in the <code>param</code> block), you can pass parameters to a proxy function and then use splatting to pass them onto the existing command; for example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Define a function to simply pass all parameters to the Get-Process command by</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Define a function to simply pass all parameters to the Get-Process command by</span>
 <span style="color:#75715e"># splatting the @Args variable.</span>
 <span style="color:#66d9ef">function</span> Get-ProcessProxy {
     Get-Process @Args
@@ -306,7 +306,7 @@ Hello!
 Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span>
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span>
 
  NPM(K)    PM(M)      WS(M)     CPU(s)      Id  SI ProcessName
  ------    -----      -----     ------      --  -- -----------
@@ -320,7 +320,7 @@ Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span>
 </div>
 
 <p>You can also use the <code>$Args</code> variable combined with named parameters (i.e., those in the <code>param</code> block of a function):</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Define a function with named parameters $a and $b that also passes any other parameters</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Define a function with named parameters $a and $b that also passes any other parameters</span>
 <span style="color:#75715e"># to Get-Process by splatting the @Args variable.</span>
 <span style="color:#66d9ef">function</span> Get-ProcessProxy {
     <span style="color:#66d9ef">param</span> (
@@ -338,7 +338,7 @@ Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span> -
 Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span> -b <span style="color:#e6db74">&#34;Nope, not today!&#34;</span>
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span> -a<span style="color:#960050;background-color:#1e0010">:</span>$true
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-ProcessProxy -Name <span style="color:#e6db74">&#34;powershell&#34;</span> -a<span style="color:#960050;background-color:#1e0010">:</span>$true
 
  NPM(K)    PM(M)      WS(M)     CPU(s)      Id  SI ProcessName
  ------    -----      -----     ------      --  -- -----------
@@ -375,14 +375,14 @@ Nope, not today!
 </div>
 <h2 id="why-not-just-use-backticks">Why not just use backticks?</h2>
 <p>There is one other technique that you might come across: namely, the use of backticks <code>`</code> to break the command line, so that code becomes more readable; for example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Copy-Item -Path <span style="color:#e6db74">&#34;.\source\&#34;</span> `
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Copy-Item -Path <span style="color:#e6db74">&#34;.\source\&#34;</span> `
     -Destination <span style="color:#e6db74">&#34;.\dest\&#34;</span> `
     -Include <span style="color:#e6db74">&#34;*.txt&#34;</span> `
     -Force
 </code></pre></div><p>This is widely seen as a bad choice. Backticks are hard to read, easy to miss, and easy to mistype. Also, if you accidentally enter a space after a backtick, the command will fail with an error, as you&rsquo;ll see below.</p>
 <div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Copy-Item -Path <span style="color:#e6db74">&#34;.\source\&#34;</span> `
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Copy-Item -Path <span style="color:#e6db74">&#34;.\source\&#34;</span> `
 &gt;&gt;     -Destination <span style="color:#e6db74">&#34;.\dest\&#34;</span> `
 &gt;&gt;     -Include <span style="color:#e6db74">&#34;*.txt&#34;</span> `
 &gt;&gt;     -Force

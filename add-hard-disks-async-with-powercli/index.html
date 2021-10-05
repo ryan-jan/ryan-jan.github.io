@@ -159,14 +159,14 @@
 <p>At the time of writing the <code>New-HardDisk</code> PowerCLI CmdLet does not yet have a <code>-RunAsync</code> parameter. I found this out when trying to create a new 300 GiB eagerly zeroed disk on multiple VMs in one go. I soon realised that I was going to be sat there for a long time as each new disk was being formatted one at a time. So, I asked around on the PowerCLI Slack channel for any ideas and <a href="https://twitter.com/ROIdude">Steve Kaplan</a> helpfully reminded me that I should be able to work out how to add these disks asynchronously using the Code Capture feature in the HTML5 web client, and he was right! I have put together a script which you can grab from my <a href="https://github.com/ryan-jan/Blog-Scripts/blob/master/powershell/New-HardDiskAsync.ps1">GitHub</a> to make things easier and I will give some brief examples below.</p>
 <h2 id="using-the-new-harddiskasyncps1-script">Using the New-HardDiskAsync.ps1 Script</h2>
 <p>Once you have a copy of the script downloaded from my GitHub repository, you will first need to connect to a vCenter server using the <code>Connect-VIServer</code> CmdLet.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-VIServer -Server <span style="color:#e6db74">&#34;vcenter.example.com&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-VIServer -Server <span style="color:#e6db74">&#34;vcenter.example.com&#34;</span>
 </code></pre></div><p>First lets add a single 200 GiB thin provisioned disk to the VM named <code>vm0123</code>.</p>
 <p>NOTE - These examples assume that the script is saved in the current working directory.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\New-HardDiskAsync.ps1 -Name <span style="color:#e6db74">&#34;vm0123&#34;</span> -CapacityGB 200
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\New-HardDiskAsync.ps1 -Name <span style="color:#e6db74">&#34;vm0123&#34;</span> -CapacityGB 200
 </code></pre></div><p>Now lets create a 500 GiB thick provisioned disk which is eager zeroed.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\New-HardDiskAsync.ps1 -Name <span style="color:#e6db74">&#34;vm0123&#34;</span> -CapacityGB 500 -StorageFormat <span style="color:#e6db74">&#34;EagerZeroedThick&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">.\New-HardDiskAsync.ps1 -Name <span style="color:#e6db74">&#34;vm0123&#34;</span> -CapacityGB 500 -StorageFormat <span style="color:#e6db74">&#34;EagerZeroedThick&#34;</span>
 </code></pre></div><p>We can also use the <code>-Controller</code> parameter to specify a particular SCSI controller if there is more than one assigned to the VM (by default if there is more than one assigned and this parameter is not specified we will pick the first SCSI controller with free capacity).</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$ScsiController = Get-ScsiController -VM <span style="color:#e6db74">&#34;vm0123&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$ScsiController = Get-ScsiController -VM <span style="color:#e6db74">&#34;vm0123&#34;</span>
 .\New-HardDiskAsync.ps1 -Name <span style="color:#e6db74">&#34;vm0123&#34;</span> -CapacityGB 500 -Controller $ScsiController[1]
 </code></pre></div><p>NOTE - In the example above I am simply specifying which SCSI controller to use based on its index position in the <code>$ScsiController</code> array.</p>
 <div class="in-article-ad">
@@ -178,7 +178,7 @@
      </script>
 </div>
 <p>You will notice that a task object is returned by this script. This can be used to check the progress of the asynchronous task which is registered with the vCenter server by the script. In order to do this we will store the output from this script in a variable and then use the <code>Get-Task</code> CmdLet to see the status.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Task = .\New-HardDiskAsync.ps1 -Name <span style="color:#e6db74">&#34;vm0123&#34;</span> -CapacityGB 200
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Task = .\New-HardDiskAsync.ps1 -Name <span style="color:#e6db74">&#34;vm0123&#34;</span> -CapacityGB 200
 Get-Task -Id $Task.Id
 
 Name                           State      % Complete Start Time   Finish Time

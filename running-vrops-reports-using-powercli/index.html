@@ -164,7 +164,7 @@
 </ul>
 <h2 id="introduction">Introduction</h2>
 <p>I&rsquo;ve been spending quite a bit of time with vRealize Operations Manager (vROps) lately, mostly running reports. While this is easy enough to do via the web UI, I found myself running a report, downloading the <code>.csv</code>, and then importing the data into PowerShell to work with it. Obviously, I turned to PowerCLI to see if I could do this all in PowerShell! However, I quickly vRealized (see what I did there) that the vROps PowerCLI module currently does not contain many Cmdlets, as shown below.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-Command -Module VMware.VimAutomation.vROps
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-Command -Module VMware.VimAutomation.vROps
 
 CommandType     Name                                               Version    Source
 -----------     ----                                               -------    ------
@@ -183,9 +183,9 @@ Cmdlet          Get-OMUser                                         10.0.0.... VM
 Cmdlet          Set-OMAlert                                        10.0.0.... VMware.VimAutomation.vROps
 </code></pre></div><p>Don&rsquo;t get me wrong - this is a good start but doesn&rsquo;t help me run reports. So, I had a look around online and found a great blog post by <a href="https://twitter.com/johnddias">John Dias</a> on <a href="https://blogs.vmware.com/PowerCLI/2016/05/using-entire-api-vrealize-operations-via-powercli.html">using the entire vROps REST API via PowerCLI</a>. I won&rsquo;t go into massive detail because I think John is far more informative than I would be, but essentially it explains that the entire vROps API is available by manipulating the <code>extensionData</code> container via PowerCLI.</p>
 <p>For example: if you connect to your vROps server as follows,</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops = Connect-OMServer -Server vrops.example.com -User <span style="color:#e6db74">&#34;admin&#34;</span> -Password <span style="color:#e6db74">&#34;Password&#34;</span> -AuthSource <span style="color:#e6db74">&#34;Local Users&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops = Connect-OMServer -Server vrops.example.com -User <span style="color:#e6db74">&#34;admin&#34;</span> -Password <span style="color:#e6db74">&#34;Password&#34;</span> -AuthSource <span style="color:#e6db74">&#34;Local Users&#34;</span>
 </code></pre></div><p>You can then use the <code>$vrops</code> object to access the <code>extensionData</code>. Piping to the <code>Get-Member</code> Cmdlet allows you to see all of the properties and methods available.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData | Get-Member
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData | Get-Member
 
    TypeName<span style="color:#960050;background-color:#1e0010">:</span> VMware.VimAutomation.VROps.Views.ServerApi
 
@@ -246,16 +246,16 @@ ChangePasswordAsync                           Method     System.Threading.Tasks.
 </tbody>
 </table>
 <p>Let&rsquo;s take a look at getting the <code>resourceId</code> first, as there is already a <code>cmdlet</code> for this in the <code>VMware.VimAutomation.vROps</code> module. So, if I wanted to get the <code>Id</code> for the vSphere World resource, I would use the following.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Import-Module VMware.VimAutomation.vROps
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Import-Module VMware.VimAutomation.vROps
 Get-OMResource -Name <span style="color:#e6db74">&#34;vSphere World&#34;</span> | Select-Object Id
 
 Id
 --
 26717f44-cd8d-486a-821f-e1df41bb49b3
 </code></pre></div><p>That was easy. Next, let&rsquo;s take a look at getting the <code>reportDefinitionId</code> for the report that we want to generate. In this example, I am going to use the Oversized VMs report. Unfortunately, there is not a <code>cmdlet</code> for this yet, so we have to use the <code>extensionData</code> container as explained previously. If you haven&rsquo;t done so already, connect to your vROps instance like so.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops = Connect-OMServer -Server vrops.example.com -User <span style="color:#e6db74">&#34;admin&#34;</span> -Password <span style="color:#e6db74">&#34;Password&#34;</span> -AuthSource <span style="color:#e6db74">&#34;Local Users&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops = Connect-OMServer -Server vrops.example.com -User <span style="color:#e6db74">&#34;admin&#34;</span> -Password <span style="color:#e6db74">&#34;Password&#34;</span> -AuthSource <span style="color:#e6db74">&#34;Local Users&#34;</span>
 </code></pre></div><p>Now, we can use the <code>GetReportDefinitions()</code> method to search through the available reports and find the <code>Id</code> of the report that we want. I&rsquo;m using the third parameter of this method to filter the results by name.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.GetReportDefinitions($null, $null, <span style="color:#e6db74">&#34;Oversized Virtual Machines&#34;</span>).ReportDefinition
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.GetReportDefinitions($null, $null, <span style="color:#e6db74">&#34;Oversized Virtual Machines&#34;</span>).ReportDefinition
 
 Name                 <span style="color:#960050;background-color:#1e0010">:</span> Optimization Report - Oversized Virtual Machines
 Description          <span style="color:#960050;background-color:#1e0010">:</span> Oversized VMs Report.
@@ -272,9 +272,9 @@ Active               <span style="color:#960050;background-color:#1e0010">:</spa
 ActiveSpecified      <span style="color:#960050;background-color:#1e0010">:</span> True
 AnyAttr              <span style="color:#960050;background-color:#1e0010">:</span>
 </code></pre></div><p>I hope you agree that that also wasn&rsquo;t too difficult. However, now comes the slightly trickier part. We need to use a <code>traversalSpec</code> to tell vROps which inventory to traverse when generating the report. You can list all available <code>traversalSpecs</code> by calling the <code>GetTraversalSpecs()</code> method.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.GetTraversalSpecs().TraversalSpec
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.GetTraversalSpecs().TraversalSpec
 </code></pre></div><p>You may have noticed when looking at the <code>&lt;ns3:report&gt;</code> model previously that the <code>traversalSpec</code> property actually expects to receive a <code>&lt;ns3:traversal-spec&gt;</code> object, not a string <code>Id</code> as is the case with the other two properties. Therefore, we need to create a <code>traversalSpec</code> object to use with the <code>CreateReport()</code> method. I am targeting the vSphere Hosts and Clusters <code>traversalSpec</code> for this example, so let&rsquo;s filter the results from the previous command.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.GetTraversalSpecs($null, $null, <span style="color:#e6db74">&#34;vSphere Hosts and Clusters&#34;</span>).TraversalSpec
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.GetTraversalSpecs($null, $null, <span style="color:#e6db74">&#34;vSphere Hosts and Clusters&#34;</span>).TraversalSpec
 
 Name                       <span style="color:#960050;background-color:#1e0010">:</span> vSphere Hosts and Clusters
 Description                <span style="color:#960050;background-color:#1e0010">:</span> Enables view of resources imported from vCenter like Clusters, Hosts, VMs and ResourcePools
@@ -284,19 +284,19 @@ Any                        <span style="color:#960050;background-color:#1e0010">
 AdapterInstanceAssociation <span style="color:#960050;background-color:#1e0010">:</span> False
 AnyAttr                    <span style="color:#960050;background-color:#1e0010">:</span>
 </code></pre></div><p>We can use this information to build a <code>traversalSpec</code> object. If you look at the API documentation for the <code>&lt;ns3:traversal-spec&gt;</code> model, you will find that there is only one required property, which is the <code>Name</code>. However, during testing I found that I also needed to specify the <code>RootAdapterKindKey</code> and the <code>RootResourceKindKey</code>. Therefore, we can create the object and assign the property values as follows.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$TraversalSpec = New-Object VMware.VimAutomation.VROps.Views.TraversalSpec
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$TraversalSpec = New-Object VMware.VimAutomation.VROps.Views.TraversalSpec
 $TraversalSpec.Name = <span style="color:#e6db74">&#34;vSphere Hosts and Clusters&#34;</span>
 $TraversalSpec.RootAdapterKindKey = <span style="color:#e6db74">&#34;VMWARE&#34;</span>
 $TraversalSpec.RootResourceKindKey = <span style="color:#e6db74">&#34;vSphere World&#34;</span>
 </code></pre></div><p>Now we have all of the required properties for the <code>&lt;ns3:report&gt;</code> object we can piece this all together and finally generate the report!</p>
 <p>First, we need to create a report object in our PowerShell session.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Report = New-Object VMware.VimAutomation.VROps.Views.Report
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Report = New-Object VMware.VimAutomation.VROps.Views.Report
 </code></pre></div><p>Next, we can set the three required properties on the report object using the information we just collected.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Report.ResourceId = <span style="color:#e6db74">&#34;26717f44-cd8d-486a-821f-e1df41bb49b3&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Report.ResourceId = <span style="color:#e6db74">&#34;26717f44-cd8d-486a-821f-e1df41bb49b3&#34;</span>
 $Report.ReportDefinitionId = <span style="color:#e6db74">&#34;1f69952f-7ff4-4d2c-9446-81a811de19b0&#34;</span>
 $Report.TraversalSpec = $TraversalSpec
 </code></pre></div><p>Finally, we can run the <code>CreateReport()</code> method to generate the report!</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.CreateReport($Report)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.CreateReport($Report)
 
 Name               <span style="color:#960050;background-color:#1e0010">:</span>
 Description        <span style="color:#960050;background-color:#1e0010">:</span> Oversized VMs Report.
@@ -312,7 +312,7 @@ Any                <span style="color:#960050;background-color:#1e0010">:</span>
 Id                 <span style="color:#960050;background-color:#1e0010">:</span> 5ef2e8c9-09bb-4a74-b560-f9ad2e810854
 AnyAttr            <span style="color:#960050;background-color:#1e0010">:</span>
 </code></pre></div><p>Congratulations - your report is now being generated! As you can see, its status is currently QUEUED. Depending on the size of your environment, it may take a while to complete. We can use the <code>Id</code> from above to check the status of the report.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.GetReport(<span style="color:#e6db74">&#34;5ef2e8c9-09bb-4a74-b560-f9ad2e810854&#34;</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.GetReport(<span style="color:#e6db74">&#34;5ef2e8c9-09bb-4a74-b560-f9ad2e810854&#34;</span>)
 
 Name               <span style="color:#960050;background-color:#1e0010">:</span>
 Description        <span style="color:#960050;background-color:#1e0010">:</span> Oversized VMs Report.

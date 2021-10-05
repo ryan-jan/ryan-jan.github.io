@@ -6,7 +6,25 @@
     <description>Recent content in vsphere on RyanJan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Wed, 19 Jun 2019 17:28:24 +0000</lastBuildDate><atom:link href="https://ryanjan.uk/tags/vsphere/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 05 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://ryanjan.uk/tags/vsphere/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to download and setup the VMware vSphere Client</title>
+      <link>https://ryanjan.uk/download-and-install-vsphere-client/</link>
+      <pubDate>Tue, 05 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://ryanjan.uk/download-and-install-vsphere-client/</guid>
+      <description>Find out how you should be managing your vSphere environment in 2021!</description>
+    </item>
+    
+    <item>
+      <title>How to Update VMware ESXi Hosts with Lifecycle Manager</title>
+      <link>https://ryanjan.uk/update-esxi-hosts-using-lifecycle-manager/</link>
+      <pubDate>Sun, 29 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://ryanjan.uk/update-esxi-hosts-using-lifecycle-manager/</guid>
+      <description>This tutorial shows you how to use the vSphere Lifecycle Manager to update ESXi hosts.</description>
+    </item>
+    
     <item>
       <title>Managing vSphere Global Permissions with PowerShell</title>
       <link>https://ryanjan.uk/vsphere-global-permissions-with-powershell/</link>

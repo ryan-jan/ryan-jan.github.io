@@ -169,17 +169,17 @@
 <p>To follow along with this tutorial, you&rsquo;ll just need to have <a href="https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.1">PowerShell 5.1 or later installed</a>. This tutorial will use PowerShell 7.1 running on a <a href="https://www.microsoft.com/en-us/windows-server">Windows Server 2019</a> server, although all of the processes will also work on a <a href="https://www.microsoft.com/en-gb/windows/get-windows-10">Windows 10</a> workstation.</p>
 <h2 id="installing-the-mscatalog-powershell-module">Installing the MSCatalog PowerShell module</h2>
 <p>If you haven&rsquo;t done so already, the first thing you&rsquo;ll need to do is install the latest version of the MSCatalog module from the <a href="https://www.powershellgallery.com">PowerShell Gallery</a>. This is as simple as running the following command.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Install-Module -Name <span style="color:#e6db74">&#34;MSCatalog&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Install-Module -Name <span style="color:#e6db74">&#34;MSCatalog&#34;</span>
 </code></pre></div><p>If you already have the module installed, it&rsquo;s good practice to make sure it is the latest version. You can do this using the Update-Module cmdlet; for example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Update-Module -Name <span style="color:#e6db74">&#34;MSCatalog&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Update-Module -Name <span style="color:#e6db74">&#34;MSCatalog&#34;</span>
 </code></pre></div><h2 id="searching-for-updates-using-get-mscatalogupdate">Searching for updates using <code>Get-MSCatalogUpdate</code></h2>
 <p>Now that you&rsquo;ve got the latest version of MSCatalog installed, you can start querying the Microsoft Update Catalog site. To do this, you&rsquo;ll use the <code>Get-MSCatalogUpdate</code> command.</p>
 <h3 id="searching-by-the-kb-article-number">Searching by the KB article number</h3>
 <p>If you already know the KB article number relating to the update you&rsquo;re searching for, you can simply specify this using the <code>search</code> parameter. For example, the following command will search for updates matching <code>KB5003646</code>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;KB5003646&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;KB5003646&#34;</span>
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;KB5003646&#34;</span>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;KB5003646&#34;</span>
 
 Title                                                                                     Products                   Classification   LastUpdated Size
 -----                                                                                     --------                   --------------   ----------- ----
@@ -205,10 +205,10 @@ Title                                                                           
 </div>
 <h3 id="searching-using-keywords">Searching using keywords</h3>
 <p>If you don&rsquo;t know the KB article number, you can filter the updates by providing one or more keywords to the <code>search</code> parameter. The example below provides a string (<code>Cumulative Update for Windows Server 2019 for x64-based Systems</code>) to the <code>search</code> parameter to filter the results. However, by default, the Microsoft Catalog Update site treats each of the words in this string as individual search terms, and tries to match them using an <code>OR</code> operator (e.g., Title contains &ldquo;Cumulative&rdquo; OR &ldquo;Update&rdquo; OR &ldquo;for&rdquo; etc.). This often provides results that aren&rsquo;t very accurate.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span>
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span>
 
 Title                                                                                                                                                    Products                                               Classification   LastUpdated Size
 -----                                                                                                                                                    --------                                               --------------   ----------- ----
@@ -257,10 +257,10 @@ Title                                                                           
         </div>
     </div>
 </div>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span> -Strict
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span> -Strict
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span> -Strict
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span> -Strict
 
 Title                                                                               Products            Classification   LastUpdated Size
 -----                                                                               --------            --------------   ----------- ----
@@ -323,7 +323,7 @@ Title                                                                           
         </div>
     </div>
 </div>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Params = @{
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Params = @{
     Search = <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span>
     Strict = $true
     SortBy = <span style="color:#e6db74">&#34;Size&#34;</span>
@@ -332,7 +332,7 @@ Title                                                                           
 Get-MSCatalogUpdate @Params
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-MSCatalogUpdate @Params
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-MSCatalogUpdate @Params
 
 Title                                                                               Products            Classification   LastUpdated Size
 -----                                                                               --------            --------------   ----------- ----
@@ -390,7 +390,7 @@ Title                                                                           
 </div>
 <h3 id="returning-more-than-25-results-at-a-time">Returning more than 25 results at a time</h3>
 <p>So far, all of the previous examples have returned a maximum of 25 results. This is because the Microsoft Update Catalog site only provides 25 results at a time . If you want to return all available results, you can specify the <code>AllPages</code> switch parameter. This will make multiple web requests to the Microsoft Update Catalog site to retrieve all available pages of results; for example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Params = @{
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Params = @{
     Search = <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span>
     Strict = $true
     SortBy = <span style="color:#e6db74">&#34;Size&#34;</span>
@@ -400,7 +400,7 @@ Title                                                                           
 Get-MSCatalogUpdate @Params
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-MSCatalogUpdate @Params
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; Get-MSCatalogUpdate @Params
 
 Title                                                                               Products            Classification   LastUpdated Size
 -----                                                                               --------            --------------   ----------- ----
@@ -458,10 +458,10 @@ Title                                                                           
 <h2 id="downloading-updates-using-save-mscatalogupdate">Downloading updates using <code>Save-MSCatalogUpdate</code></h2>
 <p>Now that you&rsquo;ve mastered searching for updates using <code>Get-MSCatalogUpdate</code>, you&rsquo;ll need to know how to download them. For this, you&rsquo;ll use the <code>Save-MSCatalogUpdate</code> command.</p>
 <p>The first step is to use <code>Get-MSCatalogUpdate</code> to store a single update in a variable. For example, the following command will store the <code>Cumulative Update for Windows Server 2019 for x64-based Systems (KB5003646)</code> update in the <code>$Update</code> variable.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Update = Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems (KB5003646)&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Update = Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems (KB5003646)&#34;</span>
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Store the update in the $Update variable.</span>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Store the update in the $Update variable.</span>
 PS C:\&gt; $Update = Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems (KB5003646)&#34;</span>
 
 <span style="color:#75715e"># Print the $Update variable to the console to check that it contains a single update.</span>
@@ -478,10 +478,10 @@ Title                                                                           
 </div>
 
 <p>Then, you can pass the <code>$Update</code> variable to the <code>Update</code> parameter of <code>Save-MSCatalogUpdate</code> to download it. You&rsquo;ll also need to provide a path to the <code>Destination</code> parameter; for example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Save-MSCatalogUpdate -Update $Update -Destination <span style="color:#e6db74">&#34;C:\Temp&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Save-MSCatalogUpdate -Update $Update -Destination <span style="color:#e6db74">&#34;C:\Temp&#34;</span>
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Save the update in $Update to C:\Temp.</span>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Save the update in $Update to C:\Temp.</span>
 PS C:\&gt; Save-MSCatalogUpdate -Update $Update -Destination <span style="color:#e6db74">&#34;C:\Temp&#34;</span>
 
 <span style="color:#75715e"># The Save-MSCatalogUpdate command doesn&#39;t show any output if successful. Instead,</span>
@@ -514,16 +514,16 @@ Mode                 LastWriteTime         Length Name
 </div>
 <h3 id="sending-the-update-object-down-the-pipeline">Sending the update object down the pipeline</h3>
 <p>The <code>Save-MSCatalogUpdate</code> command can receive the update object to download via the pipeline. This can be useful for writing simple one-liners to quickly download a particular update. For example, to download the latest version of the <code>Cumulative Update for Windows Server 2019 for x64-based Systems</code> you can do the following.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Reference the first update returned by its index in the array (0), and pipe it to the Save-MSCatalogUpdate command.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Reference the first update returned by its index in the array (0), and pipe it to the Save-MSCatalogUpdate command.</span>
 (Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Cumulative Update for Windows Server 2019 for x64-based Systems&#34;</span>)[0] | Save-MSCatalogUpdate -Destination <span style="color:#e6db74">&#34;C:\Temp&#34;</span>
 </code></pre></div><h3 id="dealing-with-updates-composed-of-multiple-files">Dealing with updates composed of multiple files</h3>
 <p>Some updates are composed of multiple files. This often happens when there is more than one language available for a particular update. When this is the case, <code>Save-MSCatalogUpdate</code> will detect the available options and prompt you to select which ones to download.</p>
 <p>For example, the following commands attempt to download the <code>Update for Microsoft Office 2013 (KB4011677) 32-Bit Edition</code> update, which contains multiple files. <code>Save-MSCatalogUpdate</code> will prompt you to select the required file by specifying its <code>Id</code>, or you can enter <code>A</code> to download all of the files. In this example, enter <code>11</code> to download the <code>en-us</code> language file.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Update = Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Update for Microsoft Office 2013 (KB4011677) 32-Bit Edition&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Update = Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Update for Microsoft Office 2013 (KB4011677) 32-Bit Edition&#34;</span>
 Save-MSCatalogUpdate -Update $Update -Destination <span style="color:#e6db74">&#34;.\&#34;</span>
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $Update = Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Update for Microsoft Office 2013 (KB4011677) 32-Bit Edition&#34;</span>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $Update = Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Update for Microsoft Office 2013 (KB4011677) 32-Bit Edition&#34;</span>
 PS C:\&gt; Save-MSCatalogUpdate -Update $Update -Destination <span style="color:#e6db74">&#34;.\&#34;</span>
 
 Id  FileName
@@ -586,16 +586,16 @@ Multiple files exist <span style="color:#66d9ef">for</span> this update. Enter t
      </script>
 </div>
 <p>In order to avoid this prompt when downloading updates that are composed of multiple language files, <code>Save-MSCatalogUpdate</code> has a <code>Language</code> parameter. You can use this to specify the language to download, in the format <code>language-country</code>; for example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Update = Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Update for Microsoft Office 2013 (KB4011677) 32-Bit Edition&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Update = Get-MSCatalogUpdate -Search <span style="color:#e6db74">&#34;Update for Microsoft Office 2013 (KB4011677) 32-Bit Edition&#34;</span>
 Save-MSCatalogUpdate -Update $Update -Destination <span style="color:#e6db74">&#34;.\&#34;</span> -Language <span style="color:#e6db74">&#34;en-us&#34;</span>
 </code></pre></div><h2 id="installing-offline-updates-using-wusaexe">Installing offline updates using <code>wusa.exe</code></h2>
 <p>With the offline updates downloaded, you&rsquo;re now ready to install them. For this, you&rsquo;ll use the built-in <a href="https://support.microsoft.com/en-us/topic/description-of-the-windows-update-standalone-installer-in-windows-799ba3df-ec7e-b05e-ee13-1cdae8f23b19">Windows Update Standalone Installer</a> tool, <code>wusa.exe</code>. This process is very straightforward as there are only a couple of different parameters available to the <code>wusa.exe</code> command.</p>
 <p>The following example runs the <code>wusa.exe</code> command to install an update (<code>windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu</code> in this case) file located in the current directory. This will run the installer interactively and will prompt for input as required.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">wusa.exe <span style="color:#e6db74">&#34;.\windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">wusa.exe <span style="color:#e6db74">&#34;.\windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu&#34;</span>
 </code></pre></div><p>This is fine, but with most automated solutions, you probably wouldn&rsquo;t want to have to interact with the installer. If this is the case, you can specify the <code>/quiet</code> switch to suppress all user input and restart the computer/server as required; for example;</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">wusa.exe <span style="color:#e6db74">&#34;.\windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu&#34;</span> /quiet
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">wusa.exe <span style="color:#e6db74">&#34;.\windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu&#34;</span> /quiet
 </code></pre></div><p>Finally, if you&rsquo;d rather not let <code>wusa.exe</code> automatically reboot your computer/server without warning, you can use the <code>/norestart</code> switch combined with <code>/quiet</code>, as in the example below. This will not allow <code>wusa.exe</code> to trigger any restarts and, therefore, you&rsquo;d need to restart manually once the command completes.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">wusa.exe <span style="color:#e6db74">&#34;.\windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu&#34;</span> /quiet /norestart
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">wusa.exe <span style="color:#e6db74">&#34;.\windows10.0-kb5003646-x64_ef50cfb8e8067dd27c13ae7c4150d20cb346b3bf.msu&#34;</span> /quiet /norestart
 </code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>In this tutorial, you&rsquo;ve learned how to install the MSCatalog PowerShell module, how to search for and download offline updates from the Microsoft Update Catalog site, and how to install these updates using the built-in <code>wusa.exe</code> tool. Hopefully, this has been interesting to you and will help you when automating offline update tasks in the future. Thanks for reading!</p>
 

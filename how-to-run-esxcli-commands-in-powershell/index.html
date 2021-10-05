@@ -176,7 +176,7 @@
 <h2 id="creating-an-interface-to-esxcli-using-get-esxcli">Creating an interface to ESXCLI using Get-EsxCli</h2>
 <p>The first step is to create an interface to an ESXi host using the <code>Get-EsxCli</code> cmdlet. This interface information is stored in a variable, which is then used to invoke <code>esxcli</code> methods.</p>
 <p>The following commands will connect you to your vCenter server and store the <code>esxcli</code> interface in a variable (<code>$EsxCli</code>).</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-ViServer -Server <span style="color:#e6db74">&#34;vcenter.example.com&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-ViServer -Server <span style="color:#e6db74">&#34;vcenter.example.com&#34;</span>
 $EsxCli = Get-EsxCli -VMHost <span style="color:#e6db74">&#34;esx01.example.com&#34;</span> -V2
 </code></pre></div><div class="callout info">
     <div class="callout-wrapper">
@@ -200,10 +200,10 @@ $EsxCli = Get-EsxCli -VMHost <span style="color:#e6db74">&#34;esx01.example.com&
 </div>
 <h2 id="traversing-the-namespace-hierarchy">Traversing the namespace hierarchy</h2>
 <p>With the <code>esxcli</code> interface details now stored in <code>$EsxCli</code>, it&rsquo;s time to look around. To start with, you can simply call the <code>$EsxCli</code> object to view all root namespace elements; for example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli
 
 ===============================
 EsxCli<span style="color:#960050;background-color:#1e0010">:</span> esx01.example.com
@@ -234,10 +234,10 @@ EsxCli<span style="color:#960050;background-color:#1e0010">:</span> esx01.exampl
 </div>
 
 <p>Then, using dot (<code>.</code>) notation, you can traverse the namespace hierarchy to see all available namespaces. For example, to see the namespaces available in the <code>software</code> root namespace, you can do the following:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software
 
 =======================
 EsxCliElement<span style="color:#960050;background-color:#1e0010">:</span> software
@@ -261,10 +261,10 @@ EsxCliElement<span style="color:#960050;background-color:#1e0010">:</span> softw
 
 <h2 id="running-esxcli-commands">Running esxcli commands</h2>
 <p>As you look at the different namespaces, you&rsquo;ll start to see Method Elements and Methods listed in the output. For example, if you call the <code>$EsxCli.software.vib</code> namespace element, you&rsquo;ll see the following:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib
 
 ==================
 EsxCliElement<span style="color:#960050;background-color:#1e0010">:</span> vib
@@ -294,10 +294,10 @@ EsxCliElement<span style="color:#960050;background-color:#1e0010">:</span> vib
 <h3 id="method-elements-vs-methods">Method Elements vs Methods</h3>
 <p>Method Elements refer to PowerShell objects that represent an available <code>esxcli</code> command, whereas Methods are the functions you can execute. Method Element objects contain multiple Methods, as you&rsquo;ll see later.</p>
 <p>For example, you can execute the <code>$EsxCli.software.vib.Help()</code> Method directly and it will display some useful information, as shown below.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.Help()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.Help()
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.Help()
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.Help()
 
 ================================================================================================================================================================================================================
 vim.EsxCLI.software.vib
@@ -324,10 +324,10 @@ Method
 </div>
 
 <p>But, if you try and call the <code>get</code> Method Element directly, you&rsquo;ll get an error; for example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.get()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.get()
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.get()
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.get()
 <span style="color:#75715e">#error</span>
 InvalidOperation<span style="color:#960050;background-color:#1e0010">:</span> Method invocation failed because <span style="color:#66d9ef">[VMware.VimAutomation.ViCore.Impl.V1.EsxCli.EsxCliElementImpl]</span> does not contain a method named <span style="color:#e6db74">&#39;get&#39;</span>.
 <span style="color:#75715e">#enderror</span>
@@ -349,10 +349,10 @@ InvalidOperation<span style="color:#960050;background-color:#1e0010">:</span> Me
 <h3 id="using-the-invoke-method">Using the <code>Invoke()</code> Method</h3>
 <p>Now that you know the difference between Method Elements and Methods, it&rsquo;s time to start running some <code>esxcli</code> commands.</p>
 <p>First, print the <code>$EsxCli.software.vib.get</code> object to the console using the following command. You&rsquo;ll see that it contains its own list of callable Methods.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.get
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.get
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.get
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.get
 
 ==================
 EsxCliMethodElement<span style="color:#960050;background-color:#1e0010">:</span> get
@@ -370,10 +370,10 @@ EsxCliMethodElement<span style="color:#960050;background-color:#1e0010">:</span>
 </div>
 
 <p>You can use the <code>Invoke()</code> Method to run the <code>esxcli software vib get</code> command; for example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.get.Invoke()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.get.Invoke()
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.get.Invoke()
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.get.Invoke()
 
 AcceptanceLevel           <span style="color:#960050;background-color:#1e0010">:</span> VMwareCertified
 Conflicts                 <span style="color:#960050;background-color:#1e0010">:</span>
@@ -420,10 +420,10 @@ Description               <span style="color:#960050;background-color:#1e0010">:
 <ol>
 <li>
 <p>You can use the <code>Help()</code> method. The <code>Help()</code> method prints detailed information on the specific command to the console. For example, you can run <code>$EsxCli.software.vib.get.Help()</code> to print information relating to the <code>esxcli software vib get</code> command, as shown below.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.get.Help()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.get.Help()
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.get.Help()
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.get.Help()
 
 ================================================================================================================================================================================================================
 vim.EsxCLI.software.vib.get
@@ -447,14 +447,14 @@ Displays detailed information about one or more installed VIBs
 </li>
 <li>
 <p>You can use the <code>CreateArgs()</code> helper method. The <code>CreateArgs()</code> method returns an object containing every available argument. You can run the <code>CreateArgs()</code> method, store the resulting object in a variable, and then print the object to the console to see the available arguments, as follows:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Run the CreateArgs() method and store the returned object in $ArgsObj.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Run the CreateArgs() method and store the returned object in $ArgsObj.</span>
 $ArgsObj = $EsxCli.software.vib.get.CreateArgs()
 
 <span style="color:#75715e"># Write the $ArgsObj to the console to view the available arguments.</span>
 $ArgsObj
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $ArgsObj = $EsxCli.software.vib.get.CreateArgs()
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $ArgsObj = $EsxCli.software.vib.get.CreateArgs()
 PS C:\&gt; $ArgsObj
 
 Name                           Value
@@ -483,10 +483,10 @@ rebootingimage                 Unset, (<span style="color:#66d9ef">[boolean]</sp
 <ol>
 <li>
 <p>You can supply the arguments/values as an inline hashtable. For example, to set the <code>vibname</code> argument to the value <code>tools-light</code>, you can do the following:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.get.Invoke(@{vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>})
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.get.Invoke(@{vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>})
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.get.Invoke(@{vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>})
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.get.Invoke(@{vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>})
 
 AcceptanceLevel           <span style="color:#960050;background-color:#1e0010">:</span> VMwareCertified
 Conflicts                 <span style="color:#960050;background-color:#1e0010">:</span>
@@ -522,7 +522,7 @@ Version                   <span style="color:#960050;background-color:#1e0010">:
 </li>
 <li>
 <p>You can use the object created by the <code>CreateArgs()</code> method. To use the same example again, you can set the <code>vibname</code> argument to the value <code>tools-light</code> , as follows.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Run the CreateArgs() method and store the returned object in $ArgsObj.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Run the CreateArgs() method and store the returned object in $ArgsObj.</span>
 $ArgsObj = $EsxCli.software.vib.get.CreateArgs()
 
 <span style="color:#75715e"># Set the vibname property to &#34;tools-light&#34;.</span>
@@ -532,7 +532,7 @@ $ArgsObj.vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>
 $EsxCli.software.vib.get.Invoke($ArgsObj)
 </code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $ArgsObj = $EsxCli.software.vib.get.CreateArgs()
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $ArgsObj = $EsxCli.software.vib.get.CreateArgs()
 PS C:\&gt; $ArgsObj.vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>
 PS C:\&gt; $EsxCli.software.vib.get.Invoke($ArgsObj)
 

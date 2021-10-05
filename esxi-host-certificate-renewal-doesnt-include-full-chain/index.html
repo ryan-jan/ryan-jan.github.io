@@ -163,15 +163,15 @@
 <li>Start the SSH service and connect to the host</li>
 <li>Edit the <code>/etc/vmware/rhttpproxy/config.xml</code> file</li>
 </ol>
-<pre><code>vi /etc/vmware/rhttpproxy/config.xml
+<pre tabindex="0"><code>vi /etc/vmware/rhttpproxy/config.xml
 </code></pre><ol start="4">
 <li>Either uncomment or add the following item to the <code>&lt;ssl&gt;</code> xml node.</li>
 </ol>
-<pre><code>&lt;keyStoreFile&gt;/etc/vmware/ssl/castore.pem&lt;/keyStoreFile&gt;
+<pre tabindex="0"><code>&lt;keyStoreFile&gt;/etc/vmware/ssl/castore.pem&lt;/keyStoreFile&gt;
 </code></pre><ol start="5">
 <li>For example the full <code>&lt;ssl&gt;</code> node should look similar to the following</li>
 </ol>
-<pre><code>&lt;!-- Remove the following node to disable SSL --&gt;
+<pre tabindex="0"><code>&lt;!-- Remove the following node to disable SSL --&gt;
 &lt;ssl&gt;
   &lt;!-- The server private key file --&gt;
   &lt;privateKey&gt;/etc/vmware/ssl/rui.key&lt;/privateKey&gt;
@@ -185,7 +185,7 @@
 </code></pre><ol start="6">
 <li>Save the config file and restart the <code>rhttpproxy</code> service</li>
 </ol>
-<pre><code>/etc/init.d/rhttpproxy restart
+<pre tabindex="0"><code>/etc/init.d/rhttpproxy restart
 </code></pre><ol start="7">
 <li>Once the service has been restarted, exit the host from Maintenance Mode</li>
 <li>You should now be able to renew the ESXi host certificate successfully via the vSphere Client</li>

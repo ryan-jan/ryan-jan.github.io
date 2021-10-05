@@ -175,7 +175,7 @@
 </div>
 <h2 id="downloading-a-generated-report">Downloading A Generated Report</h2>
 <p>The last step of the <a href="https://ryanjan.uk/2018/05/16/running-vrops-reports-using-powercli/">previous article</a> was to use the <code>GetReport()</code> method to verify that your report generation was complete.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.GetReport(<span style="color:#e6db74">&#34;5ef2e8c9-09bb-4a74-b560-f9ad2e810854&#34;</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.GetReport(<span style="color:#e6db74">&#34;5ef2e8c9-09bb-4a74-b560-f9ad2e810854&#34;</span>)
 
 Name               <span style="color:#960050;background-color:#1e0010">:</span>
 Description        <span style="color:#960050;background-color:#1e0010">:</span> Oversized VMs Report.
@@ -191,7 +191,7 @@ Any                <span style="color:#960050;background-color:#1e0010">:</span>
 Id                 <span style="color:#960050;background-color:#1e0010">:</span> 5ef2e8c9-09bb-4a74-b560-f9ad2e810854
 AnyAttr    
 </code></pre></div><p>Let&rsquo;s take a look at the properties and methods of the <code>GetReport()</code> method using the <code>Get-Member</code> cmdlet.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.GetReport(<span style="color:#e6db74">&#34;5ef2e8c9-09bb-4a74-b560-f9ad2e810854&#34;</span>) | Get-Member
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.GetReport(<span style="color:#e6db74">&#34;5ef2e8c9-09bb-4a74-b560-f9ad2e810854&#34;</span>) | Get-Member
 
    TypeName<span style="color:#960050;background-color:#1e0010">:</span> VMware.VimAutomation.VROps.Views.Report
 
@@ -217,32 +217,32 @@ Status              Property   string Status {get;set;}
 Subject             Property   string Subject {get;set;}
 TraversalSpec       Property   VMware.VimAutomation.VROps.Views.TraversalSpec TraversalSpec {get;set;}
 </code></pre></div><p>Right at the top of that list is <code>DownloadReport()</code>, which is the method that we are after. To see which properties the <code>DownloadReport()</code> method expects as its inputs, we can call the method on its own.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.GetReport(<span style="color:#e6db74">&#34;5ef2e8c9-09bb-4a74-b560-f9ad2e810854&#34;</span>).DownloadReport
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.GetReport(<span style="color:#e6db74">&#34;5ef2e8c9-09bb-4a74-b560-f9ad2e810854&#34;</span>).DownloadReport
 
 OverloadDefinitions
 -------------------
 void DownloadReport(System.IO.Stream outputStream, string format)
 </code></pre></div><p>This tells us that it requires two inputs: (1) a <code>System.IO.Stream</code> object; and (2) a string specifying the format in which to download the report. The API documentation states that the format can be either <code>PDF</code> or <code>CSV</code>. If not specified, the default is <code>PDF</code>. Given that we are trying to convert this report into a PowerShell object, a <code>PDF</code> is useless to us; therefore, we need to make sure that we specify <code>CSV</code>.</p>
 <p>First, we will create a <code>System.IO.Stream</code> object. The <a href="https://docs.microsoft.com/en-us/dotnet/api/system.io">.NET API documentation</a> for the <code>System.IO</code> namespace helpfully lists the available stream classes. We&rsquo;ll be using the <code>MemoryStream</code> class. You can create a <code>MemoryStream</code> object in PowerShell as follows:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$MemoryStream = New-Object System.IO.MemoryStream
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$MemoryStream = New-Object System.IO.MemoryStream
 </code></pre></div><p>Now we run the <code>DownloadReport()</code> method with the <code>$MemoryStream</code> object, making sure to specify <code>CSV</code> as the format.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.GetReport(<span style="color:#e6db74">&#34;5ef2e8c9-09bb-4a74-b560-f9ad2e810854&#34;</span>).DownloadReport($MemoryStream, <span style="color:#e6db74">&#34;CSV&#34;</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vrops.ExtensionData.GetReport(<span style="color:#e6db74">&#34;5ef2e8c9-09bb-4a74-b560-f9ad2e810854&#34;</span>).DownloadReport($MemoryStream, <span style="color:#e6db74">&#34;CSV&#34;</span>)
 </code></pre></div><p>Once we have received our report into the <code>$MemoryStream</code> object, we need to use a <code>System.IO.StreamReader</code> object to read the stream. But before we create this object, we need to set the current position of the <code>$MemoryStream</code> back to its starting point.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$MemoryStream.Seek(0, <span style="color:#e6db74">&#34;Begin&#34;</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$MemoryStream.Seek(0, <span style="color:#e6db74">&#34;Begin&#34;</span>)
 $ReadStream = New-Object System.IO.StreamReader($MemoryStream)
 </code></pre></div><p>With the <code>$ReadStream</code> object populated with the <code>$MemoryStream</code> data, we can now loop through the <code>$ReadStream</code> line by line and write the data to the console.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">while</span> ($ReadStream.Peek() <span style="color:#f92672">-ne</span> -1) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">while</span> ($ReadStream.Peek() <span style="color:#f92672">-ne</span> -1) {
     $ReadStream.ReadLine()
 }
 </code></pre></div><p>I&rsquo;ve used the <code>Peek()</code> method of the <code>System.IO.StreamReader</code> object to identify the end of the stream (when it returns <code>-1</code>). Again, the <a href="https://docs.microsoft.com/en-us/dotnet/api/system.io.streamreader.peek">.NET API documentation</a> is a great resource to find these methods and to see how they can be used.</p>
 <p>Hopefully, each line of your report has been written to your PowerShell console, which is great. So, to convert this data into a PowerShell object, we will first store it as a string.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">while</span> ($ReadStream.Peek() <span style="color:#f92672">-ne</span> -1) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#66d9ef">while</span> ($ReadStream.Peek() <span style="color:#f92672">-ne</span> -1) {
     $Output += $ReadStream.ReadLine()
     $Output += <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">`n</span><span style="color:#e6db74">&#34;</span>
 }
 </code></pre></div><p>With this slight tweak of the <code>while</code> loop, we are now appending each line from the <code>$ReadStream</code> object to a new <code>$Output</code> object, which is a string. Because this is a string you will notice that I am having to tell it where to break for a new line with <code>`n</code>, which is the PowerShell special character for &lsquo;new line&rsquo;.</p>
 <p>We now have our report, represented as a string of <code>CSV</code> data, stored in the <code>$Output</code> object. This makes it very easy to convert this string of data into a PowerShell object using the <code>ConvertFrom-Csv</code> cmdlet!</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Output | ConvertFrom-Csv
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$Output | ConvertFrom-Csv
 </code></pre></div><p>And there you have it: your vROps report is now a PowerShell object.</p>
 <h2 id="next-steps">Next Steps</h2>
 <p>The first two articles in this mini-series have hopefully shown you how to use the vROps API, together with PowerCLI to generate and download reports as a PowerShell object. However, I appreciate that it is quite a long and cumbersome process. This is why I have been working on a helper module, which will tie together all of the steps from these articles into easy-to-use cmdlets. Check back for part 3 where I will show you the module and how you can download it.</p>
