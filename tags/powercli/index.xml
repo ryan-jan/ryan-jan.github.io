@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>powercli on RyanJan</title>
+    <title>powercli on </title>
     <link>https://ryanjan.uk/tags/powercli/</link>
-    <description>Recent content in powercli on RyanJan</description>
+    <description>Recent content in powercli on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <lastBuildDate>Thu, 17 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://ryanjan.uk/tags/powercli/index.xml" rel="self" type="application/rss+xml" />
@@ -50,7 +50,7 @@
       
       <guid>https://ryanjan.uk/vrops-reports-and-powercli-part-three-a-helper-module/</guid>
       <description>For your reference here is a list of the articles in this mini-series.
- vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports vROps Reports and PowerCLI Part 3: A Helper Module (this article)  Introduction If you have been following along with the previous two articles in this series, you should now have a pretty good understanding of how to manipulate the extensionData container via PowerCLI to generate and download reports from vRealize Operations Manager (vROps).</description>
+vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports vROps Reports and PowerCLI Part 3: A Helper Module (this article) Introduction If you have been following along with the previous two articles in this series, you should now have a pretty good understanding of how to manipulate the extensionData container via PowerCLI to generate and download reports from vRealize Operations Manager (vROps).</description>
     </item>
     
     <item>
@@ -69,8 +69,8 @@
       
       <guid>https://ryanjan.uk/vrops-reports-and-powercli-part-two-downloading-reports/</guid>
       <description>For your reference, here are the articles in this mini-series:
- vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports (this article) vROps Reports and PowerCLI Part 3: A Helper Module  Introduction Following on from the previous article in this mini-series, this article demonstrates how to retrieve a generated report from vROps as a PowerShell object.
-(adsbygoogle = window.adsbygoogle || []).</description>
+vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI Part 2: Downloading Reports (this article) vROps Reports and PowerCLI Part 3: A Helper Module Introduction Following on from the previous article in this mini-series, this article demonstrates how to retrieve a generated report from vROps as a PowerShell object.
+Downloading A Generated Report The last step of the previous article was to use the GetReport() method to verify that your report generation was complete.</description>
     </item>
     
     <item>
@@ -80,7 +80,7 @@
       
       <guid>https://ryanjan.uk/running-vrops-reports-using-powercli/</guid>
       <description>For your reference, here are the articles in this mini-series:
- vROps Reports and PowerCLI Part 1: Generating Reports (this article) vROps Reports and PowerCLI Part 2: Downloading Reports vROps Reports and PowerCLI Part 3: A Helper Module  Introduction I&amp;rsquo;ve been spending quite a bit of time with vRealize Operations Manager (vROps) lately, mostly running reports. While this is easy enough to do via the web UI, I found myself running a report, downloading the .</description>
+vROps Reports and PowerCLI Part 1: Generating Reports (this article) vROps Reports and PowerCLI Part 2: Downloading Reports vROps Reports and PowerCLI Part 3: A Helper Module Introduction I&amp;rsquo;ve been spending quite a bit of time with vRealize Operations Manager (vROps) lately, mostly running reports. While this is easy enough to do via the web UI, I found myself running a report, downloading the .</description>
     </item>
     
   </channel>

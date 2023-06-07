@@ -17,7 +17,7 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>RyanJan  | Managing vSphere Global Permissions with PowerShell</title>
+  <title> Managing vSphere Global Permissions with PowerShell</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
   <meta name="HandheldFriendly" content="True" />
@@ -159,10 +159,10 @@
 <p>It appears that working with vSphere global permissions in PowerCLI is not yet possible. It is also my understanding that there is not currently a public API available in vCenter which allows you to manipulate global permissions either. However, thanks to William Lam&rsquo;s awesome <a href="https://www.virtuallyghetto.com/2017/03/automating-vsphere-global-permissions-with-powercli.html">blog post from 2017</a>, I learned that it is possible to add/remove global permissions via the Managed Object Browser (MOB). What&rsquo;s more, William provides two example PowerShell functions showing how to trigger the required MOB methods using standard <code>Invoke-WebRequest</code> calls. This is great, but unfortunately he only covered adding and removing permissions and I really needed to be able to list the current global permissions on a vCenter server for auditing purposes. So, I got to work and created a new PowerShell module named <code>VIPerms</code>. This module combines the add/remove examples from William&rsquo;s post with a new function to list all global permissions. In this post I will demonstrate how to install and use this module.</p>
 <h2 id="installation">Installation</h2>
 <p>As with most PowerShell modules VIPerms is available to install via the PowerShell Gallery.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Install-Module -Name <span style="color:#e6db74">&#34;VIPerms&#34;</span> -Scope <span style="color:#e6db74">&#34;CurrentUser&#34;</span>
-</code></pre></div><p>Once installed you can import the module into your session.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Import-Module -Name <span style="color:#e6db74">&#34;VIPerms&#34;</span>
-</code></pre></div><div class="in-article-ad">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Install-Module -Name <span style="color:#e6db74">&#34;VIPerms&#34;</span> -Scope <span style="color:#e6db74">&#34;CurrentUser&#34;</span>
+</span></span></code></pre></div><p>Once installed you can import the module into your session.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Import-Module -Name <span style="color:#e6db74">&#34;VIPerms&#34;</span>
+</span></span></code></pre></div><div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
      <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
           data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
@@ -172,52 +172,52 @@
 </div>
 <h2 id="connecting-to-a-vcenter-server">Connecting to a vCenter Server</h2>
 <p>The first step is to connect to your vCenter server.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-VIMobServer -Server <span style="color:#e6db74">&#34;vcenter.example.com&#34;</span>
-</code></pre></div><p>This will prompt for credentials. You will need to use the <code>administrator@vsphere.local</code> account in order to access and manage the global permissions.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Connect-VIMobServer -Server <span style="color:#e6db74">&#34;vcenter.example.com&#34;</span>
+</span></span></code></pre></div><p>This will prompt for credentials. You will need to use the <code>administrator@vsphere.local</code> account in order to access and manage the global permissions.</p>
 <p>If you use self-signed certificates in your environment you will need to skip certificate checking.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-VIMobServer -Server <span style="color:#e6db74">&#34;vcenter.example.com&#34;</span> -SkipCertificateCheck
-</code></pre></div><h2 id="listing-global-permissions">Listing Global Permissions</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Connect-VIMobServer -Server <span style="color:#e6db74">&#34;vcenter.example.com&#34;</span> -SkipCertificateCheck
+</span></span></code></pre></div><h2 id="listing-global-permissions">Listing Global Permissions</h2>
 <p>To list all global permissions for your vCenter server use the <code>Get-VIGlobalPermission</code> function.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-VIGlobalPermission
-
-Principal                                                            PrincipalType Role            Propagate
----------                                                            ------------- ----            ---------
-VSPHERE.LOCAL\vpxd-extension-b2df90b0-1e03-11e6-b844-005056bf2aaa    User          Admin           true
-VSPHERE.LOCAL\vpxd-b2df90b0-1e03-11e6-b844-005056bf2aaa              User          Admin           true
-VSPHERE.LOCAL\vsphere-webclient-b2df90b0-1e03-11e6-b844-005056bf2aaa User          Admin           true
-VSPHERE.LOCAL\Administrators                                         Group         Admin           true
-VSPHERE.LOCAL\Administrator                                          User          Admin           true
-...
-</code></pre></div><h2 id="creating-global-permissions">Creating Global Permissions</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Get-VIGlobalPermission
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Principal                                                            PrincipalType Role            Propagate
+</span></span><span style="display:flex;"><span>---------                                                            ------------- ----            ---------
+</span></span><span style="display:flex;"><span>VSPHERE.LOCAL\vpxd-extension-b2df90b0-<span style="color:#ae81ff">1e03</span>-<span style="color:#ae81ff">11e6</span>-b844-005056bf2aaa    User          Admin           true
+</span></span><span style="display:flex;"><span>VSPHERE.LOCAL\vpxd-b2df90b0-<span style="color:#ae81ff">1e03</span>-<span style="color:#ae81ff">11e6</span>-b844-005056bf2aaa              User          Admin           true
+</span></span><span style="display:flex;"><span>VSPHERE.LOCAL\vsphere-webclient-b2df90b0-<span style="color:#ae81ff">1e03</span>-<span style="color:#ae81ff">11e6</span>-b844-005056bf2aaa User          Admin           true
+</span></span><span style="display:flex;"><span>VSPHERE.LOCAL\Administrators                                         Group         Admin           true
+</span></span><span style="display:flex;"><span>VSPHERE.LOCAL\Administrator                                          User          Admin           true
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><h2 id="creating-global-permissions">Creating Global Permissions</h2>
 <p>The <code>New-VIGlobalPermission</code> function will allow you to create a global permission. You must supply a user/group
 name and the identifier of the required role to assign.</p>
 <p>First use the <code>Get-VIMobRole</code> function to get the identifier for the specific role.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-VIMobRole
-
-Name     Description Id
-----     ----------- --
-Admin    Admin       -1
-ReadOnly ReadOnly    -2
-View     View        -3
-...
-</code></pre></div><p>Then use the <code>New-VIGlobalPermission</code> function to create the permission. For example to assign the <code>Admin</code> role
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Get-VIMobRole
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Name     Description Id
+</span></span><span style="display:flex;"><span>----     ----------- --
+</span></span><span style="display:flex;"><span>Admin    Admin       <span style="color:#ae81ff">-1</span>
+</span></span><span style="display:flex;"><span>ReadOnly ReadOnly    <span style="color:#ae81ff">-2</span>
+</span></span><span style="display:flex;"><span>View     View        <span style="color:#ae81ff">-3</span>
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>Then use the <code>New-VIGlobalPermission</code> function to create the permission. For example to assign the <code>Admin</code> role
 to the vSphere user <code>VSPHERE.LOCAL\test-user</code> you would use.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">New-VIGlobalPermission -Name <span style="color:#e6db74">&#34;VSPHERE.LOCAL\test-user&#34;</span> -RoleId -1
-</code></pre></div><p>If you are assigning a role to a group you will need to use the <code>-IsGroup</code> parameter.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">New-VIGlobalPermission -Name <span style="color:#e6db74">&#34;VSPHERE.LOCAL\group-of-users&#34;</span> -IsGroup -RoleId -1
-</code></pre></div><p>By default the global permission will propagate to all children objects. If you would like to override this
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>New-VIGlobalPermission -Name <span style="color:#e6db74">&#34;VSPHERE.LOCAL\test-user&#34;</span> -RoleId <span style="color:#ae81ff">-1</span>
+</span></span></code></pre></div><p>If you are assigning a role to a group you will need to use the <code>-IsGroup</code> parameter.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>New-VIGlobalPermission -Name <span style="color:#e6db74">&#34;VSPHERE.LOCAL\group-of-users&#34;</span> -IsGroup -RoleId <span style="color:#ae81ff">-1</span>
+</span></span></code></pre></div><p>By default the global permission will propagate to all children objects. If you would like to override this
 you can use the <code>-Propagate</code> parameter.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">New-VIGlobalPermission -Name <span style="color:#e6db74">&#34;VSPHERE.LOCAL\group-of-users&#34;</span> -IsGroup -RoleId -1 -Propagate<span style="color:#960050;background-color:#1e0010">:</span>$false
-</code></pre></div><blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>New-VIGlobalPermission -Name <span style="color:#e6db74">&#34;VSPHERE.LOCAL\group-of-users&#34;</span> -IsGroup -RoleId <span style="color:#ae81ff">-1</span> -Propagate:$false
+</span></span></code></pre></div><blockquote>
 <p><strong>NOTE</strong>
 If you are already using the VMware.PowerCLI module you can use the official <code>Get-VIRole</code> CmdLet in place of the <code>Get-VIMobRole</code> function included in VIPerms.</p>
 </blockquote>
 <h2 id="removing-global-permissions">Removing Global Permissions</h2>
 <p>The <code>Remove-VIGlobalPermission</code> function will allow you to delete a global permission. You only need to specify the user/group with this function.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Remove-VIGlobalPermission -Name <span style="color:#e6db74">&#34;VSPHERE.LOCAL\test-user&#34;</span>
-</code></pre></div><p>Again, if you are removing a permission from a group you will need to use the <code>-IsGroup</code> parameter.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Remove-VIGlobalPermission -Name <span style="color:#e6db74">&#34;VSPHERE.LOCAL\group-of-users&#34;</span> -IsGroup
-</code></pre></div><h2 id="conclusion">Conclusion</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Remove-VIGlobalPermission -Name <span style="color:#e6db74">&#34;VSPHERE.LOCAL\test-user&#34;</span>
+</span></span></code></pre></div><p>Again, if you are removing a permission from a group you will need to use the <code>-IsGroup</code> parameter.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Remove-VIGlobalPermission -Name <span style="color:#e6db74">&#34;VSPHERE.LOCAL\group-of-users&#34;</span> -IsGroup
+</span></span></code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>This module is something that I have put together pretty quickly as I needed to automate some global permissions tasks. I have tested it against vSphere 6.0, 6.5 and 6.7 lab environements and it seems to work fine with all versions. Hopefully it is useful to some other people out there! If you have any questions or feedback then you can find me on <a href="https://twitter.com/_ryanjan_">twitter</a>.</p>
 <div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -416,7 +416,7 @@ The Symptoms I was initially made aware of this issue as it appeared that certai
     </main>
     <footer class="site-footer outer">
     <div class="inner">
-        <section class="copyright"><a href="https://ryanjan.uk/">RyanJan</a> &copy; 2021</section>
+        <section class="copyright"><a href="https://ryanjan.uk/"></a> &copy; 2023</section>
         <nav class="site-footer-nav">
             <a href="https://ryanjan.uk/">Latest Posts</a>
             <a href="https://github.com/ryan-jan" target="_blank" rel="noopener">GitHub</a>

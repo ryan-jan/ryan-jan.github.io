@@ -17,7 +17,7 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>RyanJan  | How to run ESXCLI commands in PowerShell using the PowerCLI Get-EsxCli cmdlet</title>
+  <title> How to run ESXCLI commands in PowerShell using the PowerCLI Get-EsxCli cmdlet</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
   <meta name="HandheldFriendly" content="True" />
@@ -176,9 +176,9 @@
 <h2 id="creating-an-interface-to-esxcli-using-get-esxcli">Creating an interface to ESXCLI using Get-EsxCli</h2>
 <p>The first step is to create an interface to an ESXi host using the <code>Get-EsxCli</code> cmdlet. This interface information is stored in a variable, which is then used to invoke <code>esxcli</code> methods.</p>
 <p>The following commands will connect you to your vCenter server and store the <code>esxcli</code> interface in a variable (<code>$EsxCli</code>).</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Connect-ViServer -Server <span style="color:#e6db74">&#34;vcenter.example.com&#34;</span>
-$EsxCli = Get-EsxCli -VMHost <span style="color:#e6db74">&#34;esx01.example.com&#34;</span> -V2
-</code></pre></div><div class="callout info">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Connect-ViServer -Server <span style="color:#e6db74">&#34;vcenter.example.com&#34;</span>
+</span></span><span style="display:flex;"><span>$EsxCli = Get-EsxCli -VMHost <span style="color:#e6db74">&#34;esx01.example.com&#34;</span> -V2
+</span></span></code></pre></div><div class="callout info">
     <div class="callout-wrapper">
         <span>
             
@@ -200,33 +200,33 @@ $EsxCli = Get-EsxCli -VMHost <span style="color:#e6db74">&#34;esx01.example.com&
 </div>
 <h2 id="traversing-the-namespace-hierarchy">Traversing the namespace hierarchy</h2>
 <p>With the <code>esxcli</code> interface details now stored in <code>$EsxCli</code>, it&rsquo;s time to look around. To start with, you can simply call the <code>$EsxCli</code> object to view all root namespace elements; for example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli
-</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli
+</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli
-
-===============================
-EsxCli<span style="color:#960050;background-color:#1e0010">:</span> esx01.example.com
-
-   Elements<span style="color:#960050;background-color:#1e0010">:</span>
-   ---------
-   device
-   elxnet
-   esxcli
-   fcoe
-   graphics
-   hardware
-   iscsi
-   network
-   nvme
-   rdma
-   sched
-   software
-   storage
-   system
-   vm
-   vsan
-</code></pre></div>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>===============================
+</span></span><span style="display:flex;"><span>EsxCli<span style="color:#960050;background-color:#1e0010">:</span> esx01.example.com
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   Elements<span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>   ---------
+</span></span><span style="display:flex;"><span>   device
+</span></span><span style="display:flex;"><span>   elxnet
+</span></span><span style="display:flex;"><span>   esxcli
+</span></span><span style="display:flex;"><span>   fcoe
+</span></span><span style="display:flex;"><span>   graphics
+</span></span><span style="display:flex;"><span>   hardware
+</span></span><span style="display:flex;"><span>   iscsi
+</span></span><span style="display:flex;"><span>   network
+</span></span><span style="display:flex;"><span>   nvme
+</span></span><span style="display:flex;"><span>   rdma
+</span></span><span style="display:flex;"><span>   sched
+</span></span><span style="display:flex;"><span>   software
+</span></span><span style="display:flex;"><span>   storage
+</span></span><span style="display:flex;"><span>   system
+</span></span><span style="display:flex;"><span>   vm
+</span></span><span style="display:flex;"><span>   vsan
+</span></span></code></pre></div>
 </div>
 
 <div class="code-output-caption">
@@ -234,25 +234,25 @@ EsxCli<span style="color:#960050;background-color:#1e0010">:</span> esx01.exampl
 </div>
 
 <p>Then, using dot (<code>.</code>) notation, you can traverse the namespace hierarchy to see all available namespaces. For example, to see the namespaces available in the <code>software</code> root namespace, you can do the following:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software
-</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli.software
+</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software
-
-=======================
-EsxCliElement<span style="color:#960050;background-color:#1e0010">:</span> software
-
-   Elements<span style="color:#960050;background-color:#1e0010">:</span>
-   ---------
-   acceptance
-   profile
-   sources
-   vib
-
-   Methods<span style="color:#960050;background-color:#1e0010">:</span>
-   --------
-   string Help()
-</code></pre></div>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>=======================
+</span></span><span style="display:flex;"><span>EsxCliElement<span style="color:#960050;background-color:#1e0010">:</span> software
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   Elements<span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>   ---------
+</span></span><span style="display:flex;"><span>   acceptance
+</span></span><span style="display:flex;"><span>   profile
+</span></span><span style="display:flex;"><span>   sources
+</span></span><span style="display:flex;"><span>   vib
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   Methods<span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>   --------
+</span></span><span style="display:flex;"><span>   string Help()
+</span></span></code></pre></div>
 </div>
 
 <div class="code-output-caption">
@@ -261,30 +261,30 @@ EsxCliElement<span style="color:#960050;background-color:#1e0010">:</span> softw
 
 <h2 id="running-esxcli-commands">Running esxcli commands</h2>
 <p>As you look at the different namespaces, you&rsquo;ll start to see Method Elements and Methods listed in the output. For example, if you call the <code>$EsxCli.software.vib</code> namespace element, you&rsquo;ll see the following:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib
-</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli.software.vib
+</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib
-
-==================
-EsxCliElement<span style="color:#960050;background-color:#1e0010">:</span> vib
-
-   Elements<span style="color:#960050;background-color:#1e0010">:</span>
-   ---------
-   signature
-
-   Method Elements<span style="color:#960050;background-color:#1e0010">:</span>
-   ---------
-   get
-   install
-   list
-   remove
-   update
-
-   Methods<span style="color:#960050;background-color:#1e0010">:</span>
-   --------
-   string Help()
-</code></pre></div>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software.vib
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>==================
+</span></span><span style="display:flex;"><span>EsxCliElement<span style="color:#960050;background-color:#1e0010">:</span> vib
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   Elements<span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>   ---------
+</span></span><span style="display:flex;"><span>   signature
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   Method Elements<span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>   ---------
+</span></span><span style="display:flex;"><span>   get
+</span></span><span style="display:flex;"><span>   install
+</span></span><span style="display:flex;"><span>   list
+</span></span><span style="display:flex;"><span>   remove
+</span></span><span style="display:flex;"><span>   update
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   Methods<span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>   --------
+</span></span><span style="display:flex;"><span>   string Help()
+</span></span></code></pre></div>
 </div>
 
 <div class="code-output-caption">
@@ -294,29 +294,29 @@ EsxCliElement<span style="color:#960050;background-color:#1e0010">:</span> vib
 <h3 id="method-elements-vs-methods">Method Elements vs Methods</h3>
 <p>Method Elements refer to PowerShell objects that represent an available <code>esxcli</code> command, whereas Methods are the functions you can execute. Method Element objects contain multiple Methods, as you&rsquo;ll see later.</p>
 <p>For example, you can execute the <code>$EsxCli.software.vib.Help()</code> Method directly and it will display some useful information, as shown below.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.Help()
-</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli.software.vib.Help()
+</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.Help()
-
-================================================================================================================================================================================================================
-vim.EsxCLI.software.vib
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Install, update, remove, or display individual VIB packages
-
-ChildElement
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-- software.vib.signa | Commands to verify signatures and show information about the signature verification status of VIB packages
-  ture               |
-
-Method
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-- get                | Displays detailed information about one or more installed VIBs
-- install            | Installs VIB packages from a URL or depot. VIBs may be installed, upgraded, or downgraded. WARNING<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">If</span> your installation requires a reboot, you need to disable HA first.
-- list               | Lists the installed VIB packages
-- remove             | Removes VIB packages from the host. WARNING<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">If</span> your installation requires a reboot, you need to disable HA first.
-- update             | Update installed VIBs to newer VIB packages. No new VIBs will be installed, only updates. WARNING<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">If</span> your installation requires a reboot, you need to disable HA first.
-</code></pre></div>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software.vib.Help()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>================================================================================================================================================================================================================
+</span></span><span style="display:flex;"><span>vim.EsxCLI.software.vib
+</span></span><span style="display:flex;"><span>----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>Install, update, remove, or display individual VIB packages
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ChildElement
+</span></span><span style="display:flex;"><span>----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>- software.vib.signa | Commands to verify signatures and show information about the signature verification status of VIB packages
+</span></span><span style="display:flex;"><span>  ture               |
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Method
+</span></span><span style="display:flex;"><span>----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>- get                | Displays detailed information about one or more installed VIBs
+</span></span><span style="display:flex;"><span>- install            | Installs VIB packages from a URL or depot. VIBs may be installed, upgraded, or downgraded. WARNING<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">If</span> your installation requires a reboot, you need to disable HA first.
+</span></span><span style="display:flex;"><span>- list               | Lists the installed VIB packages
+</span></span><span style="display:flex;"><span>- remove             | Removes VIB packages from the host. WARNING<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">If</span> your installation requires a reboot, you need to disable HA first.
+</span></span><span style="display:flex;"><span>- update             | Update installed VIBs to newer VIB packages. No new VIBs will be installed, only updates. WARNING<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">If</span> your installation requires a reboot, you need to disable HA first.
+</span></span></code></pre></div>
 </div>
 
 <div class="code-output-caption">
@@ -324,14 +324,14 @@ Method
 </div>
 
 <p>But, if you try and call the <code>get</code> Method Element directly, you&rsquo;ll get an error; for example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.get()
-</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli.software.vib.get()
+</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.get()
-<span style="color:#75715e">#error</span>
-InvalidOperation<span style="color:#960050;background-color:#1e0010">:</span> Method invocation failed because <span style="color:#66d9ef">[VMware.VimAutomation.ViCore.Impl.V1.EsxCli.EsxCliElementImpl]</span> does not contain a method named <span style="color:#e6db74">&#39;get&#39;</span>.
-<span style="color:#75715e">#enderror</span>
-</code></pre></div>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software.vib.get()
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#error</span>
+</span></span><span style="display:flex;"><span>InvalidOperation<span style="color:#960050;background-color:#1e0010">:</span> Method invocation failed because [<span style="color:#66d9ef">VMware.VimAutomation.ViCore.Impl.V1.EsxCli.EsxCliElementImpl</span>] does not contain a method named <span style="color:#e6db74">&#39;get&#39;</span>.
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#enderror</span>
+</span></span></code></pre></div>
 </div>
 
 <div class="code-output-caption">
@@ -349,20 +349,20 @@ InvalidOperation<span style="color:#960050;background-color:#1e0010">:</span> Me
 <h3 id="using-the-invoke-method">Using the <code>Invoke()</code> Method</h3>
 <p>Now that you know the difference between Method Elements and Methods, it&rsquo;s time to start running some <code>esxcli</code> commands.</p>
 <p>First, print the <code>$EsxCli.software.vib.get</code> object to the console using the following command. You&rsquo;ll see that it contains its own list of callable Methods.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.get
-</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli.software.vib.get
+</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.get
-
-==================
-EsxCliMethodElement<span style="color:#960050;background-color:#1e0010">:</span> get
-
-   Methods<span style="color:#960050;background-color:#1e0010">:</span>
-   --------
-   Hashtable CreateArgs()
-   VIB[] Invoke(Hashtable args)
-   string Help()
-</code></pre></div>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software.vib.get
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>==================
+</span></span><span style="display:flex;"><span>EsxCliMethodElement<span style="color:#960050;background-color:#1e0010">:</span> get
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   Methods<span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>   --------
+</span></span><span style="display:flex;"><span>   Hashtable CreateArgs()
+</span></span><span style="display:flex;"><span>   VIB[] Invoke(Hashtable args)
+</span></span><span style="display:flex;"><span>   string Help()
+</span></span></code></pre></div>
 </div>
 
 <div class="code-output-caption">
@@ -370,43 +370,43 @@ EsxCliMethodElement<span style="color:#960050;background-color:#1e0010">:</span>
 </div>
 
 <p>You can use the <code>Invoke()</code> Method to run the <code>esxcli software vib get</code> command; for example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.get.Invoke()
-</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli.software.vib.get.Invoke()
+</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.get.Invoke()
-
-AcceptanceLevel           <span style="color:#960050;background-color:#1e0010">:</span> VMwareCertified
-Conflicts                 <span style="color:#960050;background-color:#1e0010">:</span>
-CreationDate              <span style="color:#960050;background-color:#1e0010">:</span> 2016-01-06
-Depends                   <span style="color:#960050;background-color:#1e0010">:</span> {vmkapi_2_3_0_0, com.vmware.driverAPI-9.2.3.0}
-Description               <span style="color:#960050;background-color:#1e0010">:</span> Adaptec HBA Driver
-HardwarePlatformsRequired <span style="color:#960050;background-color:#1e0010">:</span>
-ID                        <span style="color:#960050;background-color:#1e0010">:</span> Adaptec_Inc_bootbank_scsi-aacraid_6.0.6.2.1.52011-1OEM.600.0.0.2494585
-InstallDate               <span style="color:#960050;background-color:#1e0010">:</span> 2020-01-07
-LiveInstallAllowed        <span style="color:#960050;background-color:#1e0010">:</span> False
-LiveRemoveAllowed         <span style="color:#960050;background-color:#1e0010">:</span> False
-MaintenanceModeRequired   <span style="color:#960050;background-color:#1e0010">:</span> True
-Name                      <span style="color:#960050;background-color:#1e0010">:</span> scsi-aacraid
-Overlay                   <span style="color:#960050;background-color:#1e0010">:</span> False
-Payloads                  <span style="color:#960050;background-color:#1e0010">:</span> {scsi-aac}
-Provides                  <span style="color:#960050;background-color:#1e0010">:</span>
-ReferenceURLs             <span style="color:#960050;background-color:#1e0010">:</span>
-Replaces                  <span style="color:#960050;background-color:#1e0010">:</span>
-StatelessReady            <span style="color:#960050;background-color:#1e0010">:</span> False
-Status                    <span style="color:#960050;background-color:#1e0010">:</span>
-Summary                   <span style="color:#960050;background-color:#1e0010">:</span> aacraid<span style="color:#960050;background-color:#1e0010">:</span> scsi driver <span style="color:#66d9ef">for</span> VMware ESX
-Tags                      <span style="color:#960050;background-color:#1e0010">:</span> {driver, module}
-Type                      <span style="color:#960050;background-color:#1e0010">:</span> bootbank
-Vendor                    <span style="color:#960050;background-color:#1e0010">:</span> Adaptec_Inc
-Version                   <span style="color:#960050;background-color:#1e0010">:</span> 6.0.6.2.1.52011-1OEM.600.0.0.2494585
-
-AcceptanceLevel           <span style="color:#960050;background-color:#1e0010">:</span> VMwareCertified
-Conflicts                 <span style="color:#960050;background-color:#1e0010">:</span>
-CreationDate              <span style="color:#960050;background-color:#1e0010">:</span> 2019-06-30
-Depends                   <span style="color:#960050;background-color:#1e0010">:</span> {vmkapi_2_5_0_0}
-Description               <span style="color:#960050;background-color:#1e0010">:</span> Broadcom NetXtreme-E VMKAPI network driver <span style="color:#66d9ef">for</span> VMware ESXi
-...
-</code></pre></div>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software.vib.get.Invoke()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>AcceptanceLevel           <span style="color:#960050;background-color:#1e0010">:</span> VMwareCertified
+</span></span><span style="display:flex;"><span>Conflicts                 <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>CreationDate              <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">2016</span>-<span style="color:#ae81ff">01</span>-<span style="color:#ae81ff">06</span>
+</span></span><span style="display:flex;"><span>Depends                   <span style="color:#960050;background-color:#1e0010">:</span> {vmkapi_2_3_0_0, com.vmware.driverAPI-<span style="color:#ae81ff">9.2</span>.3.<span style="color:#ae81ff">0</span>}
+</span></span><span style="display:flex;"><span>Description               <span style="color:#960050;background-color:#1e0010">:</span> Adaptec HBA Driver
+</span></span><span style="display:flex;"><span>HardwarePlatformsRequired <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>ID                        <span style="color:#960050;background-color:#1e0010">:</span> Adaptec_Inc_bootbank_scsi-aacraid_6.0.6.2.1.<span style="color:#ae81ff">52011</span>-1OEM.600.0.0.2494585
+</span></span><span style="display:flex;"><span>InstallDate               <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">2020</span>-<span style="color:#ae81ff">01</span>-<span style="color:#ae81ff">07</span>
+</span></span><span style="display:flex;"><span>LiveInstallAllowed        <span style="color:#960050;background-color:#1e0010">:</span> False
+</span></span><span style="display:flex;"><span>LiveRemoveAllowed         <span style="color:#960050;background-color:#1e0010">:</span> False
+</span></span><span style="display:flex;"><span>MaintenanceModeRequired   <span style="color:#960050;background-color:#1e0010">:</span> True
+</span></span><span style="display:flex;"><span>Name                      <span style="color:#960050;background-color:#1e0010">:</span> scsi-aacraid
+</span></span><span style="display:flex;"><span>Overlay                   <span style="color:#960050;background-color:#1e0010">:</span> False
+</span></span><span style="display:flex;"><span>Payloads                  <span style="color:#960050;background-color:#1e0010">:</span> {scsi-aac}
+</span></span><span style="display:flex;"><span>Provides                  <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>ReferenceURLs             <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>Replaces                  <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>StatelessReady            <span style="color:#960050;background-color:#1e0010">:</span> False
+</span></span><span style="display:flex;"><span>Status                    <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>Summary                   <span style="color:#960050;background-color:#1e0010">:</span> aacraid<span style="color:#960050;background-color:#1e0010">:</span> scsi driver <span style="color:#66d9ef">for</span> VMware ESX
+</span></span><span style="display:flex;"><span>Tags                      <span style="color:#960050;background-color:#1e0010">:</span> {driver, module}
+</span></span><span style="display:flex;"><span>Type                      <span style="color:#960050;background-color:#1e0010">:</span> bootbank
+</span></span><span style="display:flex;"><span>Vendor                    <span style="color:#960050;background-color:#1e0010">:</span> Adaptec_Inc
+</span></span><span style="display:flex;"><span>Version                   <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">6.0</span>.6.2.1.<span style="color:#ae81ff">52011</span>-1OEM.600.0.0.2494585
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>AcceptanceLevel           <span style="color:#960050;background-color:#1e0010">:</span> VMwareCertified
+</span></span><span style="display:flex;"><span>Conflicts                 <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>CreationDate              <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">2019</span>-<span style="color:#ae81ff">06</span>-<span style="color:#ae81ff">30</span>
+</span></span><span style="display:flex;"><span>Depends                   <span style="color:#960050;background-color:#1e0010">:</span> {vmkapi_2_5_0_0}
+</span></span><span style="display:flex;"><span>Description               <span style="color:#960050;background-color:#1e0010">:</span> Broadcom NetXtreme-E VMKAPI network driver <span style="color:#66d9ef">for</span> VMware ESXi
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div>
 </div>
 
 <div class="code-output-caption">
@@ -420,24 +420,24 @@ Description               <span style="color:#960050;background-color:#1e0010">:
 <ol>
 <li>
 <p>You can use the <code>Help()</code> method. The <code>Help()</code> method prints detailed information on the specific command to the console. For example, you can run <code>$EsxCli.software.vib.get.Help()</code> to print information relating to the <code>esxcli software vib get</code> command, as shown below.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.get.Help()
-</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli.software.vib.get.Help()
+</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.get.Help()
-
-================================================================================================================================================================================================================
-vim.EsxCLI.software.vib.get
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Displays detailed information about one or more installed VIBs
-
-<span style="color:#66d9ef">Param</span>
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-- rebooting-image    | Displays either information <span style="color:#66d9ef">for</span> the ESXi image that becomes active after a reboot, or nothing <span style="color:#66d9ef">if</span> the pending-reboot image has not been created yet. <span style="color:#66d9ef">If</span> not specified, information from the curr
-                        | ent ESXi image <span style="color:#66d9ef">in</span> memory is returned.
-
-- vibname            | Specifies one or more installed VIBs about which further information is displayed. <span style="color:#66d9ef">If</span> this option is not specified, then more information on all the installed VIBs will be displayed. Must be one of the following f
-                        | orms<span style="color:#960050;background-color:#1e0010">:</span> name, name<span style="color:#960050;background-color:#1e0010">:</span>version, vendor<span style="color:#960050;background-color:#1e0010">:</span>name, or vendor<span style="color:#960050;background-color:#1e0010">:</span>name<span style="color:#960050;background-color:#1e0010">:</span>version.
-</code></pre></div>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software.vib.get.Help()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>================================================================================================================================================================================================================
+</span></span><span style="display:flex;"><span>vim.EsxCLI.software.vib.get
+</span></span><span style="display:flex;"><span>----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>Displays detailed information about one or more installed VIBs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Param</span>
+</span></span><span style="display:flex;"><span>----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>- rebooting-image    | Displays either information <span style="color:#66d9ef">for</span> the ESXi image that becomes active after a reboot, or nothing <span style="color:#66d9ef">if</span> the pending-reboot image has not been created yet. <span style="color:#66d9ef">If</span> not specified, information from the curr
+</span></span><span style="display:flex;"><span>                        | ent ESXi image <span style="color:#66d9ef">in</span> memory is returned.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- vibname            | Specifies one or more installed VIBs about which further information is displayed. <span style="color:#66d9ef">If</span> this option is not specified, then more information on all the installed VIBs will be displayed. Must be one of the following f
+</span></span><span style="display:flex;"><span>                        | orms<span style="color:#960050;background-color:#1e0010">:</span> name, name<span style="color:#960050;background-color:#1e0010">:</span>version, vendor<span style="color:#960050;background-color:#1e0010">:</span>name, or vendor<span style="color:#960050;background-color:#1e0010">:</span>name<span style="color:#960050;background-color:#1e0010">:</span>version.
+</span></span></code></pre></div>
 </div>
 
 <div class="code-output-caption">
@@ -447,21 +447,21 @@ Displays detailed information about one or more installed VIBs
 </li>
 <li>
 <p>You can use the <code>CreateArgs()</code> helper method. The <code>CreateArgs()</code> method returns an object containing every available argument. You can run the <code>CreateArgs()</code> method, store the resulting object in a variable, and then print the object to the console to see the available arguments, as follows:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Run the CreateArgs() method and store the returned object in $ArgsObj.</span>
-$ArgsObj = $EsxCli.software.vib.get.CreateArgs()
-
-<span style="color:#75715e"># Write the $ArgsObj to the console to view the available arguments.</span>
-$ArgsObj
-</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Run the CreateArgs() method and store the returned object in $ArgsObj.</span>
+</span></span><span style="display:flex;"><span>$ArgsObj = $EsxCli.software.vib.get.CreateArgs()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Write the $ArgsObj to the console to view the available arguments.</span>
+</span></span><span style="display:flex;"><span>$ArgsObj
+</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $ArgsObj = $EsxCli.software.vib.get.CreateArgs()
-PS C:\&gt; $ArgsObj
-
-Name                           Value
-----                           -----
-vibname                        Unset, (<span style="color:#66d9ef">[string[]]</span>, optional)
-rebootingimage                 Unset, (<span style="color:#66d9ef">[boolean]</span>, optional)
-</code></pre></div>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $ArgsObj = $EsxCli.software.vib.get.CreateArgs()
+</span></span><span style="display:flex;"><span>PS C:\&gt; $ArgsObj
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Name                           Value
+</span></span><span style="display:flex;"><span>----                           -----
+</span></span><span style="display:flex;"><span>vibname                        Unset, ([<span style="color:#66d9ef">string[]</span>], optional)
+</span></span><span style="display:flex;"><span>rebootingimage                 Unset, ([<span style="color:#66d9ef">boolean</span>], optional)
+</span></span></code></pre></div>
 </div>
 
 <div class="code-output-caption">
@@ -483,36 +483,36 @@ rebootingimage                 Unset, (<span style="color:#66d9ef">[boolean]</sp
 <ol>
 <li>
 <p>You can supply the arguments/values as an inline hashtable. For example, to set the <code>vibname</code> argument to the value <code>tools-light</code>, you can do the following:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$EsxCli.software.vib.get.Invoke(@{vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>})
-</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli.software.vib.get.Invoke(@{vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>})
+</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $EsxCli.software.vib.get.Invoke(@{vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>})
-
-AcceptanceLevel           <span style="color:#960050;background-color:#1e0010">:</span> VMwareCertified
-Conflicts                 <span style="color:#960050;background-color:#1e0010">:</span>
-CreationDate              <span style="color:#960050;background-color:#1e0010">:</span> 2020-08-06
-Depends                   <span style="color:#960050;background-color:#1e0010">:</span> {esx-version &gt;= 6.6.0}
-Description               <span style="color:#960050;background-color:#1e0010">:</span> This package contains cdrom and floppy images used to install the VMware Tools inside virtual machines.
-HardwarePlatformsRequired <span style="color:#960050;background-color:#1e0010">:</span>
-ID                        <span style="color:#960050;background-color:#1e0010">:</span> VMware_locker_tools-light_11.1.1.16303738-16701467
-InstallDate               <span style="color:#960050;background-color:#1e0010">:</span> 2021-01-11
-LiveInstallAllowed        <span style="color:#960050;background-color:#1e0010">:</span> True
-LiveRemoveAllowed         <span style="color:#960050;background-color:#1e0010">:</span> True
-MaintenanceModeRequired   <span style="color:#960050;background-color:#1e0010">:</span> False
-Name                      <span style="color:#960050;background-color:#1e0010">:</span> tools-light
-Overlay                   <span style="color:#960050;background-color:#1e0010">:</span> False
-Payloads                  <span style="color:#960050;background-color:#1e0010">:</span> {tools}
-Provides                  <span style="color:#960050;background-color:#1e0010">:</span>
-ReferenceURLs             <span style="color:#960050;background-color:#1e0010">:</span>
-Replaces                  <span style="color:#960050;background-color:#1e0010">:</span>
-StatelessReady            <span style="color:#960050;background-color:#1e0010">:</span> True
-Status                    <span style="color:#960050;background-color:#1e0010">:</span>
-Summary                   <span style="color:#960050;background-color:#1e0010">:</span> VMware Tools VIB <span style="color:#66d9ef">for</span> Windows and Linux guests (generated by ESXi server build 16701467)
-Tags                      <span style="color:#960050;background-color:#1e0010">:</span>
-Type                      <span style="color:#960050;background-color:#1e0010">:</span> locker
-Vendor                    <span style="color:#960050;background-color:#1e0010">:</span> VMware
-Version                   <span style="color:#960050;background-color:#1e0010">:</span> 11.1.1.16303738-16701467
-</code></pre></div>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software.vib.get.Invoke(@{vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>AcceptanceLevel           <span style="color:#960050;background-color:#1e0010">:</span> VMwareCertified
+</span></span><span style="display:flex;"><span>Conflicts                 <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>CreationDate              <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">2020</span>-<span style="color:#ae81ff">08</span>-<span style="color:#ae81ff">06</span>
+</span></span><span style="display:flex;"><span>Depends                   <span style="color:#960050;background-color:#1e0010">:</span> {esx-version &gt;= <span style="color:#ae81ff">6.6</span>.<span style="color:#ae81ff">0</span>}
+</span></span><span style="display:flex;"><span>Description               <span style="color:#960050;background-color:#1e0010">:</span> This package contains cdrom and floppy images used to install the VMware Tools inside virtual machines.
+</span></span><span style="display:flex;"><span>HardwarePlatformsRequired <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>ID                        <span style="color:#960050;background-color:#1e0010">:</span> VMware_locker_tools-light_11.1.1.<span style="color:#ae81ff">16303738</span>-<span style="color:#ae81ff">16701467</span>
+</span></span><span style="display:flex;"><span>InstallDate               <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">2021</span>-<span style="color:#ae81ff">01</span>-<span style="color:#ae81ff">11</span>
+</span></span><span style="display:flex;"><span>LiveInstallAllowed        <span style="color:#960050;background-color:#1e0010">:</span> True
+</span></span><span style="display:flex;"><span>LiveRemoveAllowed         <span style="color:#960050;background-color:#1e0010">:</span> True
+</span></span><span style="display:flex;"><span>MaintenanceModeRequired   <span style="color:#960050;background-color:#1e0010">:</span> False
+</span></span><span style="display:flex;"><span>Name                      <span style="color:#960050;background-color:#1e0010">:</span> tools-light
+</span></span><span style="display:flex;"><span>Overlay                   <span style="color:#960050;background-color:#1e0010">:</span> False
+</span></span><span style="display:flex;"><span>Payloads                  <span style="color:#960050;background-color:#1e0010">:</span> {tools}
+</span></span><span style="display:flex;"><span>Provides                  <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>ReferenceURLs             <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>Replaces                  <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>StatelessReady            <span style="color:#960050;background-color:#1e0010">:</span> True
+</span></span><span style="display:flex;"><span>Status                    <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>Summary                   <span style="color:#960050;background-color:#1e0010">:</span> VMware Tools VIB <span style="color:#66d9ef">for</span> Windows and Linux guests (generated by ESXi server build <span style="color:#ae81ff">16701467</span>)
+</span></span><span style="display:flex;"><span>Tags                      <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>Type                      <span style="color:#960050;background-color:#1e0010">:</span> locker
+</span></span><span style="display:flex;"><span>Vendor                    <span style="color:#960050;background-color:#1e0010">:</span> VMware
+</span></span><span style="display:flex;"><span>Version                   <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">11.1</span>.1.<span style="color:#ae81ff">16303738</span>-<span style="color:#ae81ff">16701467</span>
+</span></span></code></pre></div>
 </div>
 
 <div class="code-output-caption">
@@ -522,45 +522,45 @@ Version                   <span style="color:#960050;background-color:#1e0010">:
 </li>
 <li>
 <p>You can use the object created by the <code>CreateArgs()</code> method. To use the same example again, you can set the <code>vibname</code> argument to the value <code>tools-light</code> , as follows.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Run the CreateArgs() method and store the returned object in $ArgsObj.</span>
-$ArgsObj = $EsxCli.software.vib.get.CreateArgs()
-
-<span style="color:#75715e"># Set the vibname property to &#34;tools-light&#34;.</span>
-$ArgsObj.vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>
-
-<span style="color:#75715e"># Supply the $ArgsObj object to the Invoke() method.</span>
-$EsxCli.software.vib.get.Invoke($ArgsObj)
-</code></pre></div><div class="code-output-bar"><span>Output</span></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Run the CreateArgs() method and store the returned object in $ArgsObj.</span>
+</span></span><span style="display:flex;"><span>$ArgsObj = $EsxCli.software.vib.get.CreateArgs()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Set the vibname property to &#34;tools-light&#34;.</span>
+</span></span><span style="display:flex;"><span>$ArgsObj.vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Supply the $ArgsObj object to the Invoke() method.</span>
+</span></span><span style="display:flex;"><span>$EsxCli.software.vib.get.Invoke($ArgsObj)
+</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
 <div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">PS C:\&gt; $ArgsObj = $EsxCli.software.vib.get.CreateArgs()
-PS C:\&gt; $ArgsObj.vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>
-PS C:\&gt; $EsxCli.software.vib.get.Invoke($ArgsObj)
-
-AcceptanceLevel           <span style="color:#960050;background-color:#1e0010">:</span> VMwareCertified
-Conflicts                 <span style="color:#960050;background-color:#1e0010">:</span>
-CreationDate              <span style="color:#960050;background-color:#1e0010">:</span> 2020-08-06
-Depends                   <span style="color:#960050;background-color:#1e0010">:</span> {esx-version &gt;= 6.6.0}
-Description               <span style="color:#960050;background-color:#1e0010">:</span> This package contains cdrom and floppy images used to install the VMware Tools inside virtual machines.
-HardwarePlatformsRequired <span style="color:#960050;background-color:#1e0010">:</span>
-ID                        <span style="color:#960050;background-color:#1e0010">:</span> VMware_locker_tools-light_11.1.1.16303738-16701467
-InstallDate               <span style="color:#960050;background-color:#1e0010">:</span> 2021-01-11
-LiveInstallAllowed        <span style="color:#960050;background-color:#1e0010">:</span> True
-LiveRemoveAllowed         <span style="color:#960050;background-color:#1e0010">:</span> True
-MaintenanceModeRequired   <span style="color:#960050;background-color:#1e0010">:</span> False
-Name                      <span style="color:#960050;background-color:#1e0010">:</span> tools-light
-Overlay                   <span style="color:#960050;background-color:#1e0010">:</span> False
-Payloads                  <span style="color:#960050;background-color:#1e0010">:</span> {tools}
-Provides                  <span style="color:#960050;background-color:#1e0010">:</span>
-ReferenceURLs             <span style="color:#960050;background-color:#1e0010">:</span>
-Replaces                  <span style="color:#960050;background-color:#1e0010">:</span>
-StatelessReady            <span style="color:#960050;background-color:#1e0010">:</span> True
-Status                    <span style="color:#960050;background-color:#1e0010">:</span>
-Summary                   <span style="color:#960050;background-color:#1e0010">:</span> VMware Tools VIB <span style="color:#66d9ef">for</span> Windows and Linux guests (generated by ESXi server build 16701467)
-Tags                      <span style="color:#960050;background-color:#1e0010">:</span>
-Type                      <span style="color:#960050;background-color:#1e0010">:</span> locker
-Vendor                    <span style="color:#960050;background-color:#1e0010">:</span> VMware
-Version                   <span style="color:#960050;background-color:#1e0010">:</span> 11.1.1.16303738-16701467
-</code></pre></div>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $ArgsObj = $EsxCli.software.vib.get.CreateArgs()
+</span></span><span style="display:flex;"><span>PS C:\&gt; $ArgsObj.vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>
+</span></span><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software.vib.get.Invoke($ArgsObj)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>AcceptanceLevel           <span style="color:#960050;background-color:#1e0010">:</span> VMwareCertified
+</span></span><span style="display:flex;"><span>Conflicts                 <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>CreationDate              <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">2020</span>-<span style="color:#ae81ff">08</span>-<span style="color:#ae81ff">06</span>
+</span></span><span style="display:flex;"><span>Depends                   <span style="color:#960050;background-color:#1e0010">:</span> {esx-version &gt;= <span style="color:#ae81ff">6.6</span>.<span style="color:#ae81ff">0</span>}
+</span></span><span style="display:flex;"><span>Description               <span style="color:#960050;background-color:#1e0010">:</span> This package contains cdrom and floppy images used to install the VMware Tools inside virtual machines.
+</span></span><span style="display:flex;"><span>HardwarePlatformsRequired <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>ID                        <span style="color:#960050;background-color:#1e0010">:</span> VMware_locker_tools-light_11.1.1.<span style="color:#ae81ff">16303738</span>-<span style="color:#ae81ff">16701467</span>
+</span></span><span style="display:flex;"><span>InstallDate               <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">2021</span>-<span style="color:#ae81ff">01</span>-<span style="color:#ae81ff">11</span>
+</span></span><span style="display:flex;"><span>LiveInstallAllowed        <span style="color:#960050;background-color:#1e0010">:</span> True
+</span></span><span style="display:flex;"><span>LiveRemoveAllowed         <span style="color:#960050;background-color:#1e0010">:</span> True
+</span></span><span style="display:flex;"><span>MaintenanceModeRequired   <span style="color:#960050;background-color:#1e0010">:</span> False
+</span></span><span style="display:flex;"><span>Name                      <span style="color:#960050;background-color:#1e0010">:</span> tools-light
+</span></span><span style="display:flex;"><span>Overlay                   <span style="color:#960050;background-color:#1e0010">:</span> False
+</span></span><span style="display:flex;"><span>Payloads                  <span style="color:#960050;background-color:#1e0010">:</span> {tools}
+</span></span><span style="display:flex;"><span>Provides                  <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>ReferenceURLs             <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>Replaces                  <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>StatelessReady            <span style="color:#960050;background-color:#1e0010">:</span> True
+</span></span><span style="display:flex;"><span>Status                    <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>Summary                   <span style="color:#960050;background-color:#1e0010">:</span> VMware Tools VIB <span style="color:#66d9ef">for</span> Windows and Linux guests (generated by ESXi server build <span style="color:#ae81ff">16701467</span>)
+</span></span><span style="display:flex;"><span>Tags                      <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>Type                      <span style="color:#960050;background-color:#1e0010">:</span> locker
+</span></span><span style="display:flex;"><span>Vendor                    <span style="color:#960050;background-color:#1e0010">:</span> VMware
+</span></span><span style="display:flex;"><span>Version                   <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">11.1</span>.1.<span style="color:#ae81ff">16303738</span>-<span style="color:#ae81ff">16701467</span>
+</span></span></code></pre></div>
 </div>
 
 <div class="code-output-caption">
@@ -763,7 +763,7 @@ Version                   <span style="color:#960050;background-color:#1e0010">:
     </main>
     <footer class="site-footer outer">
     <div class="inner">
-        <section class="copyright"><a href="https://ryanjan.uk/">RyanJan</a> &copy; 2021</section>
+        <section class="copyright"><a href="https://ryanjan.uk/"></a> &copy; 2023</section>
         <nav class="site-footer-nav">
             <a href="https://ryanjan.uk/">Latest Posts</a>
             <a href="https://github.com/ryan-jan" target="_blank" rel="noopener">GitHub</a>

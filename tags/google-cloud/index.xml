@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>google-cloud on </title>
+    <link>https://ryanjan.uk/tags/google-cloud/</link>
+    <description>Recent content in google-cloud on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Tue, 06 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://ryanjan.uk/tags/google-cloud/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using Google Cloud Service Account impersonation with Terraform</title>
+      <link>https://ryanjan.uk/terraform-google-cloud-service-account-impersonation/</link>
+      <pubDate>Tue, 06 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://ryanjan.uk/terraform-google-cloud-service-account-impersonation/</guid>
+      <description>In this post I&amp;rsquo;ll demonstrate how to configure a Terraform project to use Google Service Account impersonation and
+explain why I think this is a better option that using service account keys.</description>
+    </item>
+    
+  </channel>
+</rss>

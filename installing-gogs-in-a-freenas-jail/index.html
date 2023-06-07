@@ -17,7 +17,7 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>RyanJan  | Installing Gogs In A FreeNAS Jail</title>
+  <title> Installing Gogs In A FreeNAS Jail</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
   <meta name="HandheldFriendly" content="True" />
@@ -160,16 +160,16 @@ pkg update &amp;&amp; pkg upgrade Now install the required packages.">
         <p>I recently stumbled across the <a href="https://gogs.io">Gogs</a> project whilst looking for self-hosted Git solutions. I run a FreeNAS server at home so I thought I would get the app up and running in a jail. Here is how I did it.</p>
 <h2 id="jail-preparation">Jail Preparation</h2>
 <p>Create a new jail named <code>gogs</code> and make sure that the jail is up to date by running.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">pkg update <span style="color:#f92672">&amp;&amp;</span> pkg upgrade
-</code></pre></div><p>Now install the required packages.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">pkg install go git gcc
-</code></pre></div><p>Next add a user <code>git</code> and switch to the new user.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">pw useradd git -m
-su git -
-</code></pre></div><p>Set the Go env variables both for this session and for future sessions.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">GOPATH<span style="color:#f92672">=</span>$HOME/go; export GOPATH
-echo <span style="color:#e6db74">&#39;GOPATH=$HOME/go; export GOPATH&#39;</span> &gt;&gt; ~/.profile
-</code></pre></div><div class="in-article-ad">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pkg update <span style="color:#f92672">&amp;&amp;</span> pkg upgrade
+</span></span></code></pre></div><p>Now install the required packages.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pkg install go git gcc
+</span></span></code></pre></div><p>Next add a user <code>git</code> and switch to the new user.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pw useradd git -m
+</span></span><span style="display:flex;"><span>su git -
+</span></span></code></pre></div><p>Set the Go env variables both for this session and for future sessions.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>GOPATH<span style="color:#f92672">=</span>$HOME/go; export GOPATH
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;GOPATH=$HOME/go; export GOPATH&#39;</span> &gt;&gt; ~/.profile
+</span></span></code></pre></div><div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
      <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
           data-ad-format="fluid" data-ad-client="ca-pub-8907477009760148" data-ad-slot="3921250676"></ins>
@@ -179,31 +179,31 @@ echo <span style="color:#e6db74">&#39;GOPATH=$HOME/go; export GOPATH&#39;</span>
 </div>
 <h2 id="installation-and-initial-configuration">Installation and Initial Configuration</h2>
 <p>Fetch <code>Gogs</code> using the <code>Go</code> package manager.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">go get -u --tags sqlite github.com/gogs/gogs
-</code></pre></div><p>Create a symbolic link to the <code>gogs</code>  directory to make it easier to manage.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ln -s ~/go/src/github.com/gogs/gogs ~/gogs
-</code></pre></div><p><code>cd</code> into the source directory and issue the build command.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cd ~/gogs
-go build --tags sqlite
-</code></pre></div><p>Issue the following command to start <code>gogs</code> for the first time and then browse to the jails IP address at port <code>3000</code> and complete the initial configuration via the web GUI.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">./gogs web
-</code></pre></div><p>Once you have completed the installation terminate the <code>gogs</code> process from the terminal using <code>Ctrl+C</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>go get -u --tags sqlite github.com/gogs/gogs
+</span></span></code></pre></div><p>Create a symbolic link to the <code>gogs</code>  directory to make it easier to manage.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ln -s ~/go/src/github.com/gogs/gogs ~/gogs
+</span></span></code></pre></div><p><code>cd</code> into the source directory and issue the build command.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd ~/gogs
+</span></span><span style="display:flex;"><span>go build --tags sqlite
+</span></span></code></pre></div><p>Issue the following command to start <code>gogs</code> for the first time and then browse to the jails IP address at port <code>3000</code> and complete the initial configuration via the web GUI.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./gogs web
+</span></span></code></pre></div><p>Once you have completed the installation terminate the <code>gogs</code> process from the terminal using <code>Ctrl+C</code>.</p>
 <p>Finally, we need to switch back to the root user and configure an init script to set the <code>gogs</code> service to start at boot.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">exit
-cp /home/git/gogs/scripts/init/freebsd/gogs /usr/local/etc/rc.d/
-chmod a+x /usr/local/etc/rc.d/gogs
-</code></pre></div><p>We also need to add <code>gogs_enable=&quot;YES&quot;</code> to the <code>/etc/rc.conf</code> file. Now we can start the service and test that it is working via a web browser.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">service gogs start
-</code></pre></div><h2 id="updating">Updating</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>exit
+</span></span><span style="display:flex;"><span>cp /home/git/gogs/scripts/init/freebsd/gogs /usr/local/etc/rc.d/
+</span></span><span style="display:flex;"><span>chmod a+x /usr/local/etc/rc.d/gogs
+</span></span></code></pre></div><p>We also need to add <code>gogs_enable=&quot;YES&quot;</code> to the <code>/etc/rc.conf</code> file. Now we can start the service and test that it is working via a web browser.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>service gogs start
+</span></span></code></pre></div><h2 id="updating">Updating</h2>
 <p>Updating is a piece of cake! But take a jail snapshot first!!!!</p>
 <p>SSH into the gogs jail and run the following commands.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">su git
-cd /home/git/gogs
-go get -u --tags sqlite github.com/gogs/gogs
-go build --tags sqlite
-exit
-service gogs start
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>su git
+</span></span><span style="display:flex;"><span>cd /home/git/gogs
+</span></span><span style="display:flex;"><span>go get -u --tags sqlite github.com/gogs/gogs
+</span></span><span style="display:flex;"><span>go build --tags sqlite
+</span></span><span style="display:flex;"><span>exit
+</span></span><span style="display:flex;"><span>service gogs start
+</span></span></code></pre></div>
     </section>
 
 </article>
@@ -228,7 +228,7 @@ service gogs start
     </main>
     <footer class="site-footer outer">
     <div class="inner">
-        <section class="copyright"><a href="https://ryanjan.uk/">RyanJan</a> &copy; 2021</section>
+        <section class="copyright"><a href="https://ryanjan.uk/"></a> &copy; 2023</section>
         <nav class="site-footer-nav">
             <a href="https://ryanjan.uk/">Latest Posts</a>
             <a href="https://github.com/ryan-jan" target="_blank" rel="noopener">GitHub</a>

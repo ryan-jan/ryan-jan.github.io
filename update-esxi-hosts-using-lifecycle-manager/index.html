@@ -17,7 +17,7 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>RyanJan  | How to Update VMware ESXi Hosts with Lifecycle Manager</title>
+  <title> How to Update VMware ESXi Hosts with Lifecycle Manager</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
   <meta name="HandheldFriendly" content="True" />
@@ -201,18 +201,18 @@
 <li>
 <p>Access the Lifecycle Manager plug-in via the vSphere Client, by browsing to <strong>Menu &gt; Lifecycle Manager.</strong></p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled.png" alt="(.Get 1)" />
-	<figcaption>Accessing the vSphere Lifecycle Manager plug-in from the vSphere Client.</figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled.png" alt="(.Get 1)" />
+    	<figcaption>Accessing the vSphere Lifecycle Manager plug-in from the vSphere Client.</figcaption>
+    </figure>
 </li>
 <li>
 <p>Select a vCenter server from the dropdown menu and click the <strong>Updates</strong> tab. The available updates are shown in the main table.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%201.png" alt="(.Get 1)" />
-	<figcaption>Viewing the available updates in the vLCM depot for a specific vCenter server.</figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%201.png" alt="(.Get 1)" />
+    	<figcaption>Viewing the available updates in the vLCM depot for a specific vCenter server.</figcaption>
+    </figure>
 </li>
 </ol>
 <h3 id="configuring-automatic-patch-downloads">Configuring automatic patch downloads</h3>
@@ -221,18 +221,18 @@
 <li>
 <p>In the Lifecycle Manager plug-in, select <strong>Settings &gt; Patch Downloads &gt; Edit</strong>.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%202.png" alt="(.Get 1)" />
-	<figcaption>Launching the Edit dialog to configure the automatic download settings.</figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%202.png" alt="(.Get 1)" />
+    	<figcaption>Launching the Edit dialog to configure the automatic download settings.</figcaption>
+    </figure>
 </li>
 <li>
 <p>In the <strong>Edit Settings</strong> dialog, check the <strong>Download patches</strong> checkbox, configure the schedule as required, and then click <strong>Save.</strong></p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%203.png" alt="(.Get 1)" />
-	<figcaption>Enabling the download schedule in the Edit Settings dialog.</figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%203.png" alt="(.Get 1)" />
+    	<figcaption>Enabling the download schedule in the Edit Settings dialog.</figcaption>
+    </figure>
 <div class="callout info">
     <div class="callout-wrapper">
         <span>
@@ -278,34 +278,34 @@
 <li>
 <p>Select <strong>New &gt; Baseline</strong> in the <strong>Baselines</strong> tab of the Lifecycle Manager plug-in. This will launch the <strong>Create Baseline</strong> dialog.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%205.png" alt="(.Get 1)" />
-	<figcaption>Launching the Create Baseline dialog.</figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%205.png" alt="(.Get 1)" />
+    	<figcaption>Launching the Create Baseline dialog.</figcaption>
+    </figure>
 </li>
 <li>
 <p>In the <strong>Create Baseline</strong> dialog, enter a <strong>Name</strong> for the baseline, select the <strong>Patch</strong> radio button, and click <strong>Next</strong>.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%206.png" alt="(.Get 1)" />
-	<figcaption>Entering a name for the custom patch baseline.</figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%206.png" alt="(.Get 1)" />
+    	<figcaption>Entering a name for the custom patch baseline.</figcaption>
+    </figure>
 </li>
 <li>
 <p>In the <strong>Select Patches Automatically</strong> tab, you can create a filter to automatically include certain patches. For example, to include all patches for ESXi 7.0 check the <strong>Automatically update this baseline with patches that match the following criteria</strong> checkbox, select <strong>VMware</strong> from the <strong>Patch vendor</strong> list, and finally select <strong>embeddedEsx 7.0</strong> from the <strong>Product</strong> list.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%207.png" alt="(.Get 1)" />
-	<figcaption>Configuring an automatic patch filter.</figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%207.png" alt="(.Get 1)" />
+    	<figcaption>Configuring an automatic patch filter.</figcaption>
+    </figure>
 </li>
 <li>
 <p>To view the list of patches matched by the filter, you can select the <strong>Matched</strong> tab.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%208.png" alt="(.Get 1)" />
-	<figcaption>Viewing the select patches in the Matched tab.</figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%208.png" alt="(.Get 1)" />
+    	<figcaption>Viewing the select patches in the Matched tab.</figcaption>
+    </figure>
 </li>
 <li>
 <p>Once you&rsquo;re happy with the filter criteria, or if you unchecked the <strong>Automatically update this baseline with patches that match the following criteria</strong> checkbox (to create a fixed baseline instead), click the <strong>Next</strong> button.</p>
@@ -314,18 +314,18 @@
 <p>In the <strong>Select Patches Manually</strong> tab, you&rsquo;ll see a list of patches which do not match the automatic filter criteria configured in the previous step (or all patches if you disabled the automatic filter). You can select any of these to manually include them in the baseline.</p>
 <p>For example, to include the <strong>cru driver</strong> patch select it from the table and then click <strong>Next</strong>.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%209.png" alt="(.Get 1)" />
-	<figcaption>Including specific patches manually.</figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%209.png" alt="(.Get 1)" />
+    	<figcaption>Including specific patches manually.</figcaption>
+    </figure>
 </li>
 <li>
 <p>Finally, review the <strong>Summary</strong> tab information and click <strong>Finish</strong> to create your custom baseline.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2010.png" alt="(.Get 1)" />
-	<figcaption>Reviewing the summary tab completing the baseline creation.</figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2010.png" alt="(.Get 1)" />
+    	<figcaption>Reviewing the summary tab completing the baseline creation.</figcaption>
+    </figure>
 </li>
 </ol>
 <div class="in-article-ad">
@@ -343,34 +343,34 @@
 <li>
 <p>From the <strong>Hosts and Clusters</strong> view, click on the <strong>RegionA01-COMP01</strong> cluster object in the navigation pane on the left.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2011.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2011.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>Go to the <strong>Updates</strong> tab and scroll down to the <strong>Attached Baselines</strong> section.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2012.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2012.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>Click <strong>Attach &gt; Attach Baseline or Baseline Group</strong> to launch the <strong>Attach</strong> dialog.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2013.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2013.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>In the <strong>Attach</strong> dialog, select the <strong>MyCustomBaseline</strong> baseline object and click <strong>Attach</strong>.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2014.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2014.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 </ol>
 <p>The <strong>MyCustomBaseline</strong> baseline is now attached to the <strong>RegionA01-COMP01</strong> cluster object. To verify this, go to the <strong>Hosts and Clusters &gt; RegionA01-COMP01 &gt; Updates</strong> tab and scroll down to the <strong>Attached Baselines</strong> section, for example:</p>
@@ -401,10 +401,10 @@
 <li>
 <p>From the <strong>Hosts and Clusters</strong> view, click on the <strong>vcsa-01a.corp.local</strong> vCenter object in the navigation pane on the left, then go to <strong>Updates &gt; Hosts &gt; Baselines</strong> and scroll down to <strong>Attached Baselines</strong>.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2017.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2017.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>Select the <strong>Host Security Patches</strong> baseline and click <strong>Detach</strong> to launch the <strong>Detach</strong> dialog.</p>
@@ -412,10 +412,10 @@
 <li>
 <p>Select the <strong>vcsa-01a.corp.local</strong> object and click <strong>Detach.</strong></p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2018.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2018.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>Repeat steps 2 and 3 for the <strong>Critical Host Patches</strong> baseline.</p>
@@ -428,66 +428,66 @@
 <li>
 <p>Go to <strong>Lifecycle Manager &gt; Baselines</strong> and click <strong>New &gt; Baseline Group</strong>.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2019.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2019.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>In the <strong>Create Baseline Group</strong> dialog, enter <strong>MyBaselineGroup</strong> in the Name field and click <strong>Next.</strong></p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2020.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2020.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>Click <strong>Next</strong> to skip the <strong>Upgrade Baseline</strong> page as this is not necessary for this example.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2021.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2021.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>On the <strong>Patch Baselines</strong> page, select the <strong>MyCustomBaseline1</strong> and <strong>MyCustomBaseline2</strong> baselines and click <strong>Next</strong>.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2022.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2022.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>Click  <strong>Next</strong> to skip the <strong>Extension Baselines</strong> page as it is not necessary for this example.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2023.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2023.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>Review the <strong>Summary</strong> page and click <strong>Finish</strong> to create the baseline group.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2024.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2024.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>Now go to <strong>Hosts and Clusters &gt; RegionA01-COMP01 &gt; Updates</strong> and click <strong>Attach &gt; Attach Baseline or Baseline Group</strong>.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2025.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2025.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>In the <strong>Attach</strong> dialog, select the <strong>MyBaselineGroup</strong> object and click <strong>Attach</strong>.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2026.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2026.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 </ol>
 <div class="in-article-ad">
@@ -505,34 +505,34 @@
 <li>
 <p>Go to <strong>Hosts and Clusters &gt; RegionA01-COM01 &gt; Updates</strong> and click <strong>Check Compliance.</strong></p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2027.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2027.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>Monitor the progress of the compliance scan task in the <strong>Recent Tasks</strong> pane at the bottom of the console, or by going to <strong>Hosts and Clusters &gt; RegionA01-COMP01 &gt; Monitor &gt; Tasks and Events &gt; Tasks</strong>.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2028.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2028.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>Once the compliance check task completes, you&rsquo;ll see a warning in the <strong>Updates</strong> tab if any of the target hosts are missing patches from an attached baseline.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2029.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2029.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>Scroll down in the <strong>Updates</strong> tab to see which attached baselines are non-compliant.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2030.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2030.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 </ol>
 <div class="in-article-ad">
@@ -551,58 +551,58 @@
 <li>
 <p>Go to <strong>Hosts and Clusters &gt; RegionA01-COMP01 &gt; Updates</strong> and scroll down to the <strong>Attached Baselines</strong> section.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2031.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2031.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>Select the <strong>MyCustomBaseline</strong> baseline and click <strong>Remediate</strong> to launch the remediate dialog.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2032.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2032.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>In the <strong>Remediate</strong> dialog, ensure that the required hosts are select in the <strong>X hosts will remediate</strong> section.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2033.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2033.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 </li>
 <li>
 <p>Expand the <strong>Install X updates</strong> drop down and review the patches to be installed.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2034.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2034.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 <ol>
 <li>
 <p>If you wish to schedule the remediation task for a later time, expand the <strong>Scheduling Options</strong> drop down and configure as required. This tutorial will leave the default settings to remediate immediately.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2035.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+        <figure class="post-content-figure">
+        	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2035.png" alt="(.Get 1)" />
+        	<figcaption></figcaption>
+        </figure>
 </li>
 <li>
 <p>Finally, expand the <strong>Remediation settings</strong> drop down and review the settings before proceeding. Click <strong>Remediate</strong> to start the remediation task.</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2036.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+        <figure class="post-content-figure">
+        	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2036.png" alt="(.Get 1)" />
+        	<figcaption></figcaption>
+        </figure>
 </li>
 </ol>
 <p>This creates a remediation task for the cluster object which you can monitor by going to <strong>Hosts and Clusters &gt; RegionA01-COMP01 &gt; Monitor &gt; Tasks and Events &gt; Tasks</strong>; as follows:</p>
 
-<figure class="post-content-figure">
-	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2037.png" alt="(.Get 1)" />
-	<figcaption></figcaption>
-</figure>
+    <figure class="post-content-figure">
+    	<img src="/update-esxi-hosts-using-lifecycle-manager/Untitled%2037.png" alt="(.Get 1)" />
+    	<figcaption></figcaption>
+    </figure>
 <p>The remediation task performs the following actions for each host:</p>
 <ol>
 <li>Enters maintenance mode</li>
@@ -757,7 +757,7 @@ The Symptoms I was initially made aware of this issue as it appeared that certai
     </main>
     <footer class="site-footer outer">
     <div class="inner">
-        <section class="copyright"><a href="https://ryanjan.uk/">RyanJan</a> &copy; 2021</section>
+        <section class="copyright"><a href="https://ryanjan.uk/"></a> &copy; 2023</section>
         <nav class="site-footer-nav">
             <a href="https://ryanjan.uk/">Latest Posts</a>
             <a href="https://github.com/ryan-jan" target="_blank" rel="noopener">GitHub</a>
