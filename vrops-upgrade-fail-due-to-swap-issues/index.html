@@ -27,8 +27,7 @@
   
   <link rel="stylesheet" type="text/css" href="/css/custom/screen-custom.css" />
   <link rel="stylesheet" type="text/css" href="/css/fontawesome_all.min.css" />
-  <link rel="stylesheet" type="text/css" href="/css/prism.css" />
-  <link rel="stylesheet" type="text/css" href="/css/custom/prism-custom.css" />
+  <link rel="stylesheet" type="text/css" href="/css/custom/syntax.css" />
   <link rel="stylesheet" type="text/css" href="/css/custom/global-custom.css" />
 
   
@@ -159,7 +158,7 @@ Initially a colleague of mine pointed me to the well known disk space issues (KB
         <p>Today I upgraded my non-production vRealize Operations Manager (vROps) appliance from v6.7 to v7.0. However, when applying the initial OS update <code>.pak</code> file via the admin interface, the upgrade immediately failed
 with the error message <code>&quot;source ./pak_python_wrapper.sh validate.py&quot; failed</code>.</p>
 <p>Initially a colleague of mine pointed me to the well known disk space issues (<a href="https://kb.vmware.com/s/article/2135651">KB article</a>), but a quick look at the disk stats showed that there was plenty of space available on all partitions.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vrops.example.com:~ <span style="color:#75715e"># df -h</span>
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vrops.example.com:~ <span style="color:#7f848e"># df -h</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Filesystem             Size  Used Avail Use% Mounted on
 </span></span><span style="display:flex;"><span>/dev/sda3               16G  4.6G   11G  31% /
@@ -178,54 +177,54 @@ with the error message <code>&quot;source ./pak_python_wrapper.sh validate.py&qu
      </script>
 </div>
 <p>Then I stumbled accross an article which pointed me at the <code>/storage/log/vcops/log/pakManager/vcopsPakManager.root.post_validate.log</code> log file. In this log I saw the following errors regarding swap space.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>INFO - ***swap_space_check*** --- Validating swap space on all nodes in the cluster.
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>INFO - ***swap_space_check*** --- Validating swap space on all nodes in the cluster.
 </span></span><span style="display:flex;"><span>DEBUG - Updating state file with check: swap_space_check, start_time: True, stop_time: False, result: None, result_desc: None
-</span></span><span style="display:flex;"><span>DEBUG - state file: <span style="color:#e6db74">&#34;/storage/db/pakRepoLocal/vRealizeOperationsManagerEnterpriseVAOSUpgrade-70010098132/vRealizeOperationsManagerEnterpriseVAOSUpgrade-70010098132_validate.json&#34;</span>
-</span></span><span style="display:flex;"><span>DEBUG - Swap:            <span style="color:#ae81ff">0</span>          <span style="color:#ae81ff">0</span>          <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>DEBUG - state file: <span style="color:#98c379">&#34;/storage/db/pakRepoLocal/vRealizeOperationsManagerEnterpriseVAOSUpgrade-70010098132/vRealizeOperationsManagerEnterpriseVAOSUpgrade-70010098132_validate.json&#34;</span>
+</span></span><span style="display:flex;"><span>DEBUG - Swap:            <span style="color:#d19a66">0</span>          <span style="color:#d19a66">0</span>          <span style="color:#d19a66">0</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>DEBUG - total: 0mb, used: 0mb
 </span></span><span style="display:flex;"><span>ERROR - swap_space_check failed, float division by zero
-</span></span><span style="display:flex;"><span>Traceback <span style="color:#f92672">(</span>most recent call last<span style="color:#f92672">)</span>:
-</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;validate.py&#34;</span>, line 1974, in main
-</span></span><span style="display:flex;"><span>    result, result_description <span style="color:#f92672">=</span> getattr<span style="color:#f92672">(</span>envInfo, check_name<span style="color:#f92672">)()</span>
-</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;validate.py&#34;</span>, line 1393, in swap_space_check
-</span></span><span style="display:flex;"><span>    swap_percent <span style="color:#f92672">=</span> float<span style="color:#f92672">(</span>used<span style="color:#f92672">)</span>/float<span style="color:#f92672">(</span>total<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Traceback <span style="color:#56b6c2">(</span>most recent call last<span style="color:#56b6c2">)</span>:
+</span></span><span style="display:flex;"><span>  File <span style="color:#98c379">&#34;validate.py&#34;</span>, line 1974, in main
+</span></span><span style="display:flex;"><span>    result, <span style="color:#e06c75">result_description</span> <span style="color:#56b6c2">=</span> getattr<span style="color:#56b6c2">(</span>envInfo, check_name<span style="color:#56b6c2">)()</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#98c379">&#34;validate.py&#34;</span>, line 1393, in swap_space_check
+</span></span><span style="display:flex;"><span>    <span style="color:#e06c75">swap_percent</span> <span style="color:#56b6c2">=</span> float<span style="color:#56b6c2">(</span>used<span style="color:#56b6c2">)</span>/float<span style="color:#56b6c2">(</span>total<span style="color:#56b6c2">)</span>
 </span></span><span style="display:flex;"><span>ZeroDivisionError: float division by zero
 </span></span><span style="display:flex;"><span>ERROR - float division by zero
 </span></span><span style="display:flex;"><span>DEBUG - Updating state file with check: swap_space_check, start_time: False, stop_time: True, result: False, result_desc: float division by zero
-</span></span><span style="display:flex;"><span>DEBUG - state file: <span style="color:#e6db74">&#34;/storage/db/pakRepoLocal/vRealizeOperationsManagerEnterpriseVAOSUpgrade-70010098132/vRealizeOperationsManagerEnterpriseVAOSUpgrade-70010098132_validate.json&#34;</span>
-</span></span><span style="display:flex;"><span>ERROR - Failed running upgrade: ZeroDivisionError<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;float division by zero&#39;</span>,<span style="color:#f92672">)</span> is not JSON serializable
+</span></span><span style="display:flex;"><span>DEBUG - state file: <span style="color:#98c379">&#34;/storage/db/pakRepoLocal/vRealizeOperationsManagerEnterpriseVAOSUpgrade-70010098132/vRealizeOperationsManagerEnterpriseVAOSUpgrade-70010098132_validate.json&#34;</span>
+</span></span><span style="display:flex;"><span>ERROR - Failed running upgrade: ZeroDivisionError<span style="color:#56b6c2">(</span><span style="color:#98c379">&#39;float division by zero&#39;</span>,<span style="color:#56b6c2">)</span> is not JSON serializable
 </span></span></code></pre></div><p>I then used <code>top</code> to see swap usage and sure enough it was showing <code>0mb</code> free.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vrops.example.com:~ <span style="color:#75715e"># top</span>
-</span></span><span style="display:flex;"><span>top - 15:06:30 up <span style="color:#ae81ff">36</span> min,  <span style="color:#ae81ff">1</span> user,  load average: 0.24, 0.22, 0.29
-</span></span><span style="display:flex;"><span>Tasks: <span style="color:#ae81ff">107</span> total,   <span style="color:#ae81ff">1</span> running, <span style="color:#ae81ff">106</span> sleeping,   <span style="color:#ae81ff">0</span> stopped,   <span style="color:#ae81ff">0</span> zombie
-</span></span><span style="display:flex;"><span>Cpu<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>:  0.1%us,  0.1%sy,  0.0%ni, 99.8%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vrops.example.com:~ <span style="color:#7f848e"># top</span>
+</span></span><span style="display:flex;"><span>top - 15:06:30 up <span style="color:#d19a66">36</span> min,  <span style="color:#d19a66">1</span> user,  load average: 0.24, 0.22, 0.29
+</span></span><span style="display:flex;"><span>Tasks: <span style="color:#d19a66">107</span> total,   <span style="color:#d19a66">1</span> running, <span style="color:#d19a66">106</span> sleeping,   <span style="color:#d19a66">0</span> stopped,   <span style="color:#d19a66">0</span> zombie
+</span></span><span style="display:flex;"><span>Cpu<span style="color:#56b6c2">(</span>s<span style="color:#56b6c2">)</span>:  0.1%us,  0.1%sy,  0.0%ni, 99.8%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st
 </span></span><span style="display:flex;"><span>Mem:     16081M total,     3514M used,    12567M free,       52M buffers
 </span></span><span style="display:flex;"><span>Swap:        0M total,        0M used,        0M free,     2782M cached
 </span></span></code></pre></div><p>A quick <code>fdisk -l</code> showed me which partition was supposed to be for swap.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vrops.example.com:~ <span style="color:#75715e"># fdisk -l /dev/sda</span>
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vrops.example.com:~ <span style="color:#7f848e"># fdisk -l /dev/sda</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Disk /dev/sda: 21.5 GB, <span style="color:#ae81ff">21474836480</span> bytes
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">64</span> heads, <span style="color:#ae81ff">32</span> sectors/track, <span style="color:#ae81ff">20480</span> cylinders, total <span style="color:#ae81ff">41943040</span> sectors
-</span></span><span style="display:flex;"><span>Units <span style="color:#f92672">=</span> sectors of <span style="color:#ae81ff">1</span> * 512 <span style="color:#f92672">=</span> <span style="color:#ae81ff">512</span> bytes
-</span></span><span style="display:flex;"><span>Sector size <span style="color:#f92672">(</span>logical/physical<span style="color:#f92672">)</span>: <span style="color:#ae81ff">512</span> bytes / <span style="color:#ae81ff">512</span> bytes
-</span></span><span style="display:flex;"><span>I/O size <span style="color:#f92672">(</span>minimum/optimal<span style="color:#f92672">)</span>: <span style="color:#ae81ff">512</span> bytes / <span style="color:#ae81ff">512</span> bytes
+</span></span><span style="display:flex;"><span>Disk /dev/sda: 21.5 GB, <span style="color:#d19a66">21474836480</span> bytes
+</span></span><span style="display:flex;"><span><span style="color:#d19a66">64</span> heads, <span style="color:#d19a66">32</span> sectors/track, <span style="color:#d19a66">20480</span> cylinders, total <span style="color:#d19a66">41943040</span> sectors
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Units</span> <span style="color:#56b6c2">=</span> sectors of <span style="color:#d19a66">1</span> * <span style="color:#e06c75">512</span> <span style="color:#56b6c2">=</span> <span style="color:#d19a66">512</span> bytes
+</span></span><span style="display:flex;"><span>Sector size <span style="color:#56b6c2">(</span>logical/physical<span style="color:#56b6c2">)</span>: <span style="color:#d19a66">512</span> bytes / <span style="color:#d19a66">512</span> bytes
+</span></span><span style="display:flex;"><span>I/O size <span style="color:#56b6c2">(</span>minimum/optimal<span style="color:#56b6c2">)</span>: <span style="color:#d19a66">512</span> bytes / <span style="color:#d19a66">512</span> bytes
 </span></span><span style="display:flex;"><span>Disk identifier: 0x000cdac4
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>   Device Boot      Start         End      Blocks   Id  System
-</span></span><span style="display:flex;"><span>/dev/sda1            <span style="color:#ae81ff">2048</span>      <span style="color:#ae81ff">272383</span>      <span style="color:#ae81ff">135168</span>   <span style="color:#ae81ff">83</span>  Linux
-</span></span><span style="display:flex;"><span>/dev/sda2          <span style="color:#ae81ff">272384</span>     <span style="color:#ae81ff">8675327</span>     <span style="color:#ae81ff">4201472</span>   <span style="color:#ae81ff">82</span>  Linux swap / Solaris
-</span></span><span style="display:flex;"><span>/dev/sda3   *     <span style="color:#ae81ff">8675328</span>    <span style="color:#ae81ff">41943039</span>    <span style="color:#ae81ff">16633856</span>   <span style="color:#ae81ff">83</span>  Linux
+</span></span><span style="display:flex;"><span>/dev/sda1            <span style="color:#d19a66">2048</span>      <span style="color:#d19a66">272383</span>      <span style="color:#d19a66">135168</span>   <span style="color:#d19a66">83</span>  Linux
+</span></span><span style="display:flex;"><span>/dev/sda2          <span style="color:#d19a66">272384</span>     <span style="color:#d19a66">8675327</span>     <span style="color:#d19a66">4201472</span>   <span style="color:#d19a66">82</span>  Linux swap / Solaris
+</span></span><span style="display:flex;"><span>/dev/sda3   *     <span style="color:#d19a66">8675328</span>    <span style="color:#d19a66">41943039</span>    <span style="color:#d19a66">16633856</span>   <span style="color:#d19a66">83</span>  Linux
 </span></span></code></pre></div><p>And then I ran the following to re-enable the swap partition.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vrops.example.com:~ <span style="color:#75715e"># mkswap -L SWAP-sda2 /dev/sda2</span>
-</span></span><span style="display:flex;"><span>Setting up swapspace version 1, size <span style="color:#f92672">=</span> <span style="color:#ae81ff">4201468</span> KiB
-</span></span><span style="display:flex;"><span>LABEL<span style="color:#f92672">=</span>SWAP-sda2, UUID<span style="color:#f92672">=</span>f9eaa199-8121-4838-b277-81ca2820f64a
-</span></span><span style="display:flex;"><span>vrops.example.com:~ <span style="color:#75715e"># swapon -a</span>
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vrops.example.com:~ <span style="color:#7f848e"># mkswap -L SWAP-sda2 /dev/sda2</span>
+</span></span><span style="display:flex;"><span>Setting up swapspace version 1, <span style="color:#e06c75">size</span> <span style="color:#56b6c2">=</span> <span style="color:#d19a66">4201468</span> KiB
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">LABEL</span><span style="color:#56b6c2">=</span>SWAP-sda2, <span style="color:#e06c75">UUID</span><span style="color:#56b6c2">=</span>f9eaa199-8121-4838-b277-81ca2820f64a
+</span></span><span style="display:flex;"><span>vrops.example.com:~ <span style="color:#7f848e"># swapon -a</span>
 </span></span></code></pre></div><p>Finally I checked <code>top</code> again and as you can see the swap is now <code>4102Mb</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vrops.example.com:~ <span style="color:#75715e"># top</span>
-</span></span><span style="display:flex;"><span>top - 15:07:13 up <span style="color:#ae81ff">37</span> min,  <span style="color:#ae81ff">1</span> user,  load average: 0.21, 0.22, 0.29
-</span></span><span style="display:flex;"><span>Tasks: <span style="color:#ae81ff">106</span> total,   <span style="color:#ae81ff">1</span> running, <span style="color:#ae81ff">105</span> sleeping,   <span style="color:#ae81ff">0</span> stopped,   <span style="color:#ae81ff">0</span> zombie
-</span></span><span style="display:flex;"><span>Cpu<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>:  0.0%us,  0.1%sy,  0.0%ni, 99.9%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vrops.example.com:~ <span style="color:#7f848e"># top</span>
+</span></span><span style="display:flex;"><span>top - 15:07:13 up <span style="color:#d19a66">37</span> min,  <span style="color:#d19a66">1</span> user,  load average: 0.21, 0.22, 0.29
+</span></span><span style="display:flex;"><span>Tasks: <span style="color:#d19a66">106</span> total,   <span style="color:#d19a66">1</span> running, <span style="color:#d19a66">105</span> sleeping,   <span style="color:#d19a66">0</span> stopped,   <span style="color:#d19a66">0</span> zombie
+</span></span><span style="display:flex;"><span>Cpu<span style="color:#56b6c2">(</span>s<span style="color:#56b6c2">)</span>:  0.0%us,  0.1%sy,  0.0%ni, 99.9%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st
 </span></span><span style="display:flex;"><span>Mem:     16081M total,     3515M used,    12566M free,       52M buffers
 </span></span><span style="display:flex;"><span>Swap:     4102M total,        0M used,     4102M free,     2782M cached
 </span></span></code></pre></div><p>Sure enough, when I tried the update again it worked without issue. Hopefully this will save someone the couple of hours digging around online that I ended up doing today.</p>
@@ -510,8 +509,6 @@ vROps Reports and PowerCLI Part 1: Generating Reports (this article) vROps Repor
   </script>
 
   
-  <script type="text/javascript" src="/js/prism.js"></script>
-  <script type="text/javascript" src="/js/custom/prism-custom.js"></script>
   <script type="text/javascript" src="/js/custom/custom.js"></script>
 
   

@@ -27,8 +27,7 @@
   
   <link rel="stylesheet" type="text/css" href="/css/custom/screen-custom.css" />
   <link rel="stylesheet" type="text/css" href="/css/fontawesome_all.min.css" />
-  <link rel="stylesheet" type="text/css" href="/css/prism.css" />
-  <link rel="stylesheet" type="text/css" href="/css/custom/prism-custom.css" />
+  <link rel="stylesheet" type="text/css" href="/css/custom/syntax.css" />
   <link rel="stylesheet" type="text/css" href="/css/custom/global-custom.css" />
 
   
@@ -156,7 +155,7 @@
     <ul id="toc-list"></ul>
 </div>
 <p>If you&rsquo;re a vSphere admin, you&rsquo;ll be very familiar with the <a href="https://code.vmware.com/docs/13462/esxcli-7-0-u2-concepts-and-examples/GUID-D2EA47F0-E7C2-4918-A07E-7161FB37E073.html"><code>esxcli</code></a> command. But have you ever wondered how to run <code>esxcli</code> commands from <a href="https://developer.vmware.com/powercli">PowerCLI</a>? Maybe you don&rsquo;t want to enable SSH on your hosts, or perhaps you need to run an <code>esxcli</code> command in a PowerShell script. The <a href="https://developer.vmware.com/docs/powercli/latest/vmware.vimautomation.core/commands/get-esxcli/#Default"><code>Get-EsxCli</code></a> cmdlet from the <a href="https://developer.vmware.com/powercli"><code>VMware.PowerCLI</code></a> PowerShell module is the answer!</p>
-<p>In this tutorial, you&rsquo;ll learn how to create an <code>esxcli</code> interface to a host  using PowerCLI, how to investigate the available namespaces, how to invoke <code>esxcli</code> methods, and more! It&rsquo;ll give you all the information you need to get the most out of the <code>Get-EsxCli</code> cmdlet.</p>
+<p>In this tutorial, you&rsquo;ll learn how to create an <code>esxcli</code> interface to a host using PowerCLI, how to investigate the available namespaces, how to invoke <code>esxcli</code> methods, and more! It&rsquo;ll give you all the information you need to get the most out of the <code>Get-EsxCli</code> cmdlet.</p>
 <div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
      <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
@@ -176,8 +175,8 @@
 <h2 id="creating-an-interface-to-esxcli-using-get-esxcli">Creating an interface to ESXCLI using Get-EsxCli</h2>
 <p>The first step is to create an interface to an ESXi host using the <code>Get-EsxCli</code> cmdlet. This interface information is stored in a variable, which is then used to invoke <code>esxcli</code> methods.</p>
 <p>The following commands will connect you to your vCenter server and store the <code>esxcli</code> interface in a variable (<code>$EsxCli</code>).</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Connect-ViServer -Server <span style="color:#e6db74">&#34;vcenter.example.com&#34;</span>
-</span></span><span style="display:flex;"><span>$EsxCli = Get-EsxCli -VMHost <span style="color:#e6db74">&#34;esx01.example.com&#34;</span> -V2
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">Connect-ViServer</span> <span style="color:#e06c75">-Server</span> <span style="color:#98c379">&#34;vcenter.example.com&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">$EsxCli</span> = <span style="color:#e5c07b">Get-EsxCli</span> <span style="color:#e06c75">-VMHost</span> <span style="color:#98c379">&#34;esx01.example.com&#34;</span> <span style="color:#e06c75">-V2</span>
 </span></span></code></pre></div><div class="callout info">
     <div class="callout-wrapper">
         <span>
@@ -200,141 +199,141 @@
 </div>
 <h2 id="traversing-the-namespace-hierarchy">Traversing the namespace hierarchy</h2>
 <p>With the <code>esxcli</code> interface details now stored in <code>$EsxCli</code>, it&rsquo;s time to look around. To start with, you can simply call the <code>$EsxCli</code> object to view all root namespace elements; for example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli
-</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
-<div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$EsxCli</span>
+</span></span></code></pre></div><div class="code-title-bar"><span>Output</span></div>
+<div class="code-inner">
+    <div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">PS </span><span style="color:#e06c75">C:</span>\&gt; <span style="color:#e06c75">$EsxCli</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>===============================
-</span></span><span style="display:flex;"><span>EsxCli<span style="color:#960050;background-color:#1e0010">:</span> esx01.example.com
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">EsxCli</span>: <span style="color:#e06c75">esx01</span>.<span style="color:#e06c75">example</span>.<span style="color:#e06c75">com</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>   Elements<span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">Elements</span>:
 </span></span><span style="display:flex;"><span>   ---------
-</span></span><span style="display:flex;"><span>   device
-</span></span><span style="display:flex;"><span>   elxnet
-</span></span><span style="display:flex;"><span>   esxcli
-</span></span><span style="display:flex;"><span>   fcoe
-</span></span><span style="display:flex;"><span>   graphics
-</span></span><span style="display:flex;"><span>   hardware
-</span></span><span style="display:flex;"><span>   iscsi
-</span></span><span style="display:flex;"><span>   network
-</span></span><span style="display:flex;"><span>   nvme
-</span></span><span style="display:flex;"><span>   rdma
-</span></span><span style="display:flex;"><span>   sched
-</span></span><span style="display:flex;"><span>   software
-</span></span><span style="display:flex;"><span>   storage
-</span></span><span style="display:flex;"><span>   system
-</span></span><span style="display:flex;"><span>   vm
-</span></span><span style="display:flex;"><span>   vsan
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">device</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">elxnet</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">esxcli</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">fcoe</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">graphics</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">hardware</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">iscsi</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">network</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">nvme</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">rdma</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">sched</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">software</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">storage</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">system</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">vm</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">vsan</span>
 </span></span></code></pre></div>
 </div>
 
-<div class="code-output-caption">
+<div class="code-caption">
     <span>Output showing the available root namespace elements.</span>
 </div>
 
 <p>Then, using dot (<code>.</code>) notation, you can traverse the namespace hierarchy to see all available namespaces. For example, to see the namespaces available in the <code>software</code> root namespace, you can do the following:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli.software
-</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
-<div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>
+</span></span></code></pre></div><div class="code-title-bar"><span>Output</span></div>
+<div class="code-inner">
+    <div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">PS </span><span style="color:#e06c75">C:</span>\&gt; <span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>=======================
-</span></span><span style="display:flex;"><span>EsxCliElement<span style="color:#960050;background-color:#1e0010">:</span> software
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">EsxCliElement</span>: <span style="color:#e06c75">software</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>   Elements<span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">Elements</span>:
 </span></span><span style="display:flex;"><span>   ---------
-</span></span><span style="display:flex;"><span>   acceptance
-</span></span><span style="display:flex;"><span>   profile
-</span></span><span style="display:flex;"><span>   sources
-</span></span><span style="display:flex;"><span>   vib
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">acceptance</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">profile</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">sources</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">vib</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>   Methods<span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">Methods</span>:
 </span></span><span style="display:flex;"><span>   --------
-</span></span><span style="display:flex;"><span>   string Help()
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">string</span> <span style="color:#e06c75">Help</span>()
 </span></span></code></pre></div>
 </div>
 
-<div class="code-output-caption">
+<div class="code-caption">
     <span>Output showing the namespaces available in the `esxcli software` root namespace.</span>
 </div>
 
 <h2 id="running-esxcli-commands">Running esxcli commands</h2>
 <p>As you look at the different namespaces, you&rsquo;ll start to see Method Elements and Methods listed in the output. For example, if you call the <code>$EsxCli.software.vib</code> namespace element, you&rsquo;ll see the following:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli.software.vib
-</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
-<div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software.vib
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>
+</span></span></code></pre></div><div class="code-title-bar"><span>Output</span></div>
+<div class="code-inner">
+    <div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">PS </span><span style="color:#e06c75">C:</span>\&gt; <span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>==================
-</span></span><span style="display:flex;"><span>EsxCliElement<span style="color:#960050;background-color:#1e0010">:</span> vib
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">EsxCliElement</span>: <span style="color:#e06c75">vib</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>   Elements<span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">Elements</span>:
 </span></span><span style="display:flex;"><span>   ---------
-</span></span><span style="display:flex;"><span>   signature
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">signature</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>   Method Elements<span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">Method</span> <span style="color:#e06c75">Elements</span>:
 </span></span><span style="display:flex;"><span>   ---------
-</span></span><span style="display:flex;"><span>   get
-</span></span><span style="display:flex;"><span>   install
-</span></span><span style="display:flex;"><span>   list
-</span></span><span style="display:flex;"><span>   remove
-</span></span><span style="display:flex;"><span>   update
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">get</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">install</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">list</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">remove</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">update</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>   Methods<span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">Methods</span>:
 </span></span><span style="display:flex;"><span>   --------
-</span></span><span style="display:flex;"><span>   string Help()
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">string</span> <span style="color:#e06c75">Help</span>()
 </span></span></code></pre></div>
 </div>
 
-<div class="code-output-caption">
+<div class="code-caption">
     <span>Output showing available Methods and Method Elements for `esxcli software vib`.</span>
 </div>
 
 <h3 id="method-elements-vs-methods">Method Elements vs Methods</h3>
 <p>Method Elements refer to PowerShell objects that represent an available <code>esxcli</code> command, whereas Methods are the functions you can execute. Method Element objects contain multiple Methods, as you&rsquo;ll see later.</p>
 <p>For example, you can execute the <code>$EsxCli.software.vib.Help()</code> Method directly and it will display some useful information, as shown below.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli.software.vib.Help()
-</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
-<div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software.vib.Help()
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">Help</span>()
+</span></span></code></pre></div><div class="code-title-bar"><span>Output</span></div>
+<div class="code-inner">
+    <div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">PS </span><span style="color:#e06c75">C:</span>\&gt; <span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">Help</span>()
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>================================================================================================================================================================================================================
-</span></span><span style="display:flex;"><span>vim.EsxCLI.software.vib
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">vim</span>.<span style="color:#e06c75">EsxCLI</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>
 </span></span><span style="display:flex;"><span>----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-</span></span><span style="display:flex;"><span>Install, update, remove, or display individual VIB packages
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Install</span>, <span style="color:#e06c75">update</span>, <span style="color:#e06c75">remove</span>, <span style="color:#e06c75">or</span> <span style="color:#e06c75">display</span> <span style="color:#e06c75">individual</span> <span style="color:#e06c75">VIB</span> <span style="color:#e06c75">packages</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>ChildElement
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">ChildElement</span>
 </span></span><span style="display:flex;"><span>----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-</span></span><span style="display:flex;"><span>- software.vib.signa | Commands to verify signatures and show information about the signature verification status of VIB packages
-</span></span><span style="display:flex;"><span>  ture               |
+</span></span><span style="display:flex;"><span>- <span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">signa</span> | <span style="color:#e06c75">Commands</span> <span style="color:#e06c75">to</span> <span style="color:#e06c75">verify</span> <span style="color:#e06c75">signatures</span> <span style="color:#e06c75">and</span> <span style="color:#e06c75">show</span> <span style="color:#e06c75">information</span> <span style="color:#e06c75">about</span> <span style="color:#e06c75">the</span> <span style="color:#e06c75">signature</span> <span style="color:#e06c75">verification</span> <span style="color:#e06c75">status</span> <span style="color:#e06c75">of</span> <span style="color:#e06c75">VIB</span> <span style="color:#e06c75">packages</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">ture</span>               |
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Method
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Method</span>
 </span></span><span style="display:flex;"><span>----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-</span></span><span style="display:flex;"><span>- get                | Displays detailed information about one or more installed VIBs
-</span></span><span style="display:flex;"><span>- install            | Installs VIB packages from a URL or depot. VIBs may be installed, upgraded, or downgraded. WARNING<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">If</span> your installation requires a reboot, you need to disable HA first.
-</span></span><span style="display:flex;"><span>- list               | Lists the installed VIB packages
-</span></span><span style="display:flex;"><span>- remove             | Removes VIB packages from the host. WARNING<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">If</span> your installation requires a reboot, you need to disable HA first.
-</span></span><span style="display:flex;"><span>- update             | Update installed VIBs to newer VIB packages. No new VIBs will be installed, only updates. WARNING<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#66d9ef">If</span> your installation requires a reboot, you need to disable HA first.
+</span></span><span style="display:flex;"><span>- <span style="color:#e06c75">get</span>                | <span style="color:#e06c75">Displays</span> <span style="color:#e06c75">detailed</span> <span style="color:#e06c75">information</span> <span style="color:#e06c75">about</span> <span style="color:#e06c75">one</span> <span style="color:#e06c75">or</span> <span style="color:#e06c75">more</span> <span style="color:#e06c75">installed</span> <span style="color:#e06c75">VIBs</span>
+</span></span><span style="display:flex;"><span>- <span style="color:#e06c75">install</span>            | <span style="color:#e06c75">Installs</span> <span style="color:#e06c75">VIB</span> <span style="color:#e06c75">packages</span> <span style="color:#e06c75">from</span> <span style="color:#e06c75">a</span> <span style="color:#e06c75">URL</span> <span style="color:#e06c75">or</span> <span style="color:#e06c75">depot</span>. <span style="color:#e06c75">VIBs</span> <span style="color:#e06c75">may</span> <span style="color:#e06c75">be</span> <span style="color:#e06c75">installed</span>, <span style="color:#e06c75">upgraded</span>, <span style="color:#e06c75">or</span> <span style="color:#e06c75">downgraded</span>. <span style="color:#e06c75">WARNING</span>: <span style="color:#c678dd">If</span> <span style="color:#e06c75">your</span> <span style="color:#e06c75">installation</span> <span style="color:#e06c75">requires</span> <span style="color:#e06c75">a</span> <span style="color:#e06c75">reboot</span>, <span style="color:#e06c75">you</span> <span style="color:#e06c75">need</span> <span style="color:#e06c75">to</span> <span style="color:#e06c75">disable</span> <span style="color:#e06c75">HA</span> <span style="color:#e06c75">first</span>.
+</span></span><span style="display:flex;"><span>- <span style="color:#e06c75">list</span>               | <span style="color:#e06c75">Lists</span> <span style="color:#e06c75">the</span> <span style="color:#e06c75">installed</span> <span style="color:#e06c75">VIB</span> <span style="color:#e06c75">packages</span>
+</span></span><span style="display:flex;"><span>- <span style="color:#e06c75">remove</span>             | <span style="color:#e06c75">Removes</span> <span style="color:#e06c75">VIB</span> <span style="color:#e06c75">packages</span> <span style="color:#e06c75">from</span> <span style="color:#e06c75">the</span> <span style="color:#e06c75">host</span>. <span style="color:#e06c75">WARNING</span>: <span style="color:#c678dd">If</span> <span style="color:#e06c75">your</span> <span style="color:#e06c75">installation</span> <span style="color:#e06c75">requires</span> <span style="color:#e06c75">a</span> <span style="color:#e06c75">reboot</span>, <span style="color:#e06c75">you</span> <span style="color:#e06c75">need</span> <span style="color:#e06c75">to</span> <span style="color:#e06c75">disable</span> <span style="color:#e06c75">HA</span> <span style="color:#e06c75">first</span>.
+</span></span><span style="display:flex;"><span>- <span style="color:#e06c75">update</span>             | <span style="color:#e06c75">Update</span> <span style="color:#e06c75">installed</span> <span style="color:#e06c75">VIBs</span> <span style="color:#e06c75">to</span> <span style="color:#e06c75">newer</span> <span style="color:#e06c75">VIB</span> <span style="color:#e06c75">packages</span>. <span style="color:#e06c75">No</span> <span style="color:#e06c75">new</span> <span style="color:#e06c75">VIBs</span> <span style="color:#e06c75">will</span> <span style="color:#e06c75">be</span> <span style="color:#e06c75">installed</span>, <span style="color:#e06c75">only</span> <span style="color:#e06c75">updates</span>. <span style="color:#e06c75">WARNING</span>: <span style="color:#c678dd">If</span> <span style="color:#e06c75">your</span> <span style="color:#e06c75">installation</span> <span style="color:#e06c75">requires</span> <span style="color:#e06c75">a</span> <span style="color:#e06c75">reboot</span>, <span style="color:#e06c75">you</span> <span style="color:#e06c75">need</span> <span style="color:#e06c75">to</span> <span style="color:#e06c75">disable</span> <span style="color:#e06c75">HA</span> <span style="color:#e06c75">first</span>.
 </span></span></code></pre></div>
 </div>
 
-<div class="code-output-caption">
+<div class="code-caption">
     <span>Output showing `Help()` information for `esxcli software vib`</span>
 </div>
 
 <p>But, if you try and call the <code>get</code> Method Element directly, you&rsquo;ll get an error; for example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli.software.vib.get()
-</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
-<div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software.vib.get()
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#error</span>
-</span></span><span style="display:flex;"><span>InvalidOperation<span style="color:#960050;background-color:#1e0010">:</span> Method invocation failed because [<span style="color:#66d9ef">VMware.VimAutomation.ViCore.Impl.V1.EsxCli.EsxCliElementImpl</span>] does not contain a method named <span style="color:#e6db74">&#39;get&#39;</span>.
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#enderror</span>
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>()
+</span></span></code></pre></div><div class="code-title-bar"><span>Output</span></div>
+<div class="code-inner">
+    <div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">PS </span><span style="color:#e06c75">C:</span>\&gt; <span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>()
+</span></span><span style="display:flex;"><span><span style="color:#7f848e">#error</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">InvalidOperation</span>: <span style="color:#e06c75">Method</span> <span style="color:#e06c75">invocation</span> <span style="color:#e06c75">failed</span> <span style="color:#e06c75">because</span> [<span style="color:#e06c75">VMware.VimAutomation.ViCore.Impl.V1.EsxCli.EsxCliElementImpl</span>] <span style="color:#e06c75">does</span> <span style="color:#e06c75">not</span> <span style="color:#e06c75">contain</span> <span style="color:#e06c75">a</span> <span style="color:#e06c75">method</span> <span style="color:#e06c75">named</span> <span style="color:#98c379">&#39;get&#39;</span>.
+</span></span><span style="display:flex;"><span><span style="color:#7f848e">#enderror</span>
 </span></span></code></pre></div>
 </div>
 
-<div class="code-output-caption">
+<div class="code-caption">
     <span>Output showing error when calling a Method Element directly.</span>
 </div>
 
@@ -349,67 +348,67 @@
 <h3 id="using-the-invoke-method">Using the <code>Invoke()</code> Method</h3>
 <p>Now that you know the difference between Method Elements and Methods, it&rsquo;s time to start running some <code>esxcli</code> commands.</p>
 <p>First, print the <code>$EsxCli.software.vib.get</code> object to the console using the following command. You&rsquo;ll see that it contains its own list of callable Methods.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli.software.vib.get
-</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
-<div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software.vib.get
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>
+</span></span></code></pre></div><div class="code-title-bar"><span>Output</span></div>
+<div class="code-inner">
+    <div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">PS </span><span style="color:#e06c75">C:</span>\&gt; <span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>==================
-</span></span><span style="display:flex;"><span>EsxCliMethodElement<span style="color:#960050;background-color:#1e0010">:</span> get
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">EsxCliMethodElement</span>: <span style="color:#e06c75">get</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>   Methods<span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">Methods</span>:
 </span></span><span style="display:flex;"><span>   --------
-</span></span><span style="display:flex;"><span>   Hashtable CreateArgs()
-</span></span><span style="display:flex;"><span>   VIB[] Invoke(Hashtable args)
-</span></span><span style="display:flex;"><span>   string Help()
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">Hashtable</span> <span style="color:#e06c75">CreateArgs</span>()
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">VIB</span>[] <span style="color:#e06c75">Invoke</span>(<span style="color:#e06c75">Hashtable</span> <span style="color:#e06c75">args</span>)
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">string</span> <span style="color:#e06c75">Help</span>()
 </span></span></code></pre></div>
 </div>
 
-<div class="code-output-caption">
+<div class="code-caption">
     <span>Output showing the available Methods within the `esxcli software vib get` Method Element.</span>
 </div>
 
 <p>You can use the <code>Invoke()</code> Method to run the <code>esxcli software vib get</code> command; for example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli.software.vib.get.Invoke()
-</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
-<div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software.vib.get.Invoke()
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>.<span style="color:#e06c75">Invoke</span>()
+</span></span></code></pre></div><div class="code-title-bar"><span>Output</span></div>
+<div class="code-inner">
+    <div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">PS </span><span style="color:#e06c75">C:</span>\&gt; <span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>.<span style="color:#e06c75">Invoke</span>()
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>AcceptanceLevel           <span style="color:#960050;background-color:#1e0010">:</span> VMwareCertified
-</span></span><span style="display:flex;"><span>Conflicts                 <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>CreationDate              <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">2016</span>-<span style="color:#ae81ff">01</span>-<span style="color:#ae81ff">06</span>
-</span></span><span style="display:flex;"><span>Depends                   <span style="color:#960050;background-color:#1e0010">:</span> {vmkapi_2_3_0_0, com.vmware.driverAPI-<span style="color:#ae81ff">9.2</span>.3.<span style="color:#ae81ff">0</span>}
-</span></span><span style="display:flex;"><span>Description               <span style="color:#960050;background-color:#1e0010">:</span> Adaptec HBA Driver
-</span></span><span style="display:flex;"><span>HardwarePlatformsRequired <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>ID                        <span style="color:#960050;background-color:#1e0010">:</span> Adaptec_Inc_bootbank_scsi-aacraid_6.0.6.2.1.<span style="color:#ae81ff">52011</span>-1OEM.600.0.0.2494585
-</span></span><span style="display:flex;"><span>InstallDate               <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">2020</span>-<span style="color:#ae81ff">01</span>-<span style="color:#ae81ff">07</span>
-</span></span><span style="display:flex;"><span>LiveInstallAllowed        <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>LiveRemoveAllowed         <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>MaintenanceModeRequired   <span style="color:#960050;background-color:#1e0010">:</span> True
-</span></span><span style="display:flex;"><span>Name                      <span style="color:#960050;background-color:#1e0010">:</span> scsi-aacraid
-</span></span><span style="display:flex;"><span>Overlay                   <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>Payloads                  <span style="color:#960050;background-color:#1e0010">:</span> {scsi-aac}
-</span></span><span style="display:flex;"><span>Provides                  <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>ReferenceURLs             <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Replaces                  <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>StatelessReady            <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>Status                    <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Summary                   <span style="color:#960050;background-color:#1e0010">:</span> aacraid<span style="color:#960050;background-color:#1e0010">:</span> scsi driver <span style="color:#66d9ef">for</span> VMware ESX
-</span></span><span style="display:flex;"><span>Tags                      <span style="color:#960050;background-color:#1e0010">:</span> {driver, module}
-</span></span><span style="display:flex;"><span>Type                      <span style="color:#960050;background-color:#1e0010">:</span> bootbank
-</span></span><span style="display:flex;"><span>Vendor                    <span style="color:#960050;background-color:#1e0010">:</span> Adaptec_Inc
-</span></span><span style="display:flex;"><span>Version                   <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">6.0</span>.6.2.1.<span style="color:#ae81ff">52011</span>-1OEM.600.0.0.2494585
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AcceptanceLevel</span>           : <span style="color:#e06c75">VMwareCertified</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Conflicts</span>                 :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">CreationDate</span>              : <span style="color:#d19a66">2016</span>-<span style="color:#d19a66">01</span>-<span style="color:#d19a66">06</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Depends</span>                   : {<span style="color:#e06c75">vmkapi_2_3_0_0</span>, <span style="color:#e06c75">com</span>.<span style="color:#e06c75">vmware</span>.<span style="color:#e06c75">driverAPI</span>-<span style="color:#d19a66">9.2</span>.<span style="color:#e06c75">3</span>.<span style="color:#d19a66">0</span>}
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Description</span>               : <span style="color:#e06c75">Adaptec</span> <span style="color:#e06c75">HBA</span> <span style="color:#e06c75">Driver</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">HardwarePlatformsRequired</span> :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">ID</span>                        : <span style="color:#e5c07b">Adaptec_Inc_bootbank_scsi-aacraid_6</span>.<span style="color:#e06c75">0</span>.<span style="color:#e06c75">6</span>.<span style="color:#e06c75">2</span>.<span style="color:#e06c75">1</span>.<span style="color:#d19a66">52011</span>-<span style="color:#e06c75">1OEM</span>.<span style="color:#e06c75">600</span>.<span style="color:#e06c75">0</span>.<span style="color:#e06c75">0</span>.<span style="color:#e06c75">2494585</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">InstallDate</span>               : <span style="color:#d19a66">2020</span>-<span style="color:#d19a66">01</span>-<span style="color:#d19a66">07</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">LiveInstallAllowed</span>        : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">LiveRemoveAllowed</span>         : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">MaintenanceModeRequired</span>   : <span style="color:#e06c75">True</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Name</span>                      : <span style="color:#e5c07b">scsi-aacraid</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Overlay</span>                   : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Payloads</span>                  : {<span style="color:#e5c07b">scsi-aac</span>}
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Provides</span>                  :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">ReferenceURLs</span>             :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Replaces</span>                  :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">StatelessReady</span>            : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Status</span>                    :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Summary</span>                   : <span style="color:#e06c75">aacraid</span>: <span style="color:#e06c75">scsi</span> <span style="color:#e06c75">driver</span> <span style="color:#c678dd">for</span> <span style="color:#e06c75">VMware</span> <span style="color:#e06c75">ESX</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Tags</span>                      : {<span style="color:#e06c75">driver</span>, <span style="color:#e06c75">module</span>}
+</span></span><span style="display:flex;"><span><span style="color:#e5c07b">Type </span>                     : <span style="color:#e06c75">bootbank</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Vendor</span>                    : <span style="color:#e06c75">Adaptec_Inc</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Version</span>                   : <span style="color:#d19a66">6.0</span>.<span style="color:#e06c75">6</span>.<span style="color:#e06c75">2</span>.<span style="color:#e06c75">1</span>.<span style="color:#d19a66">52011</span>-<span style="color:#e06c75">1OEM</span>.<span style="color:#e06c75">600</span>.<span style="color:#e06c75">0</span>.<span style="color:#e06c75">0</span>.<span style="color:#e06c75">2494585</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>AcceptanceLevel           <span style="color:#960050;background-color:#1e0010">:</span> VMwareCertified
-</span></span><span style="display:flex;"><span>Conflicts                 <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>CreationDate              <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">2019</span>-<span style="color:#ae81ff">06</span>-<span style="color:#ae81ff">30</span>
-</span></span><span style="display:flex;"><span>Depends                   <span style="color:#960050;background-color:#1e0010">:</span> {vmkapi_2_5_0_0}
-</span></span><span style="display:flex;"><span>Description               <span style="color:#960050;background-color:#1e0010">:</span> Broadcom NetXtreme-E VMKAPI network driver <span style="color:#66d9ef">for</span> VMware ESXi
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AcceptanceLevel</span>           : <span style="color:#e06c75">VMwareCertified</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Conflicts</span>                 :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">CreationDate</span>              : <span style="color:#d19a66">2019</span>-<span style="color:#d19a66">06</span>-<span style="color:#d19a66">30</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Depends</span>                   : {<span style="color:#e06c75">vmkapi_2_5_0_0</span>}
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Description</span>               : <span style="color:#e06c75">Broadcom</span> <span style="color:#e5c07b">NetXtreme-E</span> <span style="color:#e06c75">VMKAPI</span> <span style="color:#e06c75">network</span> <span style="color:#e06c75">driver</span> <span style="color:#c678dd">for</span> <span style="color:#e06c75">VMware</span> <span style="color:#e06c75">ESXi</span>
 </span></span><span style="display:flex;"><span>...
 </span></span></code></pre></div>
 </div>
 
-<div class="code-output-caption">
+<div class="code-caption">
     <span>Partial output showing list of vibs returned from the `esxcli software vib get` command.</span>
 </div>
 
@@ -420,51 +419,51 @@
 <ol>
 <li>
 <p>You can use the <code>Help()</code> method. The <code>Help()</code> method prints detailed information on the specific command to the console. For example, you can run <code>$EsxCli.software.vib.get.Help()</code> to print information relating to the <code>esxcli software vib get</code> command, as shown below.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli.software.vib.get.Help()
-</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
-<div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software.vib.get.Help()
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>.<span style="color:#e06c75">Help</span>()
+</span></span></code></pre></div><div class="code-title-bar"><span>Output</span></div>
+<div class="code-inner">
+    <div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">PS </span><span style="color:#e06c75">C:</span>\&gt; <span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>.<span style="color:#e06c75">Help</span>()
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>================================================================================================================================================================================================================
-</span></span><span style="display:flex;"><span>vim.EsxCLI.software.vib.get
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">vim</span>.<span style="color:#e06c75">EsxCLI</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>
 </span></span><span style="display:flex;"><span>----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-</span></span><span style="display:flex;"><span>Displays detailed information about one or more installed VIBs
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Displays</span> <span style="color:#e06c75">detailed</span> <span style="color:#e06c75">information</span> <span style="color:#e06c75">about</span> <span style="color:#e06c75">one</span> <span style="color:#e06c75">or</span> <span style="color:#e06c75">more</span> <span style="color:#e06c75">installed</span> <span style="color:#e06c75">VIBs</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Param</span>
+</span></span><span style="display:flex;"><span><span style="color:#c678dd">Param</span>
 </span></span><span style="display:flex;"><span>----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-</span></span><span style="display:flex;"><span>- rebooting-image    | Displays either information <span style="color:#66d9ef">for</span> the ESXi image that becomes active after a reboot, or nothing <span style="color:#66d9ef">if</span> the pending-reboot image has not been created yet. <span style="color:#66d9ef">If</span> not specified, information from the curr
-</span></span><span style="display:flex;"><span>                        | ent ESXi image <span style="color:#66d9ef">in</span> memory is returned.
+</span></span><span style="display:flex;"><span>- <span style="color:#e5c07b">rebooting-image</span>    | <span style="color:#e06c75">Displays</span> <span style="color:#e06c75">either</span> <span style="color:#e06c75">information</span> <span style="color:#c678dd">for</span> <span style="color:#e06c75">the</span> <span style="color:#e06c75">ESXi</span> <span style="color:#e06c75">image</span> <span style="color:#e06c75">that</span> <span style="color:#e06c75">becomes</span> <span style="color:#e06c75">active</span> <span style="color:#e06c75">after</span> <span style="color:#e06c75">a</span> <span style="color:#e06c75">reboot</span>, <span style="color:#e06c75">or</span> <span style="color:#e06c75">nothing</span> <span style="color:#c678dd">if</span> <span style="color:#e06c75">the</span> <span style="color:#e5c07b">pending-reboot</span> <span style="color:#e06c75">image</span> <span style="color:#e06c75">has</span> <span style="color:#e06c75">not</span> <span style="color:#e06c75">been</span> <span style="color:#e06c75">created</span> <span style="color:#e06c75">yet</span>. <span style="color:#c678dd">If</span> <span style="color:#e06c75">not</span> <span style="color:#e06c75">specified</span>, <span style="color:#e06c75">information</span> <span style="color:#e06c75">from</span> <span style="color:#e06c75">the</span> <span style="color:#e06c75">curr</span>
+</span></span><span style="display:flex;"><span>                        | <span style="color:#e06c75">ent</span> <span style="color:#e06c75">ESXi</span> <span style="color:#e06c75">image</span> <span style="color:#c678dd">in</span> <span style="color:#e06c75">memory</span> <span style="color:#e06c75">is</span> <span style="color:#e06c75">returned</span>.
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>- vibname            | Specifies one or more installed VIBs about which further information is displayed. <span style="color:#66d9ef">If</span> this option is not specified, then more information on all the installed VIBs will be displayed. Must be one of the following f
-</span></span><span style="display:flex;"><span>                        | orms<span style="color:#960050;background-color:#1e0010">:</span> name, name<span style="color:#960050;background-color:#1e0010">:</span>version, vendor<span style="color:#960050;background-color:#1e0010">:</span>name, or vendor<span style="color:#960050;background-color:#1e0010">:</span>name<span style="color:#960050;background-color:#1e0010">:</span>version.
+</span></span><span style="display:flex;"><span>- <span style="color:#e06c75">vibname</span>            | <span style="color:#e06c75">Specifies</span> <span style="color:#e06c75">one</span> <span style="color:#e06c75">or</span> <span style="color:#e06c75">more</span> <span style="color:#e06c75">installed</span> <span style="color:#e06c75">VIBs</span> <span style="color:#e06c75">about</span> <span style="color:#e06c75">which</span> <span style="color:#e06c75">further</span> <span style="color:#e06c75">information</span> <span style="color:#e06c75">is</span> <span style="color:#e06c75">displayed</span>. <span style="color:#c678dd">If</span> <span style="color:#e06c75">this</span> <span style="color:#e06c75">option</span> <span style="color:#e06c75">is</span> <span style="color:#e06c75">not</span> <span style="color:#e06c75">specified</span>, <span style="color:#e06c75">then</span> <span style="color:#e06c75">more</span> <span style="color:#e06c75">information</span> <span style="color:#e06c75">on</span> <span style="color:#e06c75">all</span> <span style="color:#e06c75">the</span> <span style="color:#e06c75">installed</span> <span style="color:#e06c75">VIBs</span> <span style="color:#e06c75">will</span> <span style="color:#e06c75">be</span> <span style="color:#e06c75">displayed</span>. <span style="color:#e06c75">Must</span> <span style="color:#e06c75">be</span> <span style="color:#e06c75">one</span> <span style="color:#e06c75">of</span> <span style="color:#e06c75">the</span> <span style="color:#e06c75">following</span> <span style="color:#e06c75">f</span>
+</span></span><span style="display:flex;"><span>                        | <span style="color:#e06c75">orms</span>: <span style="color:#e06c75">name</span>, <span style="color:#e06c75">name</span>:<span style="color:#e06c75">version</span>, <span style="color:#e06c75">vendor</span>:<span style="color:#e06c75">name</span>, <span style="color:#e06c75">or</span> <span style="color:#e06c75">vendor</span>:<span style="color:#e06c75">name</span>:<span style="color:#e06c75">version</span>.
 </span></span></code></pre></div>
 </div>
 
-<div class="code-output-caption">
+<div class="code-caption">
     <span>Output showing the `Help()` info for the `esxcli software vib get` command.</span>
 </div>
 
 </li>
 <li>
 <p>You can use the <code>CreateArgs()</code> helper method. The <code>CreateArgs()</code> method returns an object containing every available argument. You can run the <code>CreateArgs()</code> method, store the resulting object in a variable, and then print the object to the console to see the available arguments, as follows:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Run the CreateArgs() method and store the returned object in $ArgsObj.</span>
-</span></span><span style="display:flex;"><span>$ArgsObj = $EsxCli.software.vib.get.CreateArgs()
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#7f848e"># Run the CreateArgs() method and store the returned object in $ArgsObj.</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">$ArgsObj</span> = <span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>.<span style="color:#e06c75">CreateArgs</span>()
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Write the $ArgsObj to the console to view the available arguments.</span>
-</span></span><span style="display:flex;"><span>$ArgsObj
-</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
-<div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $ArgsObj = $EsxCli.software.vib.get.CreateArgs()
-</span></span><span style="display:flex;"><span>PS C:\&gt; $ArgsObj
+</span></span><span style="display:flex;"><span><span style="color:#7f848e"># Write the $ArgsObj to the console to view the available arguments.</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">$ArgsObj</span>
+</span></span></code></pre></div><div class="code-title-bar"><span>Output</span></div>
+<div class="code-inner">
+    <div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">PS </span><span style="color:#e06c75">C:</span>\&gt; <span style="color:#e06c75">$ArgsObj</span> = <span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>.<span style="color:#e06c75">CreateArgs</span>()
+</span></span><span style="display:flex;"><span><span style="color:#e5c07b">PS </span><span style="color:#e06c75">C:</span>\&gt; <span style="color:#e06c75">$ArgsObj</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Name                           Value
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Name</span>                           <span style="color:#e06c75">Value</span>
 </span></span><span style="display:flex;"><span>----                           -----
-</span></span><span style="display:flex;"><span>vibname                        Unset, ([<span style="color:#66d9ef">string[]</span>], optional)
-</span></span><span style="display:flex;"><span>rebootingimage                 Unset, ([<span style="color:#66d9ef">boolean</span>], optional)
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">vibname</span>                        <span style="color:#e06c75">Unset</span>, ([<span style="color:#e06c75">string[]</span>], <span style="color:#e06c75">optional</span>)
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">rebootingimage</span>                 <span style="color:#e06c75">Unset</span>, ([<span style="color:#e06c75">boolean</span>], <span style="color:#e06c75">optional</span>)
 </span></span></code></pre></div>
 </div>
 
-<div class="code-output-caption">
+<div class="code-caption">
     <span>Output showing the `CreateArgs()` object for the `esxcli software vib get` command.</span>
 </div>
 
@@ -483,87 +482,87 @@
 <ol>
 <li>
 <p>You can supply the arguments/values as an inline hashtable. For example, to set the <code>vibname</code> argument to the value <code>tools-light</code>, you can do the following:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$EsxCli.software.vib.get.Invoke(@{vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>})
-</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
-<div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software.vib.get.Invoke(@{vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>})
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>.<span style="color:#e06c75">Invoke</span>(<span style="color:#e06c75">@</span>{<span style="color:#e06c75">vibname</span> = <span style="color:#98c379">&#34;tools-light&#34;</span>})
+</span></span></code></pre></div><div class="code-title-bar"><span>Output</span></div>
+<div class="code-inner">
+    <div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">PS </span><span style="color:#e06c75">C:</span>\&gt; <span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>.<span style="color:#e06c75">Invoke</span>(<span style="color:#e06c75">@</span>{<span style="color:#e06c75">vibname</span> = <span style="color:#98c379">&#34;tools-light&#34;</span>})
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>AcceptanceLevel           <span style="color:#960050;background-color:#1e0010">:</span> VMwareCertified
-</span></span><span style="display:flex;"><span>Conflicts                 <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>CreationDate              <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">2020</span>-<span style="color:#ae81ff">08</span>-<span style="color:#ae81ff">06</span>
-</span></span><span style="display:flex;"><span>Depends                   <span style="color:#960050;background-color:#1e0010">:</span> {esx-version &gt;= <span style="color:#ae81ff">6.6</span>.<span style="color:#ae81ff">0</span>}
-</span></span><span style="display:flex;"><span>Description               <span style="color:#960050;background-color:#1e0010">:</span> This package contains cdrom and floppy images used to install the VMware Tools inside virtual machines.
-</span></span><span style="display:flex;"><span>HardwarePlatformsRequired <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>ID                        <span style="color:#960050;background-color:#1e0010">:</span> VMware_locker_tools-light_11.1.1.<span style="color:#ae81ff">16303738</span>-<span style="color:#ae81ff">16701467</span>
-</span></span><span style="display:flex;"><span>InstallDate               <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">2021</span>-<span style="color:#ae81ff">01</span>-<span style="color:#ae81ff">11</span>
-</span></span><span style="display:flex;"><span>LiveInstallAllowed        <span style="color:#960050;background-color:#1e0010">:</span> True
-</span></span><span style="display:flex;"><span>LiveRemoveAllowed         <span style="color:#960050;background-color:#1e0010">:</span> True
-</span></span><span style="display:flex;"><span>MaintenanceModeRequired   <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>Name                      <span style="color:#960050;background-color:#1e0010">:</span> tools-light
-</span></span><span style="display:flex;"><span>Overlay                   <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>Payloads                  <span style="color:#960050;background-color:#1e0010">:</span> {tools}
-</span></span><span style="display:flex;"><span>Provides                  <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>ReferenceURLs             <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Replaces                  <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>StatelessReady            <span style="color:#960050;background-color:#1e0010">:</span> True
-</span></span><span style="display:flex;"><span>Status                    <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Summary                   <span style="color:#960050;background-color:#1e0010">:</span> VMware Tools VIB <span style="color:#66d9ef">for</span> Windows and Linux guests (generated by ESXi server build <span style="color:#ae81ff">16701467</span>)
-</span></span><span style="display:flex;"><span>Tags                      <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Type                      <span style="color:#960050;background-color:#1e0010">:</span> locker
-</span></span><span style="display:flex;"><span>Vendor                    <span style="color:#960050;background-color:#1e0010">:</span> VMware
-</span></span><span style="display:flex;"><span>Version                   <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">11.1</span>.1.<span style="color:#ae81ff">16303738</span>-<span style="color:#ae81ff">16701467</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AcceptanceLevel</span>           : <span style="color:#e06c75">VMwareCertified</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Conflicts</span>                 :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">CreationDate</span>              : <span style="color:#d19a66">2020</span>-<span style="color:#d19a66">08</span>-<span style="color:#d19a66">06</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Depends</span>                   : {<span style="color:#e5c07b">esx-version</span> &gt;= <span style="color:#d19a66">6.6</span>.<span style="color:#d19a66">0</span>}
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Description</span>               : <span style="color:#e06c75">This</span> <span style="color:#e06c75">package</span> <span style="color:#e06c75">contains</span> <span style="color:#e06c75">cdrom</span> <span style="color:#e06c75">and</span> <span style="color:#e06c75">floppy</span> <span style="color:#e06c75">images</span> <span style="color:#e06c75">used</span> <span style="color:#e06c75">to</span> <span style="color:#e06c75">install</span> <span style="color:#e06c75">the</span> <span style="color:#e06c75">VMware</span> <span style="color:#e06c75">Tools</span> <span style="color:#e06c75">inside</span> <span style="color:#e06c75">virtual</span> <span style="color:#e06c75">machines</span>.
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">HardwarePlatformsRequired</span> :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">ID</span>                        : <span style="color:#e5c07b">VMware_locker_tools-light_11</span>.<span style="color:#e06c75">1</span>.<span style="color:#e06c75">1</span>.<span style="color:#d19a66">16303738</span>-<span style="color:#d19a66">16701467</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">InstallDate</span>               : <span style="color:#d19a66">2021</span>-<span style="color:#d19a66">01</span>-<span style="color:#d19a66">11</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">LiveInstallAllowed</span>        : <span style="color:#e06c75">True</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">LiveRemoveAllowed</span>         : <span style="color:#e06c75">True</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">MaintenanceModeRequired</span>   : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Name</span>                      : <span style="color:#e5c07b">tools-light</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Overlay</span>                   : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Payloads</span>                  : {<span style="color:#e06c75">tools</span>}
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Provides</span>                  :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">ReferenceURLs</span>             :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Replaces</span>                  :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">StatelessReady</span>            : <span style="color:#e06c75">True</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Status</span>                    :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Summary</span>                   : <span style="color:#e06c75">VMware</span> <span style="color:#e06c75">Tools</span> <span style="color:#e06c75">VIB</span> <span style="color:#c678dd">for</span> <span style="color:#e06c75">Windows</span> <span style="color:#e06c75">and</span> <span style="color:#e06c75">Linux</span> <span style="color:#e06c75">guests</span> (<span style="color:#e06c75">generated</span> <span style="color:#e06c75">by</span> <span style="color:#e06c75">ESXi</span> <span style="color:#e06c75">server</span> <span style="color:#e06c75">build</span> <span style="color:#d19a66">16701467</span>)
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Tags</span>                      :
+</span></span><span style="display:flex;"><span><span style="color:#e5c07b">Type </span>                     : <span style="color:#e06c75">locker</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Vendor</span>                    : <span style="color:#e06c75">VMware</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Version</span>                   : <span style="color:#d19a66">11.1</span>.<span style="color:#e06c75">1</span>.<span style="color:#d19a66">16303738</span>-<span style="color:#d19a66">16701467</span>
 </span></span></code></pre></div>
 </div>
 
-<div class="code-output-caption">
+<div class="code-caption">
     <span>Supplying arguments to the `Invoke()` method using an inline hashtable.</span>
 </div>
 
 </li>
 <li>
 <p>You can use the object created by the <code>CreateArgs()</code> method. To use the same example again, you can set the <code>vibname</code> argument to the value <code>tools-light</code> , as follows.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Run the CreateArgs() method and store the returned object in $ArgsObj.</span>
-</span></span><span style="display:flex;"><span>$ArgsObj = $EsxCli.software.vib.get.CreateArgs()
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#7f848e"># Run the CreateArgs() method and store the returned object in $ArgsObj.</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">$ArgsObj</span> = <span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>.<span style="color:#e06c75">CreateArgs</span>()
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Set the vibname property to &#34;tools-light&#34;.</span>
-</span></span><span style="display:flex;"><span>$ArgsObj.vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#7f848e"># Set the vibname property to &#34;tools-light&#34;.</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">$ArgsObj</span>.<span style="color:#e06c75">vibname</span> = <span style="color:#98c379">&#34;tools-light&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Supply the $ArgsObj object to the Invoke() method.</span>
-</span></span><span style="display:flex;"><span>$EsxCli.software.vib.get.Invoke($ArgsObj)
-</span></span></code></pre></div><div class="code-output-bar"><span>Output</span></div>
-<div class="code-output-inner">
-    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>PS C:\&gt; $ArgsObj = $EsxCli.software.vib.get.CreateArgs()
-</span></span><span style="display:flex;"><span>PS C:\&gt; $ArgsObj.vibname = <span style="color:#e6db74">&#34;tools-light&#34;</span>
-</span></span><span style="display:flex;"><span>PS C:\&gt; $EsxCli.software.vib.get.Invoke($ArgsObj)
+</span></span><span style="display:flex;"><span><span style="color:#7f848e"># Supply the $ArgsObj object to the Invoke() method.</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>.<span style="color:#e06c75">Invoke</span>(<span style="color:#e06c75">$ArgsObj</span>)
+</span></span></code></pre></div><div class="code-title-bar"><span>Output</span></div>
+<div class="code-inner">
+    <div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">PS </span><span style="color:#e06c75">C:</span>\&gt; <span style="color:#e06c75">$ArgsObj</span> = <span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>.<span style="color:#e06c75">CreateArgs</span>()
+</span></span><span style="display:flex;"><span><span style="color:#e5c07b">PS </span><span style="color:#e06c75">C:</span>\&gt; <span style="color:#e06c75">$ArgsObj</span>.<span style="color:#e06c75">vibname</span> = <span style="color:#98c379">&#34;tools-light&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e5c07b">PS </span><span style="color:#e06c75">C:</span>\&gt; <span style="color:#e06c75">$EsxCli</span>.<span style="color:#e06c75">software</span>.<span style="color:#e06c75">vib</span>.<span style="color:#e06c75">get</span>.<span style="color:#e06c75">Invoke</span>(<span style="color:#e06c75">$ArgsObj</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>AcceptanceLevel           <span style="color:#960050;background-color:#1e0010">:</span> VMwareCertified
-</span></span><span style="display:flex;"><span>Conflicts                 <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>CreationDate              <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">2020</span>-<span style="color:#ae81ff">08</span>-<span style="color:#ae81ff">06</span>
-</span></span><span style="display:flex;"><span>Depends                   <span style="color:#960050;background-color:#1e0010">:</span> {esx-version &gt;= <span style="color:#ae81ff">6.6</span>.<span style="color:#ae81ff">0</span>}
-</span></span><span style="display:flex;"><span>Description               <span style="color:#960050;background-color:#1e0010">:</span> This package contains cdrom and floppy images used to install the VMware Tools inside virtual machines.
-</span></span><span style="display:flex;"><span>HardwarePlatformsRequired <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>ID                        <span style="color:#960050;background-color:#1e0010">:</span> VMware_locker_tools-light_11.1.1.<span style="color:#ae81ff">16303738</span>-<span style="color:#ae81ff">16701467</span>
-</span></span><span style="display:flex;"><span>InstallDate               <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">2021</span>-<span style="color:#ae81ff">01</span>-<span style="color:#ae81ff">11</span>
-</span></span><span style="display:flex;"><span>LiveInstallAllowed        <span style="color:#960050;background-color:#1e0010">:</span> True
-</span></span><span style="display:flex;"><span>LiveRemoveAllowed         <span style="color:#960050;background-color:#1e0010">:</span> True
-</span></span><span style="display:flex;"><span>MaintenanceModeRequired   <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>Name                      <span style="color:#960050;background-color:#1e0010">:</span> tools-light
-</span></span><span style="display:flex;"><span>Overlay                   <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>Payloads                  <span style="color:#960050;background-color:#1e0010">:</span> {tools}
-</span></span><span style="display:flex;"><span>Provides                  <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>ReferenceURLs             <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Replaces                  <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>StatelessReady            <span style="color:#960050;background-color:#1e0010">:</span> True
-</span></span><span style="display:flex;"><span>Status                    <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Summary                   <span style="color:#960050;background-color:#1e0010">:</span> VMware Tools VIB <span style="color:#66d9ef">for</span> Windows and Linux guests (generated by ESXi server build <span style="color:#ae81ff">16701467</span>)
-</span></span><span style="display:flex;"><span>Tags                      <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Type                      <span style="color:#960050;background-color:#1e0010">:</span> locker
-</span></span><span style="display:flex;"><span>Vendor                    <span style="color:#960050;background-color:#1e0010">:</span> VMware
-</span></span><span style="display:flex;"><span>Version                   <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">11.1</span>.1.<span style="color:#ae81ff">16303738</span>-<span style="color:#ae81ff">16701467</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AcceptanceLevel</span>           : <span style="color:#e06c75">VMwareCertified</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Conflicts</span>                 :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">CreationDate</span>              : <span style="color:#d19a66">2020</span>-<span style="color:#d19a66">08</span>-<span style="color:#d19a66">06</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Depends</span>                   : {<span style="color:#e5c07b">esx-version</span> &gt;= <span style="color:#d19a66">6.6</span>.<span style="color:#d19a66">0</span>}
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Description</span>               : <span style="color:#e06c75">This</span> <span style="color:#e06c75">package</span> <span style="color:#e06c75">contains</span> <span style="color:#e06c75">cdrom</span> <span style="color:#e06c75">and</span> <span style="color:#e06c75">floppy</span> <span style="color:#e06c75">images</span> <span style="color:#e06c75">used</span> <span style="color:#e06c75">to</span> <span style="color:#e06c75">install</span> <span style="color:#e06c75">the</span> <span style="color:#e06c75">VMware</span> <span style="color:#e06c75">Tools</span> <span style="color:#e06c75">inside</span> <span style="color:#e06c75">virtual</span> <span style="color:#e06c75">machines</span>.
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">HardwarePlatformsRequired</span> :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">ID</span>                        : <span style="color:#e5c07b">VMware_locker_tools-light_11</span>.<span style="color:#e06c75">1</span>.<span style="color:#e06c75">1</span>.<span style="color:#d19a66">16303738</span>-<span style="color:#d19a66">16701467</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">InstallDate</span>               : <span style="color:#d19a66">2021</span>-<span style="color:#d19a66">01</span>-<span style="color:#d19a66">11</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">LiveInstallAllowed</span>        : <span style="color:#e06c75">True</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">LiveRemoveAllowed</span>         : <span style="color:#e06c75">True</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">MaintenanceModeRequired</span>   : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Name</span>                      : <span style="color:#e5c07b">tools-light</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Overlay</span>                   : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Payloads</span>                  : {<span style="color:#e06c75">tools</span>}
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Provides</span>                  :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">ReferenceURLs</span>             :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Replaces</span>                  :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">StatelessReady</span>            : <span style="color:#e06c75">True</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Status</span>                    :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Summary</span>                   : <span style="color:#e06c75">VMware</span> <span style="color:#e06c75">Tools</span> <span style="color:#e06c75">VIB</span> <span style="color:#c678dd">for</span> <span style="color:#e06c75">Windows</span> <span style="color:#e06c75">and</span> <span style="color:#e06c75">Linux</span> <span style="color:#e06c75">guests</span> (<span style="color:#e06c75">generated</span> <span style="color:#e06c75">by</span> <span style="color:#e06c75">ESXi</span> <span style="color:#e06c75">server</span> <span style="color:#e06c75">build</span> <span style="color:#d19a66">16701467</span>)
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Tags</span>                      :
+</span></span><span style="display:flex;"><span><span style="color:#e5c07b">Type </span>                     : <span style="color:#e06c75">locker</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Vendor</span>                    : <span style="color:#e06c75">VMware</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Version</span>                   : <span style="color:#d19a66">11.1</span>.<span style="color:#e06c75">1</span>.<span style="color:#d19a66">16303738</span>-<span style="color:#d19a66">16701467</span>
 </span></span></code></pre></div>
 </div>
 
-<div class="code-output-caption">
+<div class="code-caption">
     <span>Supplying arguments to the `Invoke()` method using the `CreateArgs()` helper.</span>
 </div>
 
@@ -840,8 +839,6 @@
   </script>
 
   
-  <script type="text/javascript" src="/js/prism.js"></script>
-  <script type="text/javascript" src="/js/custom/prism-custom.js"></script>
   <script type="text/javascript" src="/js/custom/custom.js"></script>
 
   

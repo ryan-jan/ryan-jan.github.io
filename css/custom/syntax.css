@@ -1,0 +1,42 @@
+.highlight {
+  margin-top: 1em;
+}
+
+code[class*="language-"] {
+  line-height: 1.3;
+}
+
+code[class*="language-"] > span > span {
+  padding-right: 20px;
+}
+
+/* code-wrap */
+div.code-title-bar {
+  background-color: #282c34;
+  color: #abb2bf;
+  text-align: center;
+  padding: 8px 15px;
+  margin-top: 1em;
+  border-top-left-radius: 5px !important;
+  border-top-right-radius: 5px !important;
+}
+
+div.code-inner,
+div.code-inner .highlight {
+  margin-top: 0px !important;
+}
+
+div.code-inner > div > pre {
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+  margin-top: 0px;
+}
+
+div.code-caption {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+  font-size: 1.3rem;
+  line-height: 1.4em;
+  margin-top: 0px !important;
+}

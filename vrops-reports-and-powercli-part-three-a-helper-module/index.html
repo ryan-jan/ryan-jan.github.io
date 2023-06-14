@@ -27,8 +27,7 @@
   
   <link rel="stylesheet" type="text/css" href="/css/custom/screen-custom.css" />
   <link rel="stylesheet" type="text/css" href="/css/fontawesome_all.min.css" />
-  <link rel="stylesheet" type="text/css" href="/css/prism.css" />
-  <link rel="stylesheet" type="text/css" href="/css/custom/prism-custom.css" />
+  <link rel="stylesheet" type="text/css" href="/css/custom/syntax.css" />
   <link rel="stylesheet" type="text/css" href="/css/custom/global-custom.css" />
 
   
@@ -167,9 +166,9 @@ vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI
 <h2 id="using-the-module">Using The Module</h2>
 <h3 id="installation">Installation</h3>
 <p>This module is hosted on my public GitHub. Therefore, to install it you first need to clone the repository.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>git clone https<span style="color:#960050;background-color:#1e0010">:</span>//github.com/ryan-jan/vROps-Reports.git
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">git</span> <span style="color:#e06c75">clone</span> <span style="color:#e06c75">https</span>://<span style="color:#e06c75">github</span>.<span style="color:#e06c75">com</span>/<span style="color:#e5c07b">ryan-jan</span>/<span style="color:#e5c07b">vROps-Reports</span>.<span style="color:#e06c75">git</span>
 </span></span></code></pre></div><p>Then import the module into your PowerShell session.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Import-Module .\vROps-Reports\vROps-Reports.psd1
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">Import-Module</span> .\<span style="color:#e5c07b">vROps-Reports</span>\<span style="color:#e5c07b">vROps-Reports</span>.<span style="color:#e06c75">psd1</span>
 </span></span></code></pre></div><div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
      <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
@@ -180,137 +179,137 @@ vROps Reports and PowerCLI Part 1: Generating Reports vROps Reports and PowerCLI
 </div>
 <h3 id="generating-a-report">Generating A Report</h3>
 <p>The first thing we need to do is find the <code>ReportDefinition</code> (that&rsquo;s a Report Template if you are looking in the Web UI) that we want to generate and assign it to a variable. For this we use the <code>Get-OMReportDefinition</code> function. If you run this function with no arguments it will return a list of all available definitions. However, I am looking for the Oversized VMs Report in particular so I use the <code>Name</code> parameter to filter the results.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Get-OMReportDefinition -Name <span style="color:#e6db74">&#39;Oversized VMs&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">Get-OMReportDefinition</span> <span style="color:#e06c75">-Name</span> <span style="color:#98c379">&#39;Oversized VMs&#39;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Name                 <span style="color:#960050;background-color:#1e0010">:</span> Oversized VMs Report
-</span></span><span style="display:flex;"><span>Description          <span style="color:#960050;background-color:#1e0010">:</span> Oversized VMs Report
-</span></span><span style="display:flex;"><span>Subject              <span style="color:#960050;background-color:#1e0010">:</span> {Virtual Machine}
-</span></span><span style="display:flex;"><span>Traversalspecs       <span style="color:#960050;background-color:#1e0010">:</span> {vSphere Networking, Custom Datacenters, vSphere Hosts and Clusters, vSphere Storage}
-</span></span><span style="display:flex;"><span>LastRunTime          <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">01</span>/<span style="color:#ae81ff">01</span>/<span style="color:#ae81ff">0001</span> <span style="color:#ae81ff">00</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#ae81ff">00</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#ae81ff">00</span>
-</span></span><span style="display:flex;"><span>LastRunTimeSpecified <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>Owner                <span style="color:#960050;background-color:#1e0010">:</span> admin
-</span></span><span style="display:flex;"><span>Links                <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Any                  <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Id                   <span style="color:#960050;background-color:#1e0010">:</span> 1f69952f-7ff4-4d2c-<span style="color:#ae81ff">9446</span>-81a811de19b0
-</span></span><span style="display:flex;"><span>CreationTime         <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">01</span>/<span style="color:#ae81ff">01</span>/<span style="color:#ae81ff">0001</span> <span style="color:#ae81ff">00</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#ae81ff">00</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#ae81ff">00</span>
-</span></span><span style="display:flex;"><span>Active               <span style="color:#960050;background-color:#1e0010">:</span> True
-</span></span><span style="display:flex;"><span>ActiveSpecified      <span style="color:#960050;background-color:#1e0010">:</span> True
-</span></span><span style="display:flex;"><span>AnyAttr              <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Name</span>                 : <span style="color:#e06c75">Oversized</span> <span style="color:#e06c75">VMs</span> <span style="color:#e06c75">Report</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Description</span>          : <span style="color:#e06c75">Oversized</span> <span style="color:#e06c75">VMs</span> <span style="color:#e06c75">Report</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Subject</span>              : {<span style="color:#e06c75">Virtual</span> <span style="color:#e06c75">Machine</span>}
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Traversalspecs</span>       : {<span style="color:#e06c75">vSphere</span> <span style="color:#e06c75">Networking</span>, <span style="color:#e06c75">Custom</span> <span style="color:#e06c75">Datacenters</span>, <span style="color:#e06c75">vSphere</span> <span style="color:#e06c75">Hosts</span> <span style="color:#e06c75">and</span> <span style="color:#e06c75">Clusters</span>, <span style="color:#e06c75">vSphere</span> <span style="color:#e06c75">Storage</span>}
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">LastRunTime</span>          : <span style="color:#d19a66">01</span>/<span style="color:#d19a66">01</span>/<span style="color:#d19a66">0001</span> <span style="color:#d19a66">00</span>:<span style="color:#d19a66">00</span>:<span style="color:#d19a66">00</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">LastRunTimeSpecified</span> : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Owner</span>                : <span style="color:#e06c75">admin</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Links</span>                :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Any</span>                  :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Id</span>                   : <span style="color:#e06c75">1f69952f</span>-<span style="color:#e06c75">7ff4</span>-<span style="color:#e06c75">4d2c</span>-<span style="color:#d19a66">9446</span>-<span style="color:#e06c75">81a811de19b0</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">CreationTime</span>         : <span style="color:#d19a66">01</span>/<span style="color:#d19a66">01</span>/<span style="color:#d19a66">0001</span> <span style="color:#d19a66">00</span>:<span style="color:#d19a66">00</span>:<span style="color:#d19a66">00</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Active</span>               : <span style="color:#e06c75">True</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">ActiveSpecified</span>      : <span style="color:#e06c75">True</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AnyAttr</span>              :
 </span></span></code></pre></div><p>Once I have the <code>Id</code> for the <code>ReportDefinition</code> I can assign it to a variable for later use.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$ReportDefinition = Get-OMReportDefinition -Id 1f69952f-7ff4-4d2c-<span style="color:#ae81ff">9446</span>-81a811de19b0
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$ReportDefinition</span> = <span style="color:#e5c07b">Get-OMReportDefinition</span> <span style="color:#e06c75">-Id</span> <span style="color:#e06c75">1f69952f</span>-<span style="color:#e06c75">7ff4</span>-<span style="color:#e06c75">4d2c</span>-<span style="color:#d19a66">9446</span>-<span style="color:#e06c75">81a811de19b0</span>
 </span></span></code></pre></div><p>Next, we need to assign the <code>TraversalSpec</code> we are targeting to a variable in the same way. We will use the <code>Get-OMTraversalSpec</code> function to achieve this. If you run <code>Get-OMTraversalSpec</code> with no parameters it will return a list of all available <code>TraversalSpec</code> objects. However, if you take a look at the <code>$ReportDefinition</code> variable we just created, you can see which <code>TraversalSpecs</code> the <code>ReportDefinition</code> you are generating will accept.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$ReportDefinition.Traversalspecs
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$ReportDefinition</span>.<span style="color:#e06c75">Traversalspecs</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Name                       <span style="color:#960050;background-color:#1e0010">:</span> vSphere Networking
-</span></span><span style="display:flex;"><span>Description                <span style="color:#960050;background-color:#1e0010">:</span> View the vSphere distributed switches
-</span></span><span style="display:flex;"><span>RootAdapterKindKey         <span style="color:#960050;background-color:#1e0010">:</span> VMWARE
-</span></span><span style="display:flex;"><span>RootResourceKindKey        <span style="color:#960050;background-color:#1e0010">:</span> vSphere World
-</span></span><span style="display:flex;"><span>Any                        <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>AdapterInstanceAssociation <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>AnyAttr                    <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Name</span>                       : <span style="color:#e06c75">vSphere</span> <span style="color:#e06c75">Networking</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Description</span>                : <span style="color:#e06c75">View</span> <span style="color:#e06c75">the</span> <span style="color:#e06c75">vSphere</span> <span style="color:#e06c75">distributed</span> <span style="color:#e06c75">switches</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">RootAdapterKindKey</span>         : <span style="color:#e06c75">VMWARE</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">RootResourceKindKey</span>        : <span style="color:#e06c75">vSphere</span> <span style="color:#e06c75">World</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Any</span>                        :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AdapterInstanceAssociation</span> : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AnyAttr</span>                    :
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Name                       <span style="color:#960050;background-color:#1e0010">:</span> Custom Datacenters
-</span></span><span style="display:flex;"><span>Description                <span style="color:#960050;background-color:#1e0010">:</span> Navigation <span style="color:#66d9ef">for</span> Custom Datacenters
-</span></span><span style="display:flex;"><span>RootAdapterKindKey         <span style="color:#960050;background-color:#1e0010">:</span> VMWARE
-</span></span><span style="display:flex;"><span>RootResourceKindKey        <span style="color:#960050;background-color:#1e0010">:</span> CustomDatacenter
-</span></span><span style="display:flex;"><span>Any                        <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>AdapterInstanceAssociation <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>AnyAttr                    <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Name</span>                       : <span style="color:#e06c75">Custom</span> <span style="color:#e06c75">Datacenters</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Description</span>                : <span style="color:#e06c75">Navigation</span> <span style="color:#c678dd">for</span> <span style="color:#e06c75">Custom</span> <span style="color:#e06c75">Datacenters</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">RootAdapterKindKey</span>         : <span style="color:#e06c75">VMWARE</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">RootResourceKindKey</span>        : <span style="color:#e06c75">CustomDatacenter</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Any</span>                        :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AdapterInstanceAssociation</span> : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AnyAttr</span>                    :
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Name                       <span style="color:#960050;background-color:#1e0010">:</span> vSphere Hosts and Clusters
-</span></span><span style="display:flex;"><span>Description                <span style="color:#960050;background-color:#1e0010">:</span> Enables view of resources imported from vCenter like Clusters, Hosts, VMs and ResourcePools
-</span></span><span style="display:flex;"><span>RootAdapterKindKey         <span style="color:#960050;background-color:#1e0010">:</span> VMWARE
-</span></span><span style="display:flex;"><span>RootResourceKindKey        <span style="color:#960050;background-color:#1e0010">:</span> vSphere World
-</span></span><span style="display:flex;"><span>Any                        <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>AdapterInstanceAssociation <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>AnyAttr                    <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Name</span>                       : <span style="color:#e06c75">vSphere</span> <span style="color:#e06c75">Hosts</span> <span style="color:#e06c75">and</span> <span style="color:#e06c75">Clusters</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Description</span>                : <span style="color:#e06c75">Enables</span> <span style="color:#e06c75">view</span> <span style="color:#e06c75">of</span> <span style="color:#e06c75">resources</span> <span style="color:#e06c75">imported</span> <span style="color:#e06c75">from</span> <span style="color:#e06c75">vCenter</span> <span style="color:#e06c75">like</span> <span style="color:#e06c75">Clusters</span>, <span style="color:#e06c75">Hosts</span>, <span style="color:#e06c75">VMs</span> <span style="color:#e06c75">and</span> <span style="color:#e06c75">ResourcePools</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">RootAdapterKindKey</span>         : <span style="color:#e06c75">VMWARE</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">RootResourceKindKey</span>        : <span style="color:#e06c75">vSphere</span> <span style="color:#e06c75">World</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Any</span>                        :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AdapterInstanceAssociation</span> : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AnyAttr</span>                    :
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Name                       <span style="color:#960050;background-color:#1e0010">:</span> vSphere Storage
-</span></span><span style="display:flex;"><span>Description                <span style="color:#960050;background-color:#1e0010">:</span> Enables view of storage resources imported from vCenter like Datastores and Datastore
-</span></span><span style="display:flex;"><span>                             Clusters
-</span></span><span style="display:flex;"><span>RootAdapterKindKey         <span style="color:#960050;background-color:#1e0010">:</span> VMWARE
-</span></span><span style="display:flex;"><span>RootResourceKindKey        <span style="color:#960050;background-color:#1e0010">:</span> vSphere World
-</span></span><span style="display:flex;"><span>Any                        <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>AdapterInstanceAssociation <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>AnyAttr                    <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Name</span>                       : <span style="color:#e06c75">vSphere</span> <span style="color:#e06c75">Storage</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Description</span>                : <span style="color:#e06c75">Enables</span> <span style="color:#e06c75">view</span> <span style="color:#e06c75">of</span> <span style="color:#e06c75">storage</span> <span style="color:#e06c75">resources</span> <span style="color:#e06c75">imported</span> <span style="color:#e06c75">from</span> <span style="color:#e06c75">vCenter</span> <span style="color:#e06c75">like</span> <span style="color:#e06c75">Datastores</span> <span style="color:#e06c75">and</span> <span style="color:#e06c75">Datastore</span>
+</span></span><span style="display:flex;"><span>                             <span style="color:#e06c75">Clusters</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">RootAdapterKindKey</span>         : <span style="color:#e06c75">VMWARE</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">RootResourceKindKey</span>        : <span style="color:#e06c75">vSphere</span> <span style="color:#e06c75">World</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Any</span>                        :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AdapterInstanceAssociation</span> : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AnyAttr</span>                    :
 </span></span></code></pre></div><p>I can see that the <code>Oversized VMs Report</code> will only accept four <code>TraversalSpec</code> objects; vSphere Networking, Custom Datacenters, vSphere Hosts and Clusters, and vSphere Storage. I am going to use vSphere Hosts and Clusters in this example. I can find more information about this <code>TraversalSpec</code> using the <code>Get-OMTraversalSpec</code> function with the <code>Name</code> parameter.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Get-OMTraversalSpec -Name <span style="color:#e6db74">&#34;vSphere Hosts and Clusters&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">Get-OMTraversalSpec</span> <span style="color:#e06c75">-Name</span> <span style="color:#98c379">&#34;vSphere Hosts and Clusters&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Name                       <span style="color:#960050;background-color:#1e0010">:</span> vSphere Hosts and Clusters
-</span></span><span style="display:flex;"><span>Description                <span style="color:#960050;background-color:#1e0010">:</span> Enables view of resources imported from vCenter like Clusters, Hosts, VMs and ResourcePools
-</span></span><span style="display:flex;"><span>RootAdapterKindKey         <span style="color:#960050;background-color:#1e0010">:</span> VMWARE
-</span></span><span style="display:flex;"><span>RootResourceKindKey        <span style="color:#960050;background-color:#1e0010">:</span> vSphere World
-</span></span><span style="display:flex;"><span>Any                        <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>AdapterInstanceAssociation <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>AnyAttr                    <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Name</span>                       : <span style="color:#e06c75">vSphere</span> <span style="color:#e06c75">Hosts</span> <span style="color:#e06c75">and</span> <span style="color:#e06c75">Clusters</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Description</span>                : <span style="color:#e06c75">Enables</span> <span style="color:#e06c75">view</span> <span style="color:#e06c75">of</span> <span style="color:#e06c75">resources</span> <span style="color:#e06c75">imported</span> <span style="color:#e06c75">from</span> <span style="color:#e06c75">vCenter</span> <span style="color:#e06c75">like</span> <span style="color:#e06c75">Clusters</span>, <span style="color:#e06c75">Hosts</span>, <span style="color:#e06c75">VMs</span> <span style="color:#e06c75">and</span> <span style="color:#e06c75">ResourcePools</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">RootAdapterKindKey</span>         : <span style="color:#e06c75">VMWARE</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">RootResourceKindKey</span>        : <span style="color:#e06c75">vSphere</span> <span style="color:#e06c75">World</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Any</span>                        :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AdapterInstanceAssociation</span> : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AnyAttr</span>                    :
 </span></span></code></pre></div><p>I will assign it to a variable in the same way that we did for the <code>ReportDefinition</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$TraversalSpec = Get-OMTraversalSpec -Name <span style="color:#e6db74">&#34;vSphere Hosts and Clusters&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$TraversalSpec</span> = <span style="color:#e5c07b">Get-OMTraversalSpec</span> <span style="color:#e06c75">-Name</span> <span style="color:#98c379">&#34;vSphere Hosts and Clusters&#34;</span>
 </span></span></code></pre></div><p>Finally, we need to assign the resource that we are targeting to a variable. There is already a <code>Get-OMResource</code> cmdlet in the <code>VMware.VimAutomation.vROps</code> PowerCLI module, so we will use this. You can find more information about this cmdlet <a href="https://pubs.vmware.com/vsphere-6-5/index.jsp?topic=%2Fcom.vmware.powercli.cmdletref.doc%2FGet-OMResource.html">here</a>. I am going to target my whole vCenter instance, but you can target any resource you like e.g. Datacenter, Cluster VM etc.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Get-OMResource -Name <span style="color:#e6db74">&#39;vcenter.example.com&#39;</span> | Format-List
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">Get-OMResource</span> <span style="color:#e06c75">-Name</span> <span style="color:#98c379">&#39;vcenter.example.com&#39;</span> | <span style="color:#e5c07b">Format-List</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Name                   <span style="color:#960050;background-color:#1e0010">:</span> vcenter.example.com
-</span></span><span style="display:flex;"><span>ExtensionData          <span style="color:#960050;background-color:#1e0010">:</span> VMware.VimAutomation.VROps.Views.ResourceDto
-</span></span><span style="display:flex;"><span>Health                 <span style="color:#960050;background-color:#1e0010">:</span> Green
-</span></span><span style="display:flex;"><span>HealthValue            <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">100</span>
-</span></span><span style="display:flex;"><span>SolutionObjectId       <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>DynamicTresholdEnabled <span style="color:#960050;background-color:#1e0010">:</span> True
-</span></span><span style="display:flex;"><span>AdapterInstanceId      <span style="color:#960050;background-color:#1e0010">:</span> bf9df5f2-7cae-46bc-bee8-42057e43bf02
-</span></span><span style="display:flex;"><span>Status                 <span style="color:#960050;background-color:#1e0010">:</span> DataReceiving
-</span></span><span style="display:flex;"><span>State                  <span style="color:#960050;background-color:#1e0010">:</span> Started
-</span></span><span style="display:flex;"><span>StatusMessage          <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Location               <span style="color:#960050;background-color:#1e0010">:</span> Unknown
-</span></span><span style="display:flex;"><span>AdapterKind            <span style="color:#960050;background-color:#1e0010">:</span> VMWARE
-</span></span><span style="display:flex;"><span>ResourceKind           <span style="color:#960050;background-color:#1e0010">:</span> VMwareAdapter Instance
-</span></span><span style="display:flex;"><span>Created                <span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">26</span>/<span style="color:#ae81ff">10</span>/<span style="color:#ae81ff">2015</span> <span style="color:#ae81ff">10</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#ae81ff">03</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#ae81ff">58</span>
-</span></span><span style="display:flex;"><span>Description            <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>IsOrphaned             <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>Id                     <span style="color:#960050;background-color:#1e0010">:</span> bf9df5f2-7cae-46bc-bee8-42057e43bf02
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Name</span>                   : <span style="color:#e06c75">vcenter</span>.<span style="color:#e06c75">example</span>.<span style="color:#e06c75">com</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">ExtensionData</span>          : <span style="color:#e06c75">VMware</span>.<span style="color:#e06c75">VimAutomation</span>.<span style="color:#e06c75">VROps</span>.<span style="color:#e06c75">Views</span>.<span style="color:#e06c75">ResourceDto</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Health</span>                 : <span style="color:#e06c75">Green</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">HealthValue</span>            : <span style="color:#d19a66">100</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">SolutionObjectId</span>       :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">DynamicTresholdEnabled</span> : <span style="color:#e06c75">True</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AdapterInstanceId</span>      : <span style="color:#e06c75">bf9df5f2</span>-<span style="color:#e06c75">7cae</span>-<span style="color:#e06c75">46bc-bee8</span>-<span style="color:#e06c75">42057e43bf02</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Status</span>                 : <span style="color:#e06c75">DataReceiving</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">State</span>                  : <span style="color:#e06c75">Started</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">StatusMessage</span>          :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Location</span>               : <span style="color:#e06c75">Unknown</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AdapterKind</span>            : <span style="color:#e06c75">VMWARE</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">ResourceKind</span>           : <span style="color:#e06c75">VMwareAdapter</span> <span style="color:#e06c75">Instance</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Created</span>                : <span style="color:#d19a66">26</span>/<span style="color:#d19a66">10</span>/<span style="color:#d19a66">2015</span> <span style="color:#d19a66">10</span>:<span style="color:#d19a66">03</span>:<span style="color:#d19a66">58</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Description</span>            :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">IsOrphaned</span>             : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Id</span>                     : <span style="color:#e06c75">bf9df5f2</span>-<span style="color:#e06c75">7cae</span>-<span style="color:#e06c75">46bc-bee8</span>-<span style="color:#e06c75">42057e43bf02</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$Resource = Get-OMResource -Name <span style="color:#e6db74">&#39;vcenter.example.com&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">$Resource</span> = <span style="color:#e5c07b">Get-OMResource</span> <span style="color:#e06c75">-Name</span> <span style="color:#98c379">&#39;vcenter.example.com&#39;</span>
 </span></span></code></pre></div><p>Now that we have these three objects, we can use the <code>New-OMReport</code> function to generate the report in vROps.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>New-OMReport -Resource $Resource -ReportDefinition $ReportDefinition -TraversalSpec $TraversalSpec
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">New-OMReport</span> <span style="color:#e06c75">-Resource</span> <span style="color:#e06c75">$Resource</span> <span style="color:#e06c75">-ReportDefinition</span> <span style="color:#e06c75">$ReportDefinition</span> <span style="color:#e06c75">-TraversalSpec</span> <span style="color:#e06c75">$TraversalSpec</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Name               <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Description        <span style="color:#960050;background-color:#1e0010">:</span> Oversized VMs Report
-</span></span><span style="display:flex;"><span>ResourceId         <span style="color:#960050;background-color:#1e0010">:</span> bf9df5f2-7cae-46bc-bee8-42057e43bf02
-</span></span><span style="display:flex;"><span>ReportDefinitionId <span style="color:#960050;background-color:#1e0010">:</span> 1f69952f-7ff4-4d2c-<span style="color:#ae81ff">9446</span>-81a811de19b0
-</span></span><span style="display:flex;"><span>TraversalSpec      <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Subject            <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine
-</span></span><span style="display:flex;"><span>Owner              <span style="color:#960050;background-color:#1e0010">:</span> 786b4832-00f9-46c6-b35e-56bead7d9b87
-</span></span><span style="display:flex;"><span>CompletionTime     <span style="color:#960050;background-color:#1e0010">:</span> null
-</span></span><span style="display:flex;"><span>Status             <span style="color:#960050;background-color:#1e0010">:</span> QUEUED
-</span></span><span style="display:flex;"><span>Links              <span style="color:#960050;background-color:#1e0010">:</span> {linkToSelf, linkToResource, linkToReportDefinition}
-</span></span><span style="display:flex;"><span>Any                <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Id                 <span style="color:#960050;background-color:#1e0010">:</span> bbe046cf-b2a3-<span style="color:#ae81ff">4860</span>-b7e8-f2b85f177520
-</span></span><span style="display:flex;"><span>AnyAttr            <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Name</span>               :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Description</span>        : <span style="color:#e06c75">Oversized</span> <span style="color:#e06c75">VMs</span> <span style="color:#e06c75">Report</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">ResourceId</span>         : <span style="color:#e06c75">bf9df5f2</span>-<span style="color:#e06c75">7cae</span>-<span style="color:#e06c75">46bc-bee8</span>-<span style="color:#e06c75">42057e43bf02</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">ReportDefinitionId</span> : <span style="color:#e06c75">1f69952f</span>-<span style="color:#e06c75">7ff4</span>-<span style="color:#e06c75">4d2c</span>-<span style="color:#d19a66">9446</span>-<span style="color:#e06c75">81a811de19b0</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">TraversalSpec</span>      :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Subject</span>            : <span style="color:#e06c75">VirtualMachine</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Owner</span>              : <span style="color:#e06c75">786b4832</span>-<span style="color:#e06c75">00f9</span>-<span style="color:#e06c75">46c6-b35e</span>-<span style="color:#e06c75">56bead7d9b87</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">CompletionTime</span>     : <span style="color:#e06c75">null</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Status</span>             : <span style="color:#e06c75">QUEUED</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Links</span>              : {<span style="color:#e06c75">linkToSelf</span>, <span style="color:#e06c75">linkToResource</span>, <span style="color:#e06c75">linkToReportDefinition</span>}
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Any</span>                :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Id</span>                 : <span style="color:#e5c07b">bbe046cf-b2a3</span>-<span style="color:#d19a66">4860</span><span style="color:#e06c75">-b7e8-f2b85f177520</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">AnyAttr</span>            :
 </span></span></code></pre></div><p>The report is now being generated and as you can see its current status is <code>QUEUED</code>. By specifying its <code>Id</code>, we can use the <code>Get-OMReport</code> function to check the status of this report.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Get-OMReport -Id bbe046cf-b2a3-<span style="color:#ae81ff">4860</span>-b7e8-f2b85f177520
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">Get-OMReport</span> <span style="color:#e06c75">-Id</span> <span style="color:#e5c07b">bbe046cf-b2a3</span>-<span style="color:#d19a66">4860</span><span style="color:#e06c75">-b7e8-f2b85f177520</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Name               <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Description        <span style="color:#960050;background-color:#1e0010">:</span> Oversized VMs Report
-</span></span><span style="display:flex;"><span>ResourceId         <span style="color:#960050;background-color:#1e0010">:</span> bf9df5f2-7cae-46bc-bee8-42057e43bf02
-</span></span><span style="display:flex;"><span>ReportDefinitionId <span style="color:#960050;background-color:#1e0010">:</span> 1f69952f-7ff4-4d2c-<span style="color:#ae81ff">9446</span>-81a811de19b0
-</span></span><span style="display:flex;"><span>TraversalSpec      <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Subject            <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine
-</span></span><span style="display:flex;"><span>Owner              <span style="color:#960050;background-color:#1e0010">:</span> 786b4832-00f9-46c6-b35e-56bead7d9b87
-</span></span><span style="display:flex;"><span>CompletionTime     <span style="color:#960050;background-color:#1e0010">:</span> Sun Jun <span style="color:#ae81ff">10</span> <span style="color:#ae81ff">11</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#ae81ff">12</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#ae81ff">34</span> BST <span style="color:#ae81ff">2018</span>
-</span></span><span style="display:flex;"><span>Status             <span style="color:#960050;background-color:#1e0010">:</span> COMPLETED
-</span></span><span style="display:flex;"><span>Links              <span style="color:#960050;background-color:#1e0010">:</span> {linkToSelf, linkToResource, linkToReportDefinition}
-</span></span><span style="display:flex;"><span>Any                <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Id                 <span style="color:#960050;background-color:#1e0010">:</span> bbe046cf-b2a3-<span style="color:#ae81ff">4860</span>-b7e8-f2b85f177520AnyAttr            <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Name</span>               :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Description</span>        : <span style="color:#e06c75">Oversized</span> <span style="color:#e06c75">VMs</span> <span style="color:#e06c75">Report</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">ResourceId</span>         : <span style="color:#e06c75">bf9df5f2</span>-<span style="color:#e06c75">7cae</span>-<span style="color:#e06c75">46bc-bee8</span>-<span style="color:#e06c75">42057e43bf02</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">ReportDefinitionId</span> : <span style="color:#e06c75">1f69952f</span>-<span style="color:#e06c75">7ff4</span>-<span style="color:#e06c75">4d2c</span>-<span style="color:#d19a66">9446</span>-<span style="color:#e06c75">81a811de19b0</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">TraversalSpec</span>      :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Subject</span>            : <span style="color:#e06c75">VirtualMachine</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Owner</span>              : <span style="color:#e06c75">786b4832</span>-<span style="color:#e06c75">00f9</span>-<span style="color:#e06c75">46c6-b35e</span>-<span style="color:#e06c75">56bead7d9b87</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">CompletionTime</span>     : <span style="color:#e06c75">Sun</span> <span style="color:#e06c75">Jun</span> <span style="color:#d19a66">10</span> <span style="color:#d19a66">11</span>:<span style="color:#d19a66">12</span>:<span style="color:#d19a66">34</span> <span style="color:#e06c75">BST</span> <span style="color:#d19a66">2018</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Status</span>             : <span style="color:#e06c75">COMPLETED</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Links</span>              : {<span style="color:#e06c75">linkToSelf</span>, <span style="color:#e06c75">linkToResource</span>, <span style="color:#e06c75">linkToReportDefinition</span>}
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Any</span>                :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Id</span>                 : <span style="color:#e5c07b">bbe046cf-b2a3</span>-<span style="color:#d19a66">4860</span><span style="color:#e06c75">-b7e8-f2b85f177520AnyAttr</span>            :
 </span></span></code></pre></div><p>That&rsquo;s it! Once the status has changed to <code>COMPLETED</code> the report has been generated and is ready to be received.</p>
 <h3 id="recieving-a-generated-report">Recieving A Generated Report</h3>
 <p>Now we have generated a report, we need to retrieve it from the vROps server. This is where the <code>Recieve-OMReport</code> function comes in to play. Using this function we are able to either download the report as a <code>CSV</code> or <code>PDF</code> file, or retrieve the data into a PowerShell object to manipulate the data further. I&rsquo;m not going to go into great detail on this as it really is quite straight forward.</p>
 <p>Here&rsquo;s how you receive the report as a PowerShell object.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$Report = Get-OMReport -Id bbe046cf-b2a3-<span style="color:#ae81ff">4860</span>-b7e8-f2b85f177520
-</span></span><span style="display:flex;"><span>Receive-OMReport -Report $Report
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$Report</span> = <span style="color:#e5c07b">Get-OMReport</span> <span style="color:#e06c75">-Id</span> <span style="color:#e5c07b">bbe046cf-b2a3</span>-<span style="color:#d19a66">4860</span><span style="color:#e06c75">-b7e8-f2b85f177520</span>
+</span></span><span style="display:flex;"><span><span style="color:#e5c07b">Receive-OMReport</span> <span style="color:#e06c75">-Report</span> <span style="color:#e06c75">$Report</span>
 </span></span></code></pre></div><p>Downloading to <code>CSV</code> and <code>PDF</code> files is just as easy.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$Report = Get-OMReport -Id bbe046cf-b2a3-<span style="color:#ae81ff">4860</span>-b7e8-f2b85f177520
-</span></span><span style="display:flex;"><span>Receive-OMReport -Report $Report -CSV -Path <span style="color:#e6db74">&#34;C:\Report.csv&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$Report</span> = <span style="color:#e5c07b">Get-OMReport</span> <span style="color:#e06c75">-Id</span> <span style="color:#e5c07b">bbe046cf-b2a3</span>-<span style="color:#d19a66">4860</span><span style="color:#e06c75">-b7e8-f2b85f177520</span>
+</span></span><span style="display:flex;"><span><span style="color:#e5c07b">Receive-OMReport</span> <span style="color:#e06c75">-Report</span> <span style="color:#e06c75">$Report</span> <span style="color:#e06c75">-CSV</span> <span style="color:#e06c75">-Path</span> <span style="color:#98c379">&#34;C:\Report.csv&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Or as a PDF</span>
+</span></span><span style="display:flex;"><span><span style="color:#7f848e"># Or as a PDF</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Receive-OMReport -Report $Report -PDF -Path <span style="color:#e6db74">&#34;C:\Report.csv&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e5c07b">Receive-OMReport</span> <span style="color:#e06c75">-Report</span> <span style="color:#e06c75">$Report</span> <span style="color:#e06c75">-PDF</span> <span style="color:#e06c75">-Path</span> <span style="color:#98c379">&#34;C:\Report.csv&#34;</span>
 </span></span></code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>I hope you have found these articles helpful in understanding how to fully utilise the vROps API from a PowerCLI session. I use this module frequently and it really does save time when working with the report data from vROps. If you have any suggestions on how this module could be improved or additional functionality that you would like to see, please get in touch via <a href="https://twitter.com/_ryanjan_">Twitter</a> or <a href="https://github.com/ryan-jan">GitHub</a>.</p>
 
@@ -585,8 +584,6 @@ vROps Reports and PowerCLI Part 1: Generating Reports (this article) vROps Repor
   </script>
 
   
-  <script type="text/javascript" src="/js/prism.js"></script>
-  <script type="text/javascript" src="/js/custom/prism-custom.js"></script>
   <script type="text/javascript" src="/js/custom/custom.js"></script>
 
   

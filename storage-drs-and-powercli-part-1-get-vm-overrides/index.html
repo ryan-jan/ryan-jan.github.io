@@ -27,8 +27,7 @@
   
   <link rel="stylesheet" type="text/css" href="/css/custom/screen-custom.css" />
   <link rel="stylesheet" type="text/css" href="/css/fontawesome_all.min.css" />
-  <link rel="stylesheet" type="text/css" href="/css/prism.css" />
-  <link rel="stylesheet" type="text/css" href="/css/custom/prism-custom.css" />
+  <link rel="stylesheet" type="text/css" href="/css/custom/syntax.css" />
   <link rel="stylesheet" type="text/css" href="/css/custom/global-custom.css" />
 
   
@@ -162,115 +161,115 @@ This results in a VM Override being created for that VM. Consequently, SDRS will
 <p>To stop this being an issue I have now written a couple of PowerShell scripts using PowerCLI. The first one is to list the current VM Overrides. The second one is to bulk remove the VM Overrides that are not required. In this first post I will show you how to get a list of all VM Overrides for a specific datastore cluster. You can also see this information in the Web Client by going to the Storage view, selecting a datastore cluster, and going to Manage &gt; Settings &gt; VM Overrides.</p>
 <h2 id="the-process">The Process</h2>
 <p>The first thing to do is to retrieve the datastore cluster object using the <code>Get-View</code> cmdlet (VMware refer to these as Storage Pods).</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$StoragePod = Get-View -ViewType <span style="color:#e6db74">&#34;StoragePod&#34;</span> -Filter @{<span style="color:#e6db74">&#34;Name&#34;</span> = <span style="color:#e6db74">&#34;TESTDATASTORECLUSTER&#34;</span>}
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$StoragePod</span> = <span style="color:#e5c07b">Get-View</span> <span style="color:#e06c75">-ViewType</span> <span style="color:#98c379">&#34;StoragePod&#34;</span> <span style="color:#e06c75">-Filter</span> <span style="color:#e06c75">@</span>{<span style="color:#98c379">&#34;Name&#34;</span> = <span style="color:#98c379">&#34;TESTDATASTORECLUSTER&#34;</span>}
 </span></span></code></pre></div><p>I am targeting a single datastore cluster, but you can target all clusters by omitting the <code>-Filter</code> parameter.</p>
 <p>If you now take a look at the <code>$StoragePod.PodStorageDrsEntry.StorageDrsConfig.VmConfig</code> property, you can see a list of VMs and their current SDRS configuration as follows.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$StoragePod.PodStorageDrsEntry.StorageDrsConfig.VmConfig
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$StoragePod</span>.<span style="color:#e06c75">PodStorageDrsEntry</span>.<span style="color:#e06c75">StorageDrsConfig</span>.<span style="color:#e06c75">VmConfig</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-<span style="color:#ae81ff">1535</span>
-</span></span><span style="display:flex;"><span>Enabled             <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Vm</span>                  : <span style="color:#e5c07b">VirtualMachine-vm</span>-<span style="color:#d19a66">1535</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Enabled</span>             :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Behavior</span>            :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">IntraVmAffinity</span>     : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">IntraVmAntiAffinity</span> :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">VirtualDiskRules</span>    :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">LinkedView</span>          :
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-<span style="color:#ae81ff">461</span>
-</span></span><span style="display:flex;"><span>Enabled             <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Vm</span>                  : <span style="color:#e5c07b">VirtualMachine-vm</span>-<span style="color:#d19a66">461</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Enabled</span>             :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Behavior</span>            :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">IntraVmAffinity</span>     : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">IntraVmAntiAffinity</span> :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">VirtualDiskRules</span>    :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">LinkedView</span>          :
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-<span style="color:#ae81ff">1381</span>
-</span></span><span style="display:flex;"><span>Enabled             <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Vm</span>                  : <span style="color:#e5c07b">VirtualMachine-vm</span>-<span style="color:#d19a66">1381</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Enabled</span>             : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Behavior</span>            :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">IntraVmAffinity</span>     :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">IntraVmAntiAffinity</span> :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">VirtualDiskRules</span>    :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">LinkedView</span>          :
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-<span style="color:#ae81ff">1382</span>
-</span></span><span style="display:flex;"><span>Enabled             <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Vm</span>                  : <span style="color:#e5c07b">VirtualMachine-vm</span>-<span style="color:#d19a66">1382</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Enabled</span>             : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Behavior</span>            :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">IntraVmAffinity</span>     :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">IntraVmAntiAffinity</span> :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">VirtualDiskRules</span>    :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">LinkedView</span>          :
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-<span style="color:#ae81ff">1481</span>
-</span></span><span style="display:flex;"><span>Enabled             <span style="color:#960050;background-color:#1e0010">:</span> False
-</span></span><span style="display:flex;"><span>Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Vm</span>                  : <span style="color:#e5c07b">VirtualMachine-vm</span>-<span style="color:#d19a66">1481</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Enabled</span>             : <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Behavior</span>            :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">IntraVmAffinity</span>     :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">IntraVmAntiAffinity</span> :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">VirtualDiskRules</span>    :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">LinkedView</span>          :
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Vm                  <span style="color:#960050;background-color:#1e0010">:</span> VirtualMachine-vm-<span style="color:#ae81ff">1527</span>
-</span></span><span style="display:flex;"><span>Enabled             <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>Behavior            <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>IntraVmAffinity     <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>IntraVmAntiAffinity <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>VirtualDiskRules    <span style="color:#960050;background-color:#1e0010">:</span>
-</span></span><span style="display:flex;"><span>LinkedView          <span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Vm</span>                  : <span style="color:#e5c07b">VirtualMachine-vm</span>-<span style="color:#d19a66">1527</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Enabled</span>             :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Behavior</span>            :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">IntraVmAffinity</span>     :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">IntraVmAntiAffinity</span> :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">VirtualDiskRules</span>    :
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">LinkedView</span>          :
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>....
 </span></span></code></pre></div><p>As you can see, I have two VMs with IntraVmAffinity overrides configured and three VMs which have SDRS disabled.</p>
 <p>You may also see VMs in this list with nothing configured, such as <code>VirtualMachine-vm-1527</code> above. This threw me initially, as only a few random VMs without an override configured were showing up. I have since worked out in my lab that any VM which previously had a VM override but has since had it removed, will show up in this state. Meanwhile, any VM which has never had an override will not show in the list at all.</p>
 <p>To filter out the VMs in the list that no longer have a VM Override configured, I need to check that the <code>Enabled</code> and <code>IntraVmAffinity</code> properties are not null.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$VMOverrides = $StoragePod.PodStorageDrsEntry.StorageDrsConfig.VmConfig | Where-Object {
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">-not</span> (
-</span></span><span style="display:flex;"><span>        ($_.Enabled <span style="color:#f92672">-eq</span> $null) <span style="color:#f92672">-and</span>
-</span></span><span style="display:flex;"><span>        ($_.IntraVmAffinity <span style="color:#f92672">-eq</span> $null)
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$VMOverrides</span> = <span style="color:#e06c75">$StoragePod</span>.<span style="color:#e06c75">PodStorageDrsEntry</span>.<span style="color:#e06c75">StorageDrsConfig</span>.<span style="color:#e06c75">VmConfig</span> | <span style="color:#e5c07b">Where-Object</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#56b6c2">-not</span> (
+</span></span><span style="display:flex;"><span>        (<span style="color:#e06c75">$_</span>.<span style="color:#e06c75">Enabled</span> <span style="color:#56b6c2">-eq</span> <span style="color:#e06c75">$null</span>) <span style="color:#56b6c2">-and</span>
+</span></span><span style="display:flex;"><span>        (<span style="color:#e06c75">$_</span>.<span style="color:#e06c75">IntraVmAffinity</span> <span style="color:#56b6c2">-eq</span> <span style="color:#e06c75">$null</span>)
 </span></span><span style="display:flex;"><span>    )
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>This will store all VMs with a current VM Override in the <code>$VMOverrides</code> object. We can then loop over these and output the data as a PSCustomObject.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#66d9ef">foreach</span> ($Override <span style="color:#66d9ef">in</span> $VMOverrides) {
-</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">PSCustomObject</span>]@{
-</span></span><span style="display:flex;"><span>        VirtualMachine = $Override.Vm
-</span></span><span style="display:flex;"><span>        SDRSAutomationLevel = $Override.Enabled
-</span></span><span style="display:flex;"><span>        KeepVMDKsTogether = $Override.IntraVmAffinity
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#c678dd">foreach</span> (<span style="color:#e06c75">$Override</span> <span style="color:#c678dd">in</span> <span style="color:#e06c75">$VMOverrides</span>) {
+</span></span><span style="display:flex;"><span>    [<span style="color:#e06c75">PSCustomObject</span>]<span style="color:#e06c75">@</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#e06c75">VirtualMachine</span> = <span style="color:#e06c75">$Override</span>.<span style="color:#e06c75">Vm</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e06c75">SDRSAutomationLevel</span> = <span style="color:#e06c75">$Override</span>.<span style="color:#e06c75">Enabled</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e06c75">KeepVMDKsTogether</span> = <span style="color:#e06c75">$Override</span>.<span style="color:#e06c75">IntraVmAffinity</span>
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>VirtualMachine         SDRSAutomationLevel KeepVMDKsTogether
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">VirtualMachine</span>         <span style="color:#e06c75">SDRSAutomationLevel</span> <span style="color:#e06c75">KeepVMDKsTogether</span>
 </span></span><span style="display:flex;"><span>--------------         ------------------- -----------------
-</span></span><span style="display:flex;"><span>VirtualMachine-vm-<span style="color:#ae81ff">1481</span> False
-</span></span><span style="display:flex;"><span>VirtualMachine-vm-<span style="color:#ae81ff">1527</span> False
-</span></span><span style="display:flex;"><span>VirtualMachine-vm-<span style="color:#ae81ff">1528</span> False
-</span></span><span style="display:flex;"><span>VirtualMachine-vm-<span style="color:#ae81ff">1547</span> False
-</span></span><span style="display:flex;"><span>VirtualMachine-vm-<span style="color:#ae81ff">844</span>  False
+</span></span><span style="display:flex;"><span><span style="color:#e5c07b">VirtualMachine-vm</span>-<span style="color:#d19a66">1481</span> <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e5c07b">VirtualMachine-vm</span>-<span style="color:#d19a66">1527</span> <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e5c07b">VirtualMachine-vm</span>-<span style="color:#d19a66">1528</span> <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e5c07b">VirtualMachine-vm</span>-<span style="color:#d19a66">1547</span> <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e5c07b">VirtualMachine-vm</span>-<span style="color:#d19a66">844</span>  <span style="color:#e06c75">False</span>
 </span></span></code></pre></div><p>While this is great, it is returning the managed object reference (MoRef) for each VM. It would be much better if we could instead display the VM name. You can get the VM name from the MoRef using the <code>Get-VM</code> cmdlet.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Get-VM -Id <span style="color:#e6db74">&#34;VirtualMachine-vm-844&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e5c07b">Get-VM</span> <span style="color:#e06c75">-Id</span> <span style="color:#98c379">&#34;VirtualMachine-vm-844&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Name                 PowerState Num CPUs MemoryGB
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Name</span>                 <span style="color:#e06c75">PowerState</span> <span style="color:#e06c75">Num</span> <span style="color:#e06c75">CPUs</span> <span style="color:#e06c75">MemoryGB</span>
 </span></span><span style="display:flex;"><span>----                 ---------- -------- --------
-</span></span><span style="display:flex;"><span>Test123              PoweredOn  <span style="color:#ae81ff">1</span>        <span style="color:#ae81ff">3.000</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Test123</span>              <span style="color:#e06c75">PoweredOn</span>  <span style="color:#d19a66">1</span>        <span style="color:#d19a66">3.000</span>
 </span></span></code></pre></div><p>Therefore, I am going to create a hashtable containing the MoRef for each VM as the keys, and the VM name as the values. We can then cross reference this lookup table later.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$VMLookup = @{}
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">foreach</span> ($VM <span style="color:#66d9ef">in</span> (Get-VM -Id $VMOverrides.Vm)) {
-</span></span><span style="display:flex;"><span>    $VMLookup.($VM.Id) = $VM.Name
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$VMLookup</span> = <span style="color:#e06c75">@</span>{}
+</span></span><span style="display:flex;"><span><span style="color:#c678dd">foreach</span> (<span style="color:#e06c75">$VM</span> <span style="color:#c678dd">in</span> (<span style="color:#e5c07b">Get-VM</span> <span style="color:#e06c75">-Id</span> <span style="color:#e06c75">$VMOverrides</span>.<span style="color:#e06c75">Vm</span>)) {
+</span></span><span style="display:flex;"><span>    <span style="color:#e06c75">$VMLookup</span>.(<span style="color:#e06c75">$VM</span>.<span style="color:#e06c75">Id</span>) = <span style="color:#e06c75">$VM</span>.<span style="color:#e06c75">Name</span>
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>To test the lookup table, we can call the hashtable and specify the MoRef as the key. This will return the name of the VM.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$VMLookup.<span style="color:#e6db74">&#34;VirtualMachine-vm-844&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">$VMLookup</span>.<span style="color:#98c379">&#34;VirtualMachine-vm-844&#34;</span>
 </span></span></code></pre></div><p>Using this technique, we can now improve our <code>foreach</code> loop from earlier to display the VM name.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#66d9ef">foreach</span> ($Override <span style="color:#66d9ef">in</span> $VMOverrides) {
-</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">PSCustomObject</span>]@{
-</span></span><span style="display:flex;"><span>        VirtualMachine = $VMLookup.<span style="color:#e6db74">&#34;</span>$($Override.Vm.Type)<span style="color:#e6db74">-</span>$($Override.Vm.Value)<span style="color:#e6db74">&#34;</span>
-</span></span><span style="display:flex;"><span>        SDRSAutomationLevel = $Override.Enabled
-</span></span><span style="display:flex;"><span>        KeepVMDKsTogether = $Override.IntraVmAffinity
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#c678dd">foreach</span> (<span style="color:#e06c75">$Override</span> <span style="color:#c678dd">in</span> <span style="color:#e06c75">$VMOverrides</span>) {
+</span></span><span style="display:flex;"><span>    [<span style="color:#e06c75">PSCustomObject</span>]<span style="color:#e06c75">@</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#e06c75">VirtualMachine</span> = <span style="color:#e06c75">$VMLookup</span>.<span style="color:#98c379">&#34;</span>$(<span style="color:#e06c75">$Override</span>.<span style="color:#e06c75">Vm</span>.<span style="color:#e06c75">Type</span>)<span style="color:#98c379">-</span>$(<span style="color:#e06c75">$Override</span>.<span style="color:#e06c75">Vm</span>.<span style="color:#e06c75">Value</span>)<span style="color:#98c379">&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e06c75">SDRSAutomationLevel</span> = <span style="color:#e06c75">$Override</span>.<span style="color:#e06c75">Enabled</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e06c75">KeepVMDKsTogether</span> = <span style="color:#e06c75">$Override</span>.<span style="color:#e06c75">IntraVmAffinity</span>
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>VirtualMachine                SDRSAutomationLevel KeepVMDKsTogether
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">VirtualMachine</span>                <span style="color:#e06c75">SDRSAutomationLevel</span> <span style="color:#e06c75">KeepVMDKsTogether</span>
 </span></span><span style="display:flex;"><span>--------------                ------------------- -----------------
-</span></span><span style="display:flex;"><span>SL_Test                       False
-</span></span><span style="display:flex;"><span>RKTEST1                       False
-</span></span><span style="display:flex;"><span>RKTEST0                       False
-</span></span><span style="display:flex;"><span>ZERTOTEST1                    False
-</span></span><span style="display:flex;"><span>Test123                       False
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">SL_Test</span>                       <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">RKTEST1</span>                       <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">RKTEST0</span>                       <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">ZERTOTEST1</span>                    <span style="color:#e06c75">False</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Test123</span>                       <span style="color:#e06c75">False</span>
 </span></span></code></pre></div><div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
      <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
@@ -282,54 +281,54 @@ This results in a VM Override being created for that VM. Consequently, SDRS will
 <p>We now have our list of current VM Overrides for this specific datastore cluster. All the above VMs have SDRS Automation set to false (disabling SDRS); and as there is no entry in the Keep VMDKs Together column, these VMs do not have an override for this setting and therefore will all be using the cluster default.</p>
 <p>This output is OK, but when you view the VM Overrides view in the Web Client it is a bit more informative. For example rather than displaying just &ldquo;true&rdquo; or &ldquo;false&rdquo; for the SDRSAutomationLevel the Web Client will display &ldquo;Fully Automated&rdquo; or &ldquo;Disabled&rdquo;, and for KeepVMDKsTogether it will display &ldquo;Yes&rdquo; or &ldquo;No&rdquo;. Also, rather than displaying a blank when there is no override configured for a specific setting, the Web Client will instead display the cluster default, as this is the setting that will be taking effect. For completeness, I will show you have to replicate this behavior in our script.</p>
 <p>To display the friendly name for the VM overrides we can use a <code>switch</code> statement when building our <code>PSCustomObject</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#66d9ef">foreach</span> ($Override <span style="color:#66d9ef">in</span> $VMOverrides) {
-</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">PSCustomObject</span>]@{
-</span></span><span style="display:flex;"><span>        VirtualMachine = $VMLookup.<span style="color:#e6db74">&#34;</span>$($Override.Vm.Type)<span style="color:#e6db74">-</span>$($Override.Vm.Value)<span style="color:#e6db74">&#34;</span>
-</span></span><span style="display:flex;"><span>        SDRSAutomationLevel = <span style="color:#66d9ef">Switch</span> ($Override.Enabled) {
-</span></span><span style="display:flex;"><span>            $true {<span style="color:#e6db74">&#34;Fully Automated&#34;</span>}
-</span></span><span style="display:flex;"><span>            $false {<span style="color:#e6db74">&#34;Disabled&#34;</span>}
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#c678dd">foreach</span> (<span style="color:#e06c75">$Override</span> <span style="color:#c678dd">in</span> <span style="color:#e06c75">$VMOverrides</span>) {
+</span></span><span style="display:flex;"><span>    [<span style="color:#e06c75">PSCustomObject</span>]<span style="color:#e06c75">@</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#e06c75">VirtualMachine</span> = <span style="color:#e06c75">$VMLookup</span>.<span style="color:#98c379">&#34;</span>$(<span style="color:#e06c75">$Override</span>.<span style="color:#e06c75">Vm</span>.<span style="color:#e06c75">Type</span>)<span style="color:#98c379">-</span>$(<span style="color:#e06c75">$Override</span>.<span style="color:#e06c75">Vm</span>.<span style="color:#e06c75">Value</span>)<span style="color:#98c379">&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e06c75">SDRSAutomationLevel</span> = <span style="color:#c678dd">Switch</span> (<span style="color:#e06c75">$Override</span>.<span style="color:#e06c75">Enabled</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#e06c75">$true</span> {<span style="color:#98c379">&#34;Fully Automated&#34;</span>}
+</span></span><span style="display:flex;"><span>            <span style="color:#e06c75">$false</span> {<span style="color:#98c379">&#34;Disabled&#34;</span>}
 </span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        KeepVMDKsTogether = <span style="color:#66d9ef">Switch</span> ($Override.IntraVmAffinity) {
-</span></span><span style="display:flex;"><span>            $true {<span style="color:#e6db74">&#34;Yes&#34;</span>}
-</span></span><span style="display:flex;"><span>            $false {<span style="color:#e6db74">&#34;No&#34;</span>}
+</span></span><span style="display:flex;"><span>        <span style="color:#e06c75">KeepVMDKsTogether</span> = <span style="color:#c678dd">Switch</span> (<span style="color:#e06c75">$Override</span>.<span style="color:#e06c75">IntraVmAffinity</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#e06c75">$true</span> {<span style="color:#98c379">&#34;Yes&#34;</span>}
+</span></span><span style="display:flex;"><span>            <span style="color:#e06c75">$false</span> {<span style="color:#98c379">&#34;No&#34;</span>}
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>As you can see, we are now testing the value of both <code>$Override.Enabled</code> and <code>$Override.IntraVmAffinity</code> and depending on whether the value is <code>$true</code> or <code>$false</code> we are returning the required friendly name.</p>
 <p>This takes care of the specific VM overrides but we will still see a number of blanks which are defaulting to the cluster default. To fix this we first need to assign the cluster default settings for both <code>DefaultVmBehavior</code> and <code>DefaultIntraVmAffinity</code> to separate variables. These settings can be retrieved from the <code>$StoragePod</code> object that we created earlier.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#66d9ef">Switch</span> ($StoragePod.PodStorageDrsEntry.StorageDrsConfig.PodConfig.DefaultVmBehavior) {
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;automated&#34;</span> {$DefaultVmBehavior = <span style="color:#e6db74">&#34;Default (Fully Automated)&#34;</span>}
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;manual&#34;</span> {$DefaultVmBehavior = <span style="color:#e6db74">&#34;Default (No Automation (Manual Mode))&#34;</span>}
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#c678dd">Switch</span> (<span style="color:#e06c75">$StoragePod</span>.<span style="color:#e06c75">PodStorageDrsEntry</span>.<span style="color:#e06c75">StorageDrsConfig</span>.<span style="color:#e06c75">PodConfig</span>.<span style="color:#e06c75">DefaultVmBehavior</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#98c379">&#34;automated&#34;</span> {<span style="color:#e06c75">$DefaultVmBehavior</span> = <span style="color:#98c379">&#34;Default (Fully Automated)&#34;</span>}
+</span></span><span style="display:flex;"><span>    <span style="color:#98c379">&#34;manual&#34;</span> {<span style="color:#e06c75">$DefaultVmBehavior</span> = <span style="color:#98c379">&#34;Default (No Automation (Manual Mode))&#34;</span>}
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Switch</span> ($StoragePod.PodStorageDrsEntry.StorageDrsConfig.PodConfig.DefaultIntraVmAffinity) {
-</span></span><span style="display:flex;"><span>    $true {$DefaultIntraVmAffinity = <span style="color:#e6db74">&#34;Default (Yes)&#34;</span>}
-</span></span><span style="display:flex;"><span>    $false {$DefaultIntraVmAffinity = <span style="color:#e6db74">&#34;Default (No)&#34;</span>}
+</span></span><span style="display:flex;"><span><span style="color:#c678dd">Switch</span> (<span style="color:#e06c75">$StoragePod</span>.<span style="color:#e06c75">PodStorageDrsEntry</span>.<span style="color:#e06c75">StorageDrsConfig</span>.<span style="color:#e06c75">PodConfig</span>.<span style="color:#e06c75">DefaultIntraVmAffinity</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#e06c75">$true</span> {<span style="color:#e06c75">$DefaultIntraVmAffinity</span> = <span style="color:#98c379">&#34;Default (Yes)&#34;</span>}
+</span></span><span style="display:flex;"><span>    <span style="color:#e06c75">$false</span> {<span style="color:#e06c75">$DefaultIntraVmAffinity</span> = <span style="color:#98c379">&#34;Default (No)&#34;</span>}
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>Now we have two variables, <code>$DefaultVmBehavior</code> and <code>$DefaultIntraVmAffinity</code>, which contain a friendly name for the cluster default setting e.g. &ldquo;manual&rdquo; becomes &ldquo;Default (No Automation (Manual Mode))&rdquo; which is how it would display in the Web Client. With a simple addition to the two <code>switch</code> statements we used creating our <code>PSCustomObject</code> we can add a test for <code>$null</code> which if true will return this default setting.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#66d9ef">foreach</span> ($Override <span style="color:#66d9ef">in</span> $VMOverrides) {
-</span></span><span style="display:flex;"><span>    [<span style="color:#66d9ef">PSCustomObject</span>]@{
-</span></span><span style="display:flex;"><span>        VirtualMachine = $VMLookup.<span style="color:#e6db74">&#34;</span>$($Override.Vm.Type)<span style="color:#e6db74">-</span>$($Override.Vm.Value)<span style="color:#e6db74">&#34;</span>
-</span></span><span style="display:flex;"><span>        SDRSAutomationLevel = <span style="color:#66d9ef">Switch</span> ($Override.Enabled) {
-</span></span><span style="display:flex;"><span>            $true {<span style="color:#e6db74">&#34;Fully Automated&#34;</span>}
-</span></span><span style="display:flex;"><span>            $false {<span style="color:#e6db74">&#34;Disabled&#34;</span>}
-</span></span><span style="display:flex;"><span>            $null {$DefaultVmBehavior}
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#c678dd">foreach</span> (<span style="color:#e06c75">$Override</span> <span style="color:#c678dd">in</span> <span style="color:#e06c75">$VMOverrides</span>) {
+</span></span><span style="display:flex;"><span>    [<span style="color:#e06c75">PSCustomObject</span>]<span style="color:#e06c75">@</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#e06c75">VirtualMachine</span> = <span style="color:#e06c75">$VMLookup</span>.<span style="color:#98c379">&#34;</span>$(<span style="color:#e06c75">$Override</span>.<span style="color:#e06c75">Vm</span>.<span style="color:#e06c75">Type</span>)<span style="color:#98c379">-</span>$(<span style="color:#e06c75">$Override</span>.<span style="color:#e06c75">Vm</span>.<span style="color:#e06c75">Value</span>)<span style="color:#98c379">&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e06c75">SDRSAutomationLevel</span> = <span style="color:#c678dd">Switch</span> (<span style="color:#e06c75">$Override</span>.<span style="color:#e06c75">Enabled</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#e06c75">$true</span> {<span style="color:#98c379">&#34;Fully Automated&#34;</span>}
+</span></span><span style="display:flex;"><span>            <span style="color:#e06c75">$false</span> {<span style="color:#98c379">&#34;Disabled&#34;</span>}
+</span></span><span style="display:flex;"><span>            <span style="color:#e06c75">$null</span> {<span style="color:#e06c75">$DefaultVmBehavior</span>}
 </span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        KeepVMDKsTogether = <span style="color:#66d9ef">Switch</span> ($Override.IntraVmAffinity) {
-</span></span><span style="display:flex;"><span>            $true {<span style="color:#e6db74">&#34;Yes&#34;</span>}
-</span></span><span style="display:flex;"><span>            $false {<span style="color:#e6db74">&#34;No&#34;</span>}
-</span></span><span style="display:flex;"><span>            $null {$DefaultIntraVmAffinity}
+</span></span><span style="display:flex;"><span>        <span style="color:#e06c75">KeepVMDKsTogether</span> = <span style="color:#c678dd">Switch</span> (<span style="color:#e06c75">$Override</span>.<span style="color:#e06c75">IntraVmAffinity</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#e06c75">$true</span> {<span style="color:#98c379">&#34;Yes&#34;</span>}
+</span></span><span style="display:flex;"><span>            <span style="color:#e06c75">$false</span> {<span style="color:#98c379">&#34;No&#34;</span>}
+</span></span><span style="display:flex;"><span>            <span style="color:#e06c75">$null</span> {<span style="color:#e06c75">$DefaultIntraVmAffinity</span>}
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>As you can see, now if either <code>$Override.Enabled</code> or <code>$Override.IntraVmAffinity</code> is <code>$null</code>, instead of returning a blank we now return the cluster default variable. The whole script now displays VM overrides in a pretty nice format.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>VirtualMachine                SDRSAutomationLevel       KeepVMDKsTogether
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#e06c75">VirtualMachine</span>                <span style="color:#e06c75">SDRSAutomationLevel</span>       <span style="color:#e06c75">KeepVMDKsTogether</span>
 </span></span><span style="display:flex;"><span>--------------                -------------------       -----------------
-</span></span><span style="display:flex;"><span>TEST                          <span style="color:#66d9ef">Default</span> (Fully Automated) No
-</span></span><span style="display:flex;"><span>RKTEST1                       Disabled                  <span style="color:#66d9ef">Default</span> (Yes)
-</span></span><span style="display:flex;"><span>RKTEST0                       Disabled                  <span style="color:#66d9ef">Default</span> (Yes)
-</span></span><span style="display:flex;"><span>Test123                       Disabled                  <span style="color:#66d9ef">Default</span> (Yes)
-</span></span><span style="display:flex;"><span>TEST00008                     Fully Automated           Yes
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">TEST</span>                          <span style="color:#c678dd">Default</span> (<span style="color:#e06c75">Fully</span> <span style="color:#e06c75">Automated</span>) <span style="color:#e06c75">No</span>
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">RKTEST1</span>                       <span style="color:#e06c75">Disabled</span>                  <span style="color:#c678dd">Default</span> (<span style="color:#e06c75">Yes</span>)
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">RKTEST0</span>                       <span style="color:#e06c75">Disabled</span>                  <span style="color:#c678dd">Default</span> (<span style="color:#e06c75">Yes</span>)
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">Test123</span>                       <span style="color:#e06c75">Disabled</span>                  <span style="color:#c678dd">Default</span> (<span style="color:#e06c75">Yes</span>)
+</span></span><span style="display:flex;"><span><span style="color:#e06c75">TEST00008</span>                     <span style="color:#e06c75">Fully</span> <span style="color:#e06c75">Automated</span>           <span style="color:#e06c75">Yes</span>
 </span></span></code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>I hope this has been helpful in showing you how to retrieve the VM Override information for a datastore cluster via PowerCLI. In part 2, I will focus on how to remove VM Overrides in bulk to ensure that Storage DRS performs as effectively as possible in your environment.</p>
 
@@ -604,8 +603,6 @@ Downloading A Generated Report The last step of the previous article was to use 
   </script>
 
   
-  <script type="text/javascript" src="/js/prism.js"></script>
-  <script type="text/javascript" src="/js/custom/prism-custom.js"></script>
   <script type="text/javascript" src="/js/custom/custom.js"></script>
 
   

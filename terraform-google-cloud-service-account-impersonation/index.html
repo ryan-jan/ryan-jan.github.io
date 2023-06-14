@@ -27,8 +27,7 @@
   
   <link rel="stylesheet" type="text/css" href="/css/custom/screen-custom.css" />
   <link rel="stylesheet" type="text/css" href="/css/fontawesome_all.min.css" />
-  <link rel="stylesheet" type="text/css" href="/css/prism.css" />
-  <link rel="stylesheet" type="text/css" href="/css/custom/prism-custom.css" />
+  <link rel="stylesheet" type="text/css" href="/css/custom/syntax.css" />
   <link rel="stylesheet" type="text/css" href="/css/custom/global-custom.css" />
 
   
@@ -191,13 +190,13 @@ in a project. However, it is best practice to assign the role at the service acc
 <p>For example, to allow the user <code>joe.bloggs@example.com</code> to impersonate the service account
 <code>terraform-admin@my-project.iam.gserviceaccount.com</code> you can assign the <code>iam.serviceAccountTokenCreator</code> role as
 follows.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gcloud iam service-accounts add-iam-policy-binding <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    terraform-admin@my-project.iam.gserviceaccount.com <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --member<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;user:joe.bloggs@example.com&#39;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --role<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;roles/iam.serviceAccountTokenCreator&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gcloud iam service-accounts add-iam-policy-binding <span style="color:#98c379">\
+</span></span></span><span style="display:flex;"><span><span style="color:#98c379"></span>    terraform-admin@my-project.iam.gserviceaccount.com <span style="color:#98c379">\
+</span></span></span><span style="display:flex;"><span><span style="color:#98c379"></span>    --member<span style="color:#56b6c2">=</span><span style="color:#98c379">&#39;user:joe.bloggs@example.com&#39;</span> <span style="color:#98c379">\
+</span></span></span><span style="display:flex;"><span><span style="color:#98c379"></span>    --role<span style="color:#56b6c2">=</span><span style="color:#98c379">&#39;roles/iam.serviceAccountTokenCreator&#39;</span>
 </span></span></code></pre></div><p>The principal can then impersonate the <code>terraform-admin@my-project.iam.gserviceaccount.com</code> service account be setting
 the <code>GOOGLE_IMPERSONATE_SERVICE_ACCOUNT</code> environment variable, for example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>export GOOGLE_IMPERSONATE_SERVICE_ACCOUNT<span style="color:#f92672">=</span>terraform-admin@my-project.iam.gserviceaccount.com
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#e5c07b">export</span> <span style="color:#e06c75">GOOGLE_IMPERSONATE_SERVICE_ACCOUNT</span><span style="color:#56b6c2">=</span>terraform-admin@my-project.iam.gserviceaccount.com
 </span></span></code></pre></div><p>Applications such as the gcloud CLI and Terraform are aware of this environment variable and will attempt to impersonate
 the service account when performing any actions. However, this is not always the best option when impersonating service
 accounts with Terraform, as the following section will explain.</p>
@@ -218,11 +217,11 @@ service account which has permissions to create monitoring resources in a centra
 have permission to create resources in the main project. This is where configuring the impersonation directly in the
 Terraform providers can be useful.</p>
 <p>First, create a <code>google</code> provider as follows.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tf" data-lang="tf"><span style="display:flex;"><span><span style="color:#66d9ef">provider</span> <span style="color:#e6db74">&#34;google&#34;</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">alias</span> = <span style="color:#e6db74">&#34;impersonation&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">scopes</span> = [
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;https://www.googleapis.com/auth/cloud-platform&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;https://www.googleapis.com/auth/userinfo.email&#34;</span>,
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tf" data-lang="tf"><span style="display:flex;"><span><span style="color:#c678dd">provider</span> <span style="color:#98c379">&#34;google&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">alias</span> = <span style="color:#98c379">&#34;impersonation&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">scopes</span> = [
+</span></span><span style="display:flex;"><span>    <span style="color:#98c379">&#34;https://www.googleapis.com/auth/cloud-platform&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#98c379">&#34;https://www.googleapis.com/auth/userinfo.email&#34;</span>,
 </span></span><span style="display:flex;"><span>  ]
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>This provider will run in the context of your personal user account (as it doesn&rsquo;t have any other credentials or access
@@ -230,17 +229,17 @@ tokens configured) and has the <code>impersonation</code> alias.</p>
 <p>Next, add a data block to retrieve the short-lived access token which will be used to authenticate as the target service
 account. Notice that you&rsquo;re explicitly telling the data source to use the <code>google.impersonation</code> aliased provider, thus
 requesting the access token via your personal user account.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tf" data-lang="tf"><span style="display:flex;"><span><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;google_service_account_access_token&#34;</span> <span style="color:#e6db74">&#34;default&#34;</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">target_service_account</span> 	= <span style="color:#a6e22e">terraform</span><span style="color:#f92672">-</span><span style="color:#a6e22e">admin</span><span style="color:#960050;background-color:#1e0010">@</span><span style="color:#a6e22e">my</span><span style="color:#f92672">-</span><span style="color:#a6e22e">project</span>.<span style="color:#a6e22e">iam</span>.<span style="color:#a6e22e">gserviceaccount</span>.<span style="color:#a6e22e">com</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">scopes</span>                 	= [<span style="color:#e6db74">&#34;userinfo-email&#34;</span>, <span style="color:#e6db74">&#34;cloud-platform&#34;</span>]
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">  provider</span>               	<span style="color:#f92672">=</span> <span style="color:#a6e22e">google</span>.<span style="color:#a6e22e">impersonation</span>
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tf" data-lang="tf"><span style="display:flex;"><span><span style="color:#c678dd">data</span> <span style="color:#98c379">&#34;google_service_account_access_token&#34;</span> <span style="color:#98c379">&#34;default&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">target_service_account</span> 	= <span style="color:#e06c75">terraform</span><span style="color:#56b6c2">-</span><span style="color:#e06c75">admin</span>@<span style="color:#e06c75">my</span><span style="color:#56b6c2">-</span><span style="color:#e06c75">project</span>.<span style="color:#e06c75">iam</span>.<span style="color:#e06c75">gserviceaccount</span>.<span style="color:#e06c75">com</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">scopes</span>                 	= [<span style="color:#98c379">&#34;userinfo-email&#34;</span>, <span style="color:#98c379">&#34;cloud-platform&#34;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#c678dd">
+</span></span></span><span style="display:flex;"><span><span style="color:#c678dd">  provider</span>               	<span style="color:#56b6c2">=</span> <span style="color:#e06c75">google</span>.<span style="color:#e06c75">impersonation</span>
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>And finally, create a second <code>google</code> provider that will use the access token of your service account. Notice that this
 provider doesn&rsquo;t have an alias, meaning it’ll be the default provider used for any Google resources in your Terraform
 code.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tf" data-lang="tf"><span style="display:flex;"><span><span style="color:#66d9ef">provider</span> <span style="color:#e6db74">&#34;google&#34;</span> {
-</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">access_token</span> = data.<span style="color:#a6e22e">google_service_account_access_token</span>.<span style="color:#a6e22e">default</span>.<span style="color:#a6e22e">access_token</span>
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tf" data-lang="tf"><span style="display:flex;"><span><span style="color:#c678dd">provider</span> <span style="color:#98c379">&#34;google&#34;</span> {
+</span></span><span style="display:flex;"><span>   <span style="color:#e06c75">access_token</span> = <span style="color:#e5c07b">data</span>.<span style="color:#e06c75">google_service_account_access_token</span>.<span style="color:#e06c75">default</span>.<span style="color:#e06c75">access_token</span>
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><div class="in-article-ad">
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -255,33 +254,33 @@ code.</p>
 service accounts. Take the example of creating monitoring resources in a central monitoring project using a different
 service account to the one which can create resources in the main project. You could expand on the previous example as
 follows.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tf" data-lang="tf"><span style="display:flex;"><span><span style="color:#66d9ef">provider</span> <span style="color:#e6db74">&#34;google&#34;</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">alias</span> = <span style="color:#e6db74">&#34;impersonation&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">scopes</span> = [
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;https://www.googleapis.com/auth/cloud-platform&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;https://www.googleapis.com/auth/userinfo.email&#34;</span>,
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tf" data-lang="tf"><span style="display:flex;"><span><span style="color:#c678dd">provider</span> <span style="color:#98c379">&#34;google&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">alias</span> = <span style="color:#98c379">&#34;impersonation&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">scopes</span> = [
+</span></span><span style="display:flex;"><span>    <span style="color:#98c379">&#34;https://www.googleapis.com/auth/cloud-platform&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#98c379">&#34;https://www.googleapis.com/auth/userinfo.email&#34;</span>,
 </span></span><span style="display:flex;"><span>  ]
 </span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;google_service_account_access_token&#34;</span> <span style="color:#e6db74">&#34;default&#34;</span> {
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">  provider</span>               	<span style="color:#f92672">=</span> <span style="color:#a6e22e">google</span>.<span style="color:#a6e22e">impersonation</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">target_service_account</span> 	= <span style="color:#a6e22e">terraform</span><span style="color:#f92672">-</span><span style="color:#a6e22e">admin</span><span style="color:#960050;background-color:#1e0010">@</span><span style="color:#a6e22e">my</span><span style="color:#f92672">-</span><span style="color:#a6e22e">project</span>.<span style="color:#a6e22e">iam</span>.<span style="color:#a6e22e">gserviceaccount</span>.<span style="color:#a6e22e">com</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">scopes</span>                 	= [<span style="color:#e6db74">&#34;userinfo-email&#34;</span>, <span style="color:#e6db74">&#34;cloud-platform&#34;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#c678dd">
+</span></span></span><span style="display:flex;"><span><span style="color:#c678dd">data</span> <span style="color:#98c379">&#34;google_service_account_access_token&#34;</span> <span style="color:#98c379">&#34;default&#34;</span> {
+</span></span><span style="display:flex;"><span><span style="color:#c678dd">  provider</span>               	<span style="color:#56b6c2">=</span> <span style="color:#e06c75">google</span>.<span style="color:#e06c75">impersonation</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">target_service_account</span> 	= <span style="color:#e06c75">terraform</span><span style="color:#56b6c2">-</span><span style="color:#e06c75">admin</span>@<span style="color:#e06c75">my</span><span style="color:#56b6c2">-</span><span style="color:#e06c75">project</span>.<span style="color:#e06c75">iam</span>.<span style="color:#e06c75">gserviceaccount</span>.<span style="color:#e06c75">com</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">scopes</span>                 	= [<span style="color:#98c379">&#34;userinfo-email&#34;</span>, <span style="color:#98c379">&#34;cloud-platform&#34;</span>]
 </span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;google_service_account_access_token&#34;</span> <span style="color:#e6db74">&#34;monitoring&#34;</span> {
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">  provider</span>               	<span style="color:#f92672">=</span> <span style="color:#a6e22e">google</span>.<span style="color:#a6e22e">impersonation</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">target_service_account</span> 	= <span style="color:#a6e22e">terraform</span><span style="color:#f92672">-</span><span style="color:#a6e22e">monitoring</span><span style="color:#960050;background-color:#1e0010">@</span><span style="color:#a6e22e">my</span><span style="color:#f92672">-</span><span style="color:#a6e22e">project</span>.<span style="color:#a6e22e">iam</span>.<span style="color:#a6e22e">gserviceaccount</span>.<span style="color:#a6e22e">com</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">scopes</span>                 	= [<span style="color:#e6db74">&#34;userinfo-email&#34;</span>, <span style="color:#e6db74">&#34;cloud-platform&#34;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#c678dd">
+</span></span></span><span style="display:flex;"><span><span style="color:#c678dd">data</span> <span style="color:#98c379">&#34;google_service_account_access_token&#34;</span> <span style="color:#98c379">&#34;monitoring&#34;</span> {
+</span></span><span style="display:flex;"><span><span style="color:#c678dd">  provider</span>               	<span style="color:#56b6c2">=</span> <span style="color:#e06c75">google</span>.<span style="color:#e06c75">impersonation</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">target_service_account</span> 	= <span style="color:#e06c75">terraform</span><span style="color:#56b6c2">-</span><span style="color:#e06c75">monitoring</span>@<span style="color:#e06c75">my</span><span style="color:#56b6c2">-</span><span style="color:#e06c75">project</span>.<span style="color:#e06c75">iam</span>.<span style="color:#e06c75">gserviceaccount</span>.<span style="color:#e06c75">com</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">scopes</span>                 	= [<span style="color:#98c379">&#34;userinfo-email&#34;</span>, <span style="color:#98c379">&#34;cloud-platform&#34;</span>]
 </span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">provider</span> <span style="color:#e6db74">&#34;google&#34;</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">access_token</span> = data.<span style="color:#a6e22e">google_service_account_access_token</span>.<span style="color:#a6e22e">default</span>.<span style="color:#a6e22e">access_token</span>
+</span></span><span style="display:flex;"><span><span style="color:#c678dd">
+</span></span></span><span style="display:flex;"><span><span style="color:#c678dd">provider</span> <span style="color:#98c379">&#34;google&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">access_token</span> = <span style="color:#e5c07b">data</span>.<span style="color:#e06c75">google_service_account_access_token</span>.<span style="color:#e06c75">default</span>.<span style="color:#e06c75">access_token</span>
 </span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">provider</span> <span style="color:#e6db74">&#34;google&#34;</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">alias</span> = <span style="color:#e6db74">&#34;monitoring&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">access_token</span> = data.<span style="color:#a6e22e">google_service_account_access_token</span>.<span style="color:#a6e22e">monitoring</span>.<span style="color:#a6e22e">access_token</span>
+</span></span><span style="display:flex;"><span><span style="color:#c678dd">
+</span></span></span><span style="display:flex;"><span><span style="color:#c678dd">provider</span> <span style="color:#98c379">&#34;google&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">alias</span> = <span style="color:#98c379">&#34;monitoring&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">access_token</span> = <span style="color:#e5c07b">data</span>.<span style="color:#e06c75">google_service_account_access_token</span>.<span style="color:#e06c75">monitoring</span>.<span style="color:#e06c75">access_token</span>
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>By creating another <code>google</code> provider, this time with the alias <code>monitoring</code>, and setting the <code>access_token</code> to that of
 a second impersonated service account (<code>terraform-monitoring@my-project.iam.gserviceaccount.com</code> in the example above),
@@ -289,24 +288,24 @@ you&rsquo;re now able to specify that certain resources be created using the <co
 <code>provider</code> meta-argument on the resource.</p>
 <p>For example, the following logging metric would be creating using the default provider, which is impersonating the
 <code>terraform-admin@my-project.iam.gserviceaccount.com</code> service account.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tf" data-lang="tf"><span style="display:flex;"><span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;google_logging_metric&#34;</span> <span style="color:#e6db74">&#34;main&#34;</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">name</span>   = <span style="color:#e6db74">&#34;my-custom/metric&#34;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">  # More arguments...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tf" data-lang="tf"><span style="display:flex;"><span><span style="color:#c678dd">resource</span> <span style="color:#98c379">&#34;google_logging_metric&#34;</span> <span style="color:#98c379">&#34;main&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">name</span>   = <span style="color:#98c379">&#34;my-custom/metric&#34;</span><span style="color:#7f848e">
+</span></span></span><span style="display:flex;"><span><span style="color:#7f848e">  # More arguments...
+</span></span></span><span style="display:flex;"><span><span style="color:#7f848e"></span>}
 </span></span></code></pre></div><p>And the following alert policy uses the <code>google.monitoring</code> aliased provider, meaning that it will be created using the
 <code>terraform-monitoring@my-project.iam.gserviceaccount.com</code> service account. It specifies the <code>google.monitoring</code> provider
 using the <code>provider</code>
 <a href="https://developer.hashicorp.com/terraform/language/meta-arguments/resource-provider">meta-argument</a> of the
 <code>google_monitoring_alert_policy</code> resource.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tf" data-lang="tf"><span style="display:flex;"><span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;google_monitoring_alert_policy&#34;</span> <span style="color:#e6db74">&#34;main&#34;</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">display_name</span> = <span style="color:#e6db74">&#34;My Alert Policy&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">combiner</span>     = <span style="color:#e6db74">&#34;OR&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">conditions</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">display_name</span> = <span style="color:#e6db74">&#34;test condition&#34;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    # More arguments...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  }
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">  provider</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">google</span>.<span style="color:#a6e22e">monitoring</span>
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tf" data-lang="tf"><span style="display:flex;"><span><span style="color:#c678dd">resource</span> <span style="color:#98c379">&#34;google_monitoring_alert_policy&#34;</span> <span style="color:#98c379">&#34;main&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">display_name</span> = <span style="color:#98c379">&#34;My Alert Policy&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">combiner</span>     = <span style="color:#98c379">&#34;OR&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">conditions</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#e06c75">display_name</span> = <span style="color:#98c379">&#34;test condition&#34;</span><span style="color:#7f848e">
+</span></span></span><span style="display:flex;"><span><span style="color:#7f848e">    # More arguments...
+</span></span></span><span style="display:flex;"><span><span style="color:#7f848e"></span>  }
+</span></span><span style="display:flex;"><span><span style="color:#c678dd">
+</span></span></span><span style="display:flex;"><span><span style="color:#c678dd">  provider</span> <span style="color:#56b6c2">=</span> <span style="color:#e06c75">google</span>.<span style="color:#e06c75">monitoring</span>
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>Hopefully this demonstrates how flexible these configurations can be in allowing you to configure service accounts with
 just the right level of permissions to perform their required tasks.</p>
@@ -324,10 +323,10 @@ just the right level of permissions to perform their required tasks.</p>
 explicitly tell it to impersonate a service account using the <code>impersonate_service_account</code> argument. This is because
 Terraform needs to access the state bucket before it even thinks about loading any of the provider configurations that
 you configured above. However, this is pretty trivial to configure as you can see in the example below.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tf" data-lang="tf"><span style="display:flex;"><span><span style="color:#a6e22e">terraform</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">backend</span> <span style="color:#e6db74">&#34;gcs&#34;</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">bucket</span>                      = <span style="color:#e6db74">&#34;my-bucket-name&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">impersonate_service_account</span> = <span style="color:#e6db74">&#34;terraform-state@my-project.iam.gserviceaccount.com&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tf" data-lang="tf"><span style="display:flex;"><span><span style="color:#e06c75">terraform</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">backend</span> <span style="color:#98c379">&#34;gcs&#34;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#e06c75">bucket</span>                      = <span style="color:#98c379">&#34;my-bucket-name&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e06c75">impersonate_service_account</span> = <span style="color:#98c379">&#34;terraform-state@my-project.iam.gserviceaccount.com&#34;</span>
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>It&rsquo;s worth noting that the argument values in the <code>backend &quot;gcs&quot;</code> block cannot be variables, so you&rsquo;ll need to hard code
@@ -447,8 +446,6 @@ and in demonstrating how easily it can be configured. Thanks for reading!</p>
   </script>
 
   
-  <script type="text/javascript" src="/js/prism.js"></script>
-  <script type="text/javascript" src="/js/custom/prism-custom.js"></script>
   <script type="text/javascript" src="/js/custom/custom.js"></script>
 
   
