@@ -2,6 +2,11 @@
 <html>
 
 <head>
+  <script>
+    if (window.location.hostname !== "localhost") {
+      window.location.replace(window.location.href.replace("ryanjan.uk", "cherrypicking.dev"))
+    }
+  </script>
   
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-58NYGBDL75"></script>
   <script>
@@ -66,7 +71,7 @@ explain why I think this is a better option that using service account keys.">
 
         <div class="gh-head-brand">
           <a class="gh-head-logo" href="/">
-            <img src="/images/favicon.png" />
+            <img src="/images/cp-favicon.png" />
           </a>
           <a class="gh-burger" role="button">
             <div class="gh-burger-box">
@@ -230,7 +235,7 @@ tokens configured) and has the <code>impersonation</code> alias.</p>
 account. Notice that you&rsquo;re explicitly telling the data source to use the <code>google.impersonation</code> aliased provider, thus
 requesting the access token via your personal user account.</p>
 <div class="highlight"><pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tf" data-lang="tf"><span style="display:flex;"><span><span style="color:#c678dd">data</span> <span style="color:#98c379">&#34;google_service_account_access_token&#34;</span> <span style="color:#98c379">&#34;default&#34;</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">target_service_account</span> 	= <span style="color:#e06c75">terraform</span><span style="color:#56b6c2">-</span><span style="color:#e06c75">admin</span>@<span style="color:#e06c75">my</span><span style="color:#56b6c2">-</span><span style="color:#e06c75">project</span>.<span style="color:#e06c75">iam</span>.<span style="color:#e06c75">gserviceaccount</span>.<span style="color:#e06c75">com</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">target_service_account</span> 	= <span style="color:#98c379">&#34;terraform-admin@my-project.iam.gserviceaccount.com&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#e06c75">scopes</span>                 	= [<span style="color:#98c379">&#34;userinfo-email&#34;</span>, <span style="color:#98c379">&#34;cloud-platform&#34;</span>]
 </span></span><span style="display:flex;"><span><span style="color:#c678dd">
 </span></span></span><span style="display:flex;"><span><span style="color:#c678dd">  provider</span>               	<span style="color:#56b6c2">=</span> <span style="color:#e06c75">google</span>.<span style="color:#e06c75">impersonation</span>
@@ -264,13 +269,13 @@ follows.</p>
 </span></span><span style="display:flex;"><span><span style="color:#c678dd">
 </span></span></span><span style="display:flex;"><span><span style="color:#c678dd">data</span> <span style="color:#98c379">&#34;google_service_account_access_token&#34;</span> <span style="color:#98c379">&#34;default&#34;</span> {
 </span></span><span style="display:flex;"><span><span style="color:#c678dd">  provider</span>               	<span style="color:#56b6c2">=</span> <span style="color:#e06c75">google</span>.<span style="color:#e06c75">impersonation</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">target_service_account</span> 	= <span style="color:#e06c75">terraform</span><span style="color:#56b6c2">-</span><span style="color:#e06c75">admin</span>@<span style="color:#e06c75">my</span><span style="color:#56b6c2">-</span><span style="color:#e06c75">project</span>.<span style="color:#e06c75">iam</span>.<span style="color:#e06c75">gserviceaccount</span>.<span style="color:#e06c75">com</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">target_service_account</span> 	= <span style="color:#98c379">&#34;terraform-admin@my-project.iam.gserviceaccount.com&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#e06c75">scopes</span>                 	= [<span style="color:#98c379">&#34;userinfo-email&#34;</span>, <span style="color:#98c379">&#34;cloud-platform&#34;</span>]
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span><span style="color:#c678dd">
 </span></span></span><span style="display:flex;"><span><span style="color:#c678dd">data</span> <span style="color:#98c379">&#34;google_service_account_access_token&#34;</span> <span style="color:#98c379">&#34;monitoring&#34;</span> {
 </span></span><span style="display:flex;"><span><span style="color:#c678dd">  provider</span>               	<span style="color:#56b6c2">=</span> <span style="color:#e06c75">google</span>.<span style="color:#e06c75">impersonation</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">target_service_account</span> 	= <span style="color:#e06c75">terraform</span><span style="color:#56b6c2">-</span><span style="color:#e06c75">monitoring</span>@<span style="color:#e06c75">my</span><span style="color:#56b6c2">-</span><span style="color:#e06c75">project</span>.<span style="color:#e06c75">iam</span>.<span style="color:#e06c75">gserviceaccount</span>.<span style="color:#e06c75">com</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e06c75">target_service_account</span> 	= <span style="color:#98c379">&#34;terraform-monitoring@my-project.iam.gserviceaccount.com&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#e06c75">scopes</span>                 	= [<span style="color:#98c379">&#34;userinfo-email&#34;</span>, <span style="color:#98c379">&#34;cloud-platform&#34;</span>]
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span><span style="color:#c678dd">
@@ -384,7 +389,7 @@ and in demonstrating how easily it can be configured. Thanks for reading!</p>
       <div class="su-modal-container">
         <div class="su-modal-content">
           <span class="su-modal-closeicon">&times;</span>
-          <header class="su-modal-signup-header"><img class="su-modal-signup-logo" src="/images/favicon.png"
+          <header class="su-modal-signup-header"><img class="su-modal-signup-logo" src="/images/cp-favicon.png"
               alt="RyanJan">
             
           </header>

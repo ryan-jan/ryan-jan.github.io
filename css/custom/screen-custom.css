@@ -23,6 +23,18 @@
   --green: #7fc724;
 }
 
+.site-logo {
+  max-height: 150px;
+}
+
+.gh-head-logo img {
+  max-height: 34px;
+}
+
+.gh-head-inner {
+  grid-gap: 2vmin;
+}
+
 .gh-canvas {
   display: grid;
   grid-template-columns:
